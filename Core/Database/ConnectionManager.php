@@ -2,7 +2,12 @@
 declare(strict_types=1);
 
 namespace Core\Database;
+
+require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'autoload.php';
+
 use \PDO;
+use Core\Configure;
+use \Exception;
 
 /**
  * This class is used to create and manage connection with DBMS
@@ -19,17 +24,21 @@ class ConnectionManager {
 
     public function __construct()
     {
-        $config = require dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'app.php';
-        
-        $this->setConfig($config['DataSource']);
+        $config = (new Configure())->read('DataSource');
 
-        $dsn = "mysql:host=$this->host;dbname=$this->database;charset=UTF8";
+        if (empty($config)) {
+            $this->_connection_error = "Aucune source de données n'est configurée";
+        } else {
+            $this->setConfig($config);
 
-        try {
-            $this->_connection = new PDO($dsn, $this->username, $this->password);
-            $this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (\PDOException $e) {
-            $this->_connection_error = $e->getMessage();
+            $dsn = "mysql:host=$this->host;dbname=$this->database;charset=UTF8";
+
+            try {
+                $this->_connection = new PDO($dsn, $this->username, $this->password);
+                $this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            } catch (\PDOException $e) {
+                $this->_connection_error = $e->getMessage();
+            }
         }
     }
 
@@ -73,6 +82,11 @@ class ConnectionManager {
     public function getError()
     {
         return $this->_connection_error;
+    }
+
+    public function closeConnection(): void
+    {
+        $this->_connection = null;
     }
 
 }

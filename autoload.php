@@ -1,4 +1,9 @@
 <?php
+// Start session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'paths.php';
 
@@ -14,7 +19,7 @@ class AutoLoader
 
             if ($fqnParts[0] === 'App') {
                 switch ($fqnParts[1]) {
-                    case 'Model':
+                    case 'Entity':
                         $this->__autoLoadModel($className);
                         break; 
                     case 'Controller':
@@ -151,3 +156,7 @@ class AutoLoader
 }
 
 (new AutoLoader())->register();
+
+use Core\Configure;
+
+$_SESSION['__configure__'] = serialize(new Configure());
