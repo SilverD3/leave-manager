@@ -16,10 +16,33 @@ class Contract
 	private $end_date;
 	private $created;
 	private $modified;
+    private $status;
 	private $etat;
 
-	function __construct()
-	{}
+    /**
+     * Validates Contract
+     * Check if all required fields are provided
+     * 
+     * @return array Array of errors
+     */
+    public function validation(): array
+    {
+        $errors = [];
+
+        if (empty($this->employee_id)) {
+            $errors[] = "L'id de l'employé est requis";
+        }
+
+        if (empty($this->contract_type_id)) {
+            $errors[] = "Le type de contrat est requis";
+        }
+
+        if (empty($this->start_date)) {
+            $errors[] = "La date de début est requise";
+        }
+
+        return $errors;
+    }
 
     /**
      * @return mixed
@@ -177,6 +200,26 @@ class Contract
     public function setModified($modified)
     {
         $this->modified = $modified;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     *
+     * @return self
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
 
         return $this;
     }

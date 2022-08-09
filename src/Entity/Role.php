@@ -12,11 +12,6 @@ class Role
 	private $code;
 	private $name;
 
-	function __construct()
-	{
-		
-	}
-
     /**
      * @return mixed
      */

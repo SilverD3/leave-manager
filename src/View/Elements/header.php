@@ -121,27 +121,51 @@ AuthController::require_auth();
 				</a>
 			</li><!-- End Dashboard Nav -->
 
-			<li class="nav-item">
-				<a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-					<i class="bi bi-menu-button-wide"></i><span>Components</span><i class="bi bi-chevron-down ms-auto"></i>
-				</a>
-				<ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-					<li>
-						<a href="components-alerts.html">
-							<i class="bi bi-circle"></i><span>Alerts</span>
-						</a>
-					</li>
-				</ul>
-			</li><!-- End Components Nav -->
+			<li class="nav-heading">Application</li>
 
-			<li class="nav-heading">Pages</li>
+			<li class="nav-item">
+				<a class="nav-link collapsed" href="#">
+					<i class="bi bi-people"></i>
+					<span>Employés</span>
+				</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link collapsed" href="#">
+					<i class="bi bi-person-dash"></i>
+					<span>Demande de permission</span>
+				</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link collapsed" href="#">
+					<i class="bi bi-files-alt"></i>
+					<span>Contrats</span>
+				</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link collapsed" href="#">
+					<i class="bi bi-emoji-sunglasses"></i>
+					<span>Congés</span>
+				</a>
+			</li>
+
+			<li class="nav-heading">Configurations</li>
 
 			<li class="nav-item">
 				<a class="nav-link collapsed" href="users-profile.html">
-					<i class="bi bi-person"></i>
-					<span>Profile</span>
+					<i class="bi bi-journal-code"></i>
+					<span>Types de contrat</span>
 				</a>
-			</li><!-- End Profile Page Nav -->
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link collapsed" href="users-profile.html">
+					<i class="bi bi-code-square"></i>
+					<span>Modèles de contrat</span>
+				</a>
+			</li>
 
 		</ul>
 

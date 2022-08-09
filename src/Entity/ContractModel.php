@@ -15,8 +15,30 @@ class ContractModel
 	private $modified;
 	private $etat;
 
-	function __construct()
-	{}
+	/**
+     * Validates Contract Model
+     * Check if all required fields are provided
+     * 
+     * @return array Array of errors
+     */
+    public function validation(): array
+    {
+        $errors = [];
+
+        if (empty($this->name)) {
+            $errors[] = "Le nom du modèle de contrat est requis";
+        }
+
+        if (empty($this->content)) {
+            $errors[] = "Le contenu du modèle de contrat est requis";
+        }
+
+        if (empty($this->contract_type_id)) {
+            $errors[] = "Le type de contrat est requis";
+        }
+
+        return $errors;
+    }
 
     /**
      * @return mixed

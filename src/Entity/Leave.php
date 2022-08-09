@@ -19,10 +19,34 @@ class Leave
 	private $note;
 	private $etat;
 
-	function __construct()
-	{
-		// code...
-	}
+    /**
+     * Validates Leave
+     * Check if all required fields are provided
+     * 
+     * @return array Array of errors
+     */
+	public function validation(): array
+    {
+        $errors = [];
+
+        if (empty($this->employee_id)) {
+            $errors[] = "L'employé est requis";
+        }
+
+        if (empty($this->year)) {
+            $errors[] = "L'année du congé est requis";
+        }
+
+        if (empty($this->days)) {
+            $errors[] = "Le nombre de jour de congé est requis";
+        }
+
+        if (empty($this->start_date)) {
+            $errors[] = "La date de départ en congé est requise";
+        }
+
+        return $errors;
+    }
 
     /**
      * @return mixed

@@ -28,11 +28,42 @@ class Employee
      */
     private $role;
 
-	function __construct()
-	{
-		
-	}
-    
+    /**
+     * Validates Employee
+     * Check if all required fields are provided
+     * 
+     * @return array Array of errors
+     */
+    public function validation(): array
+    {
+        $errors = [];
+
+        if (empty($this->first_name)) {
+            $errors[] = "Le nom de l'employé est requis";
+        }
+
+        if (empty($this->last_name)) {
+            $errors[] = "Le prénom de l'employé est requis";
+        }
+
+        if (empty($this->email)) {
+            $errors[] = "L'adresse email de l'employé est requise";
+        }
+
+        if (empty($this->username)) {
+            $errors[] = "Le nom d'utilisateur de l'employé est requis";
+        }
+
+        if (empty($this->pwd)) {
+            $errors[] = "Le mot de passe de l'employé est requis";
+        }
+
+        if (empty($this->role_id)) {
+            $errors[] = "Le role de l'employé est requis";
+        }
+
+        return $errors;
+    }
 
     /**
      * @return mixed

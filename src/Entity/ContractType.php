@@ -14,8 +14,22 @@ class ContractType
 	private $created;
 	private $etat;
 
-	function __construct()
-	{}
+    /**
+     * Validates Contract Type
+     * Check if all required fields are provided
+     * 
+     * @return array Array of errors
+     */
+    public function validation(): array
+    {
+        $errors = [];
+
+        if (empty($this->name)) {
+            $errors[] = "Le nom du type de contrat est requis";
+        }
+
+        return $errors;
+    }
 
     /**
      * @return mixed

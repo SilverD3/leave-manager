@@ -17,8 +17,39 @@ class Permission
 	private $created;
 	private $etat;
 
-	function __construct()
-	{}
+    /**
+     * @var Employee $employee;
+     */
+    private $employee;
+
+	/**
+     * Validates Permission
+     * Check if all required fields are provided
+     * 
+     * @return array Array of errors
+     */
+    public function validation(): array
+    {
+        $errors = [];
+
+        if (empty($this->employee_id)) {
+            $errors[] = "L'employé est requis";
+        }
+
+        if (empty($this->reason)) {
+            $errors[] = "Le motif de la permission est requis";
+        }
+
+        if (empty($this->start_date)) {
+            $errors[] = "La date de début de la permission est requise";
+        }
+
+        if (empty($this->end_date)) {
+            $errors[] = "La date de fin de la permission est requise";
+        }
+
+        return $errors;
+    }
 
     /**
      * @return mixed
@@ -196,6 +227,26 @@ class Permission
     public function setEtat($etat)
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    /**
+     * @return Employee
+     */
+    public function getEmployee()
+    {
+        return $this->employee;
+    }
+
+    /**
+     * @param Employee $employee
+     *
+     * @return self
+     */
+    public function setEmployee($employee)
+    {
+        $this->employee = $employee;
 
         return $this;
     }
