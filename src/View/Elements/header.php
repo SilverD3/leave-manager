@@ -154,14 +154,14 @@ AuthController::require_auth();
 			<li class="nav-heading">Configurations</li>
 
 			<li class="nav-item">
-				<a class="nav-link collapsed" href="users-profile.html">
+				<a class="nav-link collapsed" href="#">
 					<i class="bi bi-journal-code"></i>
 					<span>Types de contrat</span>
 				</a>
 			</li>
 
 			<li class="nav-item">
-				<a class="nav-link collapsed" href="users-profile.html">
+				<a class="nav-link collapsed" href="#">
 					<i class="bi bi-code-square"></i>
 					<span>Modèles de contrat</span>
 				</a>
