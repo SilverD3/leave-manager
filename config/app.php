@@ -4,7 +4,7 @@ return [
     'DataSource' => [
         'host' => 'localhost',
         'username' => 'root',
-        'password' => 'silevester',
+        'password' => '',
         'database' => 'leave_manager',
     ],
 

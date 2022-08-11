@@ -1,11 +1,11 @@
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
-<div class="copyright">
-	&copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
-</div>
-<div class="credits">
-	Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-</div>
+	<div class="copyright">
+		&copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+	</div>
+	<div class="credits">
+		Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+	</div>
 </footer>
 <!-- End Footer -->
 
@@ -25,7 +25,7 @@
 	if (logoutbtn !== null) {
 		logoutbtn.addEventListener('click', function(){
 			if (confirm("Voulez-vous fermer votre session ?")) {
-				location.href = "<?= VIEWS . 'Auth' . DS . 'logout.php' ?>";
+				location.href = "<?= VIEWS . 'Auth/logout.php' ?>";
 			}
 		});
 	}

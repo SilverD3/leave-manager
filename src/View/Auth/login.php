@@ -118,12 +118,6 @@ use Core\FlashMessages\Flash;
 
 	<!-- Template Main JS File -->
 	<script src="<?= TEMPLATE_PATH ?>assets/js/main.js"></script>
-
-	<?php
-		use Core\Logger\JsLogger;
-	 	JsLogger::toConsole();
-	?>
-
 </body>
 
 </html>
