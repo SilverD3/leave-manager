@@ -89,6 +89,7 @@ CREATE TABLE `contracts` (
   `end_date` date DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime DEFAULT NULL,
+  `status` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
   `etat` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `fk_employee_id_contracts` (`employee_id`),
@@ -140,7 +141,7 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES (1,'McBoorne','Silver','mcboorne@gmail.com','mcboorne','24079b6beaeaadc844ad054dba7a2ff9c690e0f43c39f60804e3572c56d06816 ',1,'2022-08-05 16:19:18',NULL,NULL,NULL,'pending',1);
+INSERT INTO `employees` VALUES (1,'Admin','admin','admin@gmail.com','admin','4ceb415ca0376305106660973f6f9cf550126cb0fc2a9fdcff1b30b4e6e27383 ',1,'2022-08-05 16:19:18',NULL,NULL,NULL,'pending',1);
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 

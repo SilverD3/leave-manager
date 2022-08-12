@@ -9,7 +9,7 @@ if (!defined('ROOT')) {
 }
 
 if (!defined('HOST_URL')) {
-    define('BASE_DIR', '/leave-manager');
+    define('BASE_DIR', 'http://localhost:8090/');
 }
 
 if (!defined('APP_DIR')) {
