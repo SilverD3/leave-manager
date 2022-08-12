@@ -1,9 +1,4 @@
 <?php
-// Start session
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'paths.php';
 
@@ -159,4 +154,20 @@ class AutoLoader
 
 use Core\Configure;
 
-$_SESSION['__configure__'] = serialize(new Configure());
+// Start session
+if (session_status() === PHP_SESSION_NONE) {
+    $configure = new Configure();
+
+    $default_session_config = [
+        'timeout' => 60*60*24*2 // 2 days
+    ];
+
+    $session_config = $configure->read('Session', $default_session_config);
+    
+    ini_set('session.gc_maxlifetime', $session_config['timeout']);
+    session_set_cookie_params($session_config['timeout']); 
+
+    session_start();
+    
+    $_SESSION['__configure__'] = serialize($configure);
+}

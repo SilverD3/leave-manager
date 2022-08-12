@@ -45,16 +45,16 @@ if (!defined('SERVICE_PATH')) {
 }
 
 if (!defined('TEMPLATE_PATH')) {
-    define('TEMPLATE_PATH', BASE_URL . '/template' . DS);
+    define('TEMPLATE_PATH', BASE_URL . 'template' . DS);
 }
 
 // Assets files
 if (!defined('VIEWS')) {
-    define('VIEWS', BASE_URL . '/' . APP_DIR . '/View/');
+    define('VIEWS', BASE_URL . APP_DIR . '/View/');
 }
 
 if (!defined('ASSETS')) {
-    define('ASSETS', BASE_URL . '/assets' . DS);
+    define('ASSETS', BASE_URL . 'assets' . DS);
 }
 
 if (!defined('IMAGES')) {
