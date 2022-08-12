@@ -15,7 +15,7 @@ use Core\FlashMessages\Flash;
 class AuthController
 {
 	const UNAUTHORIZED_REDIRECT = VIEWS . 'Auth' . DS . 'login.php';
-	const AUTHORIZED_REDIRECT = '/';
+	const AUTHORIZED_REDIRECT = BASE_DIR;
 	
 	public function login()
 	{

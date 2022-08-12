@@ -45,7 +45,7 @@ AuthController::require_auth();
 	<header id="header" class="header fixed-top d-flex align-items-center">
 
 		<div class="d-flex align-items-center justify-content-between">
-			<a href="index.html" class="logo d-flex align-items-center">
+			<a href="<?= BASE_DIR ?>" class="logo d-flex align-items-center">
 				<img src="<?= TEMPLATE_PATH ?>assets/img/logo.png" alt="">
 				<span class="d-none d-lg-block">LeaveManager</span>
 			</a>
@@ -85,7 +85,7 @@ AuthController::require_auth();
 						</li>
 
 						<li>
-							<a class="dropdown-item d-flex align-items-center" href="<?= VIEWS . 'Employees' . DS . 'profile.php' ?>">
+							<a class="dropdown-item d-flex align-items-center" href="<?= VIEWS . 'Employees/profile.php' ?>">
 								<i class="bi bi-person"></i>
 								<span>Mon profile</span>
 							</a>
@@ -115,7 +115,7 @@ AuthController::require_auth();
 		<ul class="sidebar-nav" id="sidebar-nav">
 
 			<li class="nav-item">
-				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Pages') ? '' : 'collapsed' ?>" href="/">
+				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Pages') ? '' : 'collapsed' ?>" href="<?= BASE_DIR ?>">
 					<i class="bi bi-grid"></i>
 					<span>Tableau de bord</span>
 				</a>
