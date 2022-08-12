@@ -11,17 +11,61 @@ git clone https://github.com/SilverD3/leave-manager.git
 ```
 2. Install the database
 
-Database schema is located in `config/schema/db-script.sql`.
+Database schema is located in `config/schema/db-script.sql`. Create a database in DBMS (Database Management System) and use it to import this schema.
 
-3. After installing the database, just start your web server.
+## Configurations 
 
-If you have cloned the repository into your web server document root, just navigate to `localhost/leave-manager`. But if you have cloned the repository anywhere else, run following command from command line when you're in root directory:
+Configurations are available in `config` directory. 
+
+1. Edit `config/app.php` to configure datasource and sessions.
+2. Set path `BASE_URL` in file `config/paths.php` to set the base URL
+```php
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://localhost:8090/');
+}
+```
+
+## Run
+
+From the command line, run following command in the root directory
+```bash
+php -S localhost:8090
+```
+Then navigate to `localhost:8090` in your browser.
+
+## Example
+
+- Clone the repository from Github:
+```bash
+git clone https://github.com/SilverD3/leave-manager.git
+```
+- Move into the root folder:
+```bash
+cd leave-manager
+```
+- Create database and import schema:
+```bash
+mysql > create database leave_manager;
+mysql > source config/schema/leave_manager.sql;
+```
+- Edit datasource config in file `config/app.php`:
+```php
+'DataSource' => [
+    'host' => 'localhost',
+    'username' => 'root',
+    'password' => '',
+    'database' => 'leave_manager',
+],
+```
+- Set the base url in file `config/paths.php`:
+```php
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://localhost:8090/');
+}
+```
+- Start the server:
 
 ```bash
 php -S localhost:8090
 ```
-Then navigate to `localhost:8090`.
-
-## Configurations 
-
-Configurations are available in `config` directory. Edit `config/app.php` to configure datasource and sessions.
+- Open your browser and type `localhost:8090` in the url bar.

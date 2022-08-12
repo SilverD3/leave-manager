@@ -8,8 +8,8 @@ if (!defined('ROOT')) {
     define('ROOT', dirname(__DIR__));
 }
 
-if (!defined('HOST_URL')) {
-    define('BASE_DIR', 'http://localhost:8090/');
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://localhost:8090/');
 }
 
 if (!defined('APP_DIR')) {
@@ -45,16 +45,16 @@ if (!defined('SERVICE_PATH')) {
 }
 
 if (!defined('TEMPLATE_PATH')) {
-    define('TEMPLATE_PATH', BASE_DIR . '/template' . DS);
+    define('TEMPLATE_PATH', BASE_URL . '/template' . DS);
 }
 
 // Assets files
 if (!defined('VIEWS')) {
-    define('VIEWS', BASE_DIR . '/' . APP_DIR . '/View/');
+    define('VIEWS', BASE_URL . '/' . APP_DIR . '/View/');
 }
 
 if (!defined('ASSETS')) {
-    define('ASSETS', BASE_DIR . '/assets' . DS);
+    define('ASSETS', BASE_URL . '/assets' . DS);
 }
 
 if (!defined('IMAGES')) {
