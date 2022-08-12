@@ -32,8 +32,6 @@ use Core\FlashMessages\Flash;
 	<!-- Vendor CSS Files -->
 	<link href="<?= TEMPLATE_PATH ?>assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link href="<?= TEMPLATE_PATH ?>assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-	<link href="<?= TEMPLATE_PATH ?>assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-	<link href="<?= TEMPLATE_PATH ?>assets/vendor/remixicon/remixicon.css" rel="stylesheet">
 
 	<!-- Template Main CSS File -->
 	<link href="<?= TEMPLATE_PATH ?>assets/css/style.css" rel="stylesheet">

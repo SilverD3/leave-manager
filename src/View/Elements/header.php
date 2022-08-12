@@ -124,7 +124,7 @@ AuthController::require_auth();
 			<li class="nav-heading">Application</li>
 
 			<li class="nav-item">
-				<a class="nav-link collapsed" href="#">
+				<a class="nav-link collapsed" href="<?= VIEWS . 'Employees' ?>">
 					<i class="bi bi-people"></i>
 					<span>Employés</span>
 				</a>
@@ -133,7 +133,7 @@ AuthController::require_auth();
 			<li class="nav-item">
 				<a class="nav-link collapsed" href="#">
 					<i class="bi bi-person-dash"></i>
-					<span>Demande de permission</span>
+					<span>Demandes de permission</span>
 				</a>
 			</li>
 

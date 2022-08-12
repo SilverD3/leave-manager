@@ -14,7 +14,23 @@ use App\Entity\Role;
  */
 class EmployeesServices
 {
+	/**
+	 * @var ConnectionManager $connectionManager
+	 */
 	private $connectionManager;
+
+	/**
+	 * Default configuration for queries
+	 * @var array $query_default_config
+	 */
+	private $query_default_config = [
+		'joinRole' => false,
+		'limit' => 50,
+		'offset' => 0,
+		'conditions' => [],
+		'order' => 'first_name',
+		'order_dir' => 'DESC',
+	];
 
 	function __construct()
 	{

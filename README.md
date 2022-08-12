@@ -22,6 +22,6 @@ php -S localhost:8090
 ```
 Then navigate to `localhost:8090`.
 
-4. Configurations 
+## Configurations 
 
 Configurations are available in `config` directory. Edit `config/app.php` to configure datasource and sessions.
