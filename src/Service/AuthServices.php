@@ -40,9 +40,9 @@ class AuthServices
         }
 
         $role = new Role();
-        $role->setId = $result['Role_id'];
-        $role->setCode = $result['Role_code'];
-        $role->setName = $result['Role_name'];
+        $role->setId($result['Role_id']);
+        $role->setCode($result['Role_code']);
+        $role->setName($result['Role_name']);
 
         $employee = new Employee();
         $employee->setId($result['Employee_id']);
