@@ -38,6 +38,11 @@ class AuthController
 
 				Flash::success("Connexion reussie");
 
+				if (isset($_GET['redirect'])) {
+					header("Location: " . $_GET['redirect']);
+					exit;
+				}
+				
 				header("Location: " . self::AUTHORIZED_REDIRECT);
 			}
 		}
@@ -58,7 +63,7 @@ class AuthController
 		if (!Auth::isConnected()) {
 			Flash::error("Veuillez vous connecter avant de continuer.");
 
-			header('Location: ' . self::UNAUTHORIZED_REDIRECT);
+			header('Location: ' . self::UNAUTHORIZED_REDIRECT . '?redirect=' . $_SERVER['REQUEST_URI']);
 			exit;
 		}
 
