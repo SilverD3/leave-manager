@@ -21,7 +21,7 @@ class UtilsHelper
             $string = substr($string, 0, $length);
             $espace = strrpos($string, " ");
 
-            if ($espaces) {
+            if ($espace) {
                 $string = substr($string, 0, $espace);
                 $string .= '...';
             }
