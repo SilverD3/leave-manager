@@ -29,8 +29,8 @@ class Employee
     private $role;
 
     /**
-     * Validates Employee
-     * Check if all required fields are provided
+     * ## Validates Employee
+     * Check if all required fields has been provided
      * 
      * @return array Array of errors
      */
