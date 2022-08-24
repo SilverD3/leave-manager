@@ -4,6 +4,7 @@ require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoloa
 use App\Controller\EmployeesController;
 use App\View\Helpers\DateHelper;
 use App\View\Helpers\UtilsHelper;
+use Core\FlashMessages\Flash;
 
 (new EmployeesController())->dashboard();
 
@@ -25,9 +26,10 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 	<section class="section dashboard">
 		<div class="row">
 
-			<!-- Left side columns -->
 			<div class="col-lg-12">
 				<div class="row">
+
+					<?= Flash::render() ?>
 
 					<!-- Employees Card -->
 					<div class="col-xxl-3 col-md-6">
@@ -168,7 +170,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 					</div><!-- End Recent Permission Requests -->
 
 				</div>
-			</div><!-- End Left side columns -->
+			</div>
 
 		</div>
 	</section>

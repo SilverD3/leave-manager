@@ -115,7 +115,7 @@ AuthController::require_auth();
 		<ul class="sidebar-nav" id="sidebar-nav">
 
 			<li class="nav-item">
-				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Pages') ? '' : 'collapsed' ?>" href="<?= BASE_URL ?>">
+				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Tableau de bord') ? '' : 'collapsed' ?>" href="<?= BASE_URL ?>">
 					<i class="bi bi-grid"></i>
 					<span>Tableau de bord</span>
 				</a>
@@ -124,7 +124,7 @@ AuthController::require_auth();
 			<li class="nav-heading">Application</li>
 
 			<li class="nav-item">
-				<a class="nav-link collapsed" href="<?= VIEWS . 'Employees' ?>">
+				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Employés') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Employees' ?>">
 					<i class="bi bi-people"></i>
 					<span>Employés</span>
 				</a>
@@ -154,7 +154,7 @@ AuthController::require_auth();
 			<li class="nav-heading">Configurations</li>
 
 			<li class="nav-item">
-				<a class="nav-link collapsed" href="#">
+				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Types de contrat') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'ContractTypes' ?>">
 					<i class="bi bi-journal-code"></i>
 					<span>Types de contrat</span>
 				</a>
