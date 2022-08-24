@@ -46,6 +46,9 @@ class AuthController
 				header("Location: " . self::AUTHORIZED_REDIRECT);
 			}
 		}
+
+		$_SESSION['page_title'] = 'Se connecter';
+		unset($_SESSION['subpage_title']);
 	}
 
 	public static function logout()
