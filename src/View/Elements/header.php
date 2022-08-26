@@ -161,7 +161,7 @@ AuthController::require_auth();
 			</li>
 
 			<li class="nav-item">
-				<a class="nav-link collapsed" href="#">
+				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Modèles de contrat') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'ContractModels' ?>">
 					<i class="bi bi-code-square"></i>
 					<span>Modèles de contrat</span>
 				</a>

@@ -1,4 +1,7 @@
 <?php
+declare(strict_types=1);
+
+namespace App\Entity;
 
 /**
  * Contract Model's Entity Class
@@ -14,6 +17,8 @@ class ContractModel
 	private $created;
 	private $modified;
 	private $etat;
+
+    private $contractType;
 
 	/**
      * Validates Contract Model
@@ -31,6 +36,10 @@ class ContractModel
 
         if (empty($this->content)) {
             $errors[] = "Le contenu du modèle de contrat est requis";
+        }
+
+        if (strlen($this->content) > 65000) {
+            $errors[] = "Le contenu du modèle de contrat dépasse le nombre de caractères autorisés ";
         }
 
         if (empty($this->contract_type_id)) {
@@ -216,6 +225,26 @@ class ContractModel
     public function setEtat($etat)
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    /**
+     * @return ContractType|null
+     */
+    public function getContractType()
+    {
+        return $this->contractType;
+    }
+
+    /**
+     * @param mixed $etat
+     *
+     * @return self
+     */
+    public function setContractType(ContractType $contractType)
+    {
+        $this->contractType = $contractType;
 
         return $this;
     }
