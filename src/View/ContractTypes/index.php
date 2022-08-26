@@ -105,10 +105,15 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 			var url = "<?= VIEWS . 'ContractTypes/delete.php?ajax=1&id=' ?>" + id;
 
 			xmlhttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-					location.reload();
-				}
+				if (xmlhttp.readyState == 4){
+                    if(xmlhttp.status == 200) {
+					    location.reload();
+                    }else {
+                        alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
+                    }
+				} 
 			};
+            
 			xmlhttp.open("DELETE", url, true);
 			xmlhttp.send();
 		}
