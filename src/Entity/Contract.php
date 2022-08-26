@@ -14,6 +14,10 @@ class Contract
 	private $contract_type_id;
 	private $start_date;
 	private $end_date;
+	private $job_object;
+	private $job_description;
+	private $job_salary;
+	private $hourly_rate;
 	private $created;
 	private $modified;
     private $status;
@@ -39,6 +43,10 @@ class Contract
 
         if (empty($this->start_date)) {
             $errors[] = "La date de début est requise";
+        }
+
+        if (empty($this->job_object)) {
+            $errors[] = "L'object du contrat est requis";
         }
 
         return $errors;
@@ -160,6 +168,86 @@ class Contract
     public function setEndDate($end_date)
     {
         $this->end_date = $end_date;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJobObject()
+    {
+        return $this->job_object;
+    }
+
+    /**
+     * @param string $job_object
+     *
+     * @return self
+     */
+    public function setJobObject($job_object)
+    {
+        $this->job_object = $job_object;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJobDescription()
+    {
+        return $this->job_description;
+    }
+
+    /**
+     * @param string $job_description
+     *
+     * @return self
+     */
+    public function setJobDescription(string $job_description)
+    {
+        $this->job_description = $job_description;
+
+        return $this;
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getJobSalary()
+    {
+        return $this->job_salary;
+    }
+
+    /**
+     * @param float|int $job_salary
+     *
+     * @return self
+     */
+    public function setJobSalary(float|int $job_salary)
+    {
+        $this->job_salary = $job_salary;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHourlyRate()
+    {
+        return $this->hourly_rate;
+    }
+
+    /**
+     * @param mixed $hourly_rate
+     *
+     * @return self
+     */
+    public function setHourlyRate($hourly_rate)
+    {
+        $this->hourly_rate = $hourly_rate;
 
         return $this;
     }
