@@ -16,6 +16,9 @@ class DateHelper
      */
     public static function shortDate($date): ?string
     {
+        if (empty($date)) {
+            return null;
+        }
         if (self::isTimestamp($date)) {
             return date('d/m/Y', $date);
         }
@@ -36,6 +39,10 @@ class DateHelper
      */
     public static function dateTime($date): ?string
     {
+        if (empty($date)) {
+            return null;
+        }
+        
         if (self::isTimestamp($date)) {
             return date('d/m/Y H:i', $date);
         }
