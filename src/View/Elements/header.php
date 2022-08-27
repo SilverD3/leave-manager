@@ -154,6 +154,13 @@ AuthController::require_auth();
 			<li class="nav-heading">Configurations</li>
 
 			<li class="nav-item">
+				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Entreprise') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Company' ?>">
+					<i class="bi bi-building"></i>
+					<span>Entreprise</span>
+				</a>
+			</li>
+
+			<li class="nav-item">
 				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Types de contrat') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'ContractTypes' ?>">
 					<i class="bi bi-journal-code"></i>
 					<span>Types de contrat</span>

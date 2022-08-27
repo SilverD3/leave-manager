@@ -28,8 +28,9 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
 			<div class="col-lg-12">
 				<div class="row">
-
-					<?= Flash::render() ?>
+					<div class="col-12 mt-2">
+						<?= Flash::render() ?>
+					</div>
 
 					<!-- Employees Card -->
 					<div class="col-xxl-3 col-md-6">
