@@ -300,7 +300,17 @@
    */
   const datatables = select('.datatable', true)
   datatables.forEach(datatable => {
-    new simpleDatatables.DataTable(datatable);
+    new simpleDatatables.DataTable(datatable, {
+      perPage: 50,
+      perPageSelect: [20,30,50,100],
+      labels:{
+        placeholder:"Rechercher...",
+        perPage:"{select} éléments par page",
+        noRows:"Pas d'élément trouvé",
+        noResults:"Aucun élément ne correspond à votre recherche",
+        info:"Affichage de {start} à {end} sur {rows} éléments"
+      }
+    });
   })
 
   /**
