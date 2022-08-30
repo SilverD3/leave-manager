@@ -32,6 +32,14 @@ class EmployeesController
 		// Set page_title
 		$_SESSION['page_title'] = 'Tableau de bord';
 		$auth_user = (new Auth())->getAuthUser();
+
+		if (empty($auth_user)) {
+			Flash::error("Veuillez vous connecter avant de continuer.");
+
+			header('Location: ' . AuthController::UNAUTHORIZED_REDIRECT . '?redirect=' . $_SERVER['REQUEST_URI']);
+			exit;
+		}
+
 		$stats = [];
 
 		$permissionRequestsServices = new PermissionRequestsServices();
@@ -174,6 +182,13 @@ class EmployeesController
 		}
 
 		$auth_user = (new Auth())->getAuthUser();
+		if (empty($auth_user)) {
+			Flash::error("Veuillez vous connecter avant de continuer.");
+
+			header('Location: ' . AuthController::UNAUTHORIZED_REDIRECT . '?redirect=' . $_SERVER['REQUEST_URI']);
+			exit;
+		}
+
 		if ($auth_user->getRole()->getCode() != 'ADM') {
 			header('Location: '.VIEWS . 'Employees/profile.php');
 			exit;
@@ -197,6 +212,13 @@ class EmployeesController
 	public function profile()
 	{
 		$auth_user = (new Auth())->getAuthUser();
+		if (empty($auth_user)) {
+			Flash::error("Veuillez vous connecter avant de continuer.");
+
+			header('Location: ' . AuthController::UNAUTHORIZED_REDIRECT . '?redirect=' . $_SERVER['REQUEST_URI']);
+			exit;
+		}
+		
 		$employee = $this->service->getById($auth_user->getId());
 
 		if (empty($employee)) {
