@@ -144,13 +144,15 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 													<td><?= DateHelper::shortDate($permissionRequest->getStartDate()) ?></td>
 													<td><?= DateHelper::shortDate($permissionRequest->getEndDate()) ?></td>
 													<td>
-														<?php if ($permissionRequest->getStatus() == 'approved'): ?>
-															<span class="badge bg-success">Approuvée</span>
-														<?php elseif($permissionRequest->getStatus() == 'rejected'): ?>
-															<span class="badge bg-danger">Rejétée</span>
-														<?php else: ?>
-															<span class="badge bg-primary">En attente</span>
-														<?php endif; ?>
+														<?php if ($permissionRequest->getStatus() == 'pending'): ?>
+                                                            <span class="badge text-bg-primary">En attente</span>
+                                                        <?php elseif($permissionRequest->getStatus() == 'approved'): ?>
+                                                            <span class="badge text-bg-success">Approuvée</span>
+                                                        <?php elseif($permissionRequest->getStatus() == 'disapproved'): ?>
+                                                            <span class="badge text-bg-danger">Rejetée</span>
+                                                        <?php else: ?>
+                                                            <span class="badge text-bg-info"> <?= $permissionRequest->getStatus() ?></span>
+                                                        <?php endif; ?>
 													</td>
 												</tr>
 											<?php endforeach ?>
