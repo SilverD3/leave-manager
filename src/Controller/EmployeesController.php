@@ -31,40 +31,53 @@ class EmployeesController
 	{
 		// Set page_title
 		$_SESSION['page_title'] = 'Tableau de bord';
+		$auth_user = (new Auth())->getAuthUser();
+		$stats = [];
 
 		$permissionRequestsServices = new PermissionRequestsServices();
-		$contractTypesServices = new ContractTypesServices();
-		$contractsServices = new ContractsServices();
+
+		if ($auth_user->getRole()->getCode() == 'ADM') {
+			$contractTypesServices = new ContractTypesServices();
+			$contractsServices = new ContractsServices();
+			
+			$nb_contract_types = $contractTypesServices->countAll();
+			$nb_contracts = $contractsServices->countAll();
+			$nb_active_contracts = $contractsServices->countAll('active');
+			$nb_terminated_contracts = $contractsServices->countAll('terminated');
+
+			$stats['nb_contract_types'] = $nb_contract_types;
+			$stats['nb_contracts'] = $nb_contracts;
+			$stats['nb_active_contracts'] = $nb_active_contracts;
+			$stats['nb_terminated_contracts'] = $nb_terminated_contracts;
+
+
+			$nb_permission_requests = $permissionRequestsServices->countAll();
+			$nb_approved_permission_requests = $permissionRequestsServices->countAll('approved');
+			$nb_rejected_permission_requests = $permissionRequestsServices->countAll('rejected');
+			$recent_permission_requests = $permissionRequestsServices->getLatest(5);
+		} else {
+			$nb_permission_requests = $permissionRequestsServices->countAll('all', $auth_user->getId());
+			$nb_approved_permission_requests = $permissionRequestsServices->countAll('approved', $auth_user->getId());
+			$nb_rejected_permission_requests = $permissionRequestsServices->countAll('rejected', $auth_user->getId());
+			$recent_permission_requests = $permissionRequestsServices->getLatest(5, $auth_user->getId());
+		}
 
 		$nb_employees = $this->service->countAll();
-		$nb_contract_types = $contractTypesServices->countAll();
 
-		$nb_permission_requests = $permissionRequestsServices->countAll();
-		$nb_approved_permission_requests = $permissionRequestsServices->countAll('approved');
-		$nb_rejected_permission_requests = $permissionRequestsServices->countAll('rejected');
+		$stats['nb_employees'] = $nb_employees;
+		$stats['nb_permission_requests'] = $nb_permission_requests;
+		$stats['nb_approved_permission_requests'] = $nb_approved_permission_requests;
+		$stats['nb_rejected_permission_requests'] = $nb_rejected_permission_requests;
 
-		$nb_contracts = $contractsServices->countAll();
-		$nb_active_contracts = $contractsServices->countAll('active');
-		$nb_terminated_contracts = $contractsServices->countAll('terminated');
-
-		$recent_permission_requests = $permissionRequestsServices->getLatest(5);
-
-		$GLOBALS['stats'] = [
-			'nb_employees' => $nb_employees,
-			'nb_contract_types' => $nb_contract_types,
-			'nb_permission_requests' => $nb_permission_requests,
-			'nb_approved_permission_requests' => $nb_approved_permission_requests,
-			'nb_rejected_permission_requests' => $nb_rejected_permission_requests,
-			'nb_contracts' => $nb_contracts,
-			'nb_active_contracts' => $nb_active_contracts,
-			'nb_terminated_contracts' => $nb_terminated_contracts,
-		];
+		$GLOBALS['stats'] = $stats; 
 
 		$GLOBALS['recent_permission_requests'] = $recent_permission_requests;
 	}
 
 	public function index()
 	{
+		AuthController::require_admin_priv();
+
 		$_SESSION['page_title'] = 'Employés';
 
 		$employees = $this->service->getAll(true);
@@ -74,6 +87,8 @@ class EmployeesController
 
 	public function add()
 	{
+		AuthController::require_admin_priv();
+
 		if (isset($_POST['add_employee'])) {
 			$employee_id = $this->service->add($_POST);
 
@@ -103,6 +118,8 @@ class EmployeesController
 
 	public function update()
 	{
+		AuthController::require_admin_priv();
+
 		if (!isset($_GET['id'])) {
 			Flash::error("Mauvaise requête");
 			header('Location: '.VIEWS . 'Employees');
@@ -153,6 +170,12 @@ class EmployeesController
 		if (!isset($_GET['id'])) {
 			Flash::error("Mauvaise requête");
 			header('Location: '.VIEWS . 'Employees');
+			exit;
+		}
+
+		$auth_user = (new Auth())->getAuthUser();
+		if ($auth_user->getRole()->getCode() != 'ADM') {
+			header('Location: '.VIEWS . 'Employees/profile.php');
 			exit;
 		}
 
@@ -208,6 +231,8 @@ class EmployeesController
 
 	public function delete()
 	{
+		AuthController::require_admin_priv();
+
 		if(!isset($_GET['id']) || empty($_GET['id'])) {
 			header('Location: ' . VIEWS . 'Employees');
 			exit;
