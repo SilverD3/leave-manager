@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4deb2ubuntu5
+-- version 5.1.1deb5ubuntu1
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : sam. 27 août 2022 à 09:01
--- Version du serveur :  8.0.29
--- Version de PHP : 8.0.8
+-- Généré le : mar. 30 août 2022 à 17:15
+-- Version du serveur : 8.0.29
+-- Version de PHP : 8.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -41,6 +41,33 @@ CREATE TABLE `company` (
   `modified` datetime DEFAULT NULL,
   `modified_by` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `configs`
+--
+
+CREATE TABLE `configs` (
+  `id` int NOT NULL,
+  `code` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `default_value` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `value` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `modified` datetime DEFAULT NULL,
+  `modified_by` int DEFAULT NULL,
+  `value_type` enum('bool','string') COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `configs`
+--
+
+INSERT INTO `configs` (`id`, `code`, `description`, `default_value`, `value`, `modified`, `modified_by`, `value_type`) VALUES
+(1, 'LM_LEAVE_NB_DAYS', 'Nombre de jours de congés par an pour chaque employé', '18', '18', '2022-08-30 15:13:52', NULL, 'string'),
+(2, 'LM_MULTIPLE_LEAVES_IN_YEAR', "Permettre plusieurs prises de congés dans l'année", 'NON', 'NON', '2022-08-30 15:13:52', NULL, 'bool'),
+(3, 'LM_WORK_BEGIN_AT', 'Heure de début du travail', '08:00', '08:00', '2022-08-30 15:20:33', NULL, 'string'),
+(4, 'LM_WORK_END_AT', 'Heure de fin du travail', '18:00', '18:00', '2022-08-30 15:20:33', NULL, 'string');
 
 -- --------------------------------------------------------
 
@@ -123,7 +150,8 @@ CREATE TABLE `employees` (
 -- Déchargement des données de la table `employees`
 --
 
-INSERT INTO `employees` VALUES (1,'Admin','admin','admin@gmail.com','admin','4ceb415ca0376305106660973f6f9cf550126cb0fc2a9fdcff1b30b4e6e27383 ',1,'2022-08-05 16:19:18',NULL,NULL,NULL,'pending',1);
+INSERT INTO `employees` (`id`, `first_name`, `last_name`, `email`, `username`, `pwd`, `role_id`, `created`, `modified`, `token`, `token_exp_date`, `status`, `etat`) VALUES
+(1,'Admin','admin','admin@gmail.com','admin','4ceb415ca0376305106660973f6f9cf550126cb0fc2a9fdcff1b30b4e6e27383 ',1,'2022-08-05 16:19:18',NULL,NULL,NULL,'pending',1);
 
 -- --------------------------------------------------------
 
@@ -171,11 +199,12 @@ CREATE TABLE `permission_requests` (
   `id` int NOT NULL,
   `employee_id` int NOT NULL,
   `reason` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` varchar(1000) COLLATE utf8mb4_general_ci NOT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
-  `status` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `start_date` datetime NOT NULL,
+  `end_date` datetime NOT NULL,
+  `status` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime DEFAULT NULL,
   `etat` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -207,6 +236,12 @@ INSERT INTO `roles` (`id`, `code`, `name`) VALUES
 -- Index pour la table `company`
 --
 ALTER TABLE `company`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `configs`
+--
+ALTER TABLE `configs`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -273,6 +308,12 @@ ALTER TABLE `roles`
 --
 ALTER TABLE `company`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `configs`
+--
+ALTER TABLE `configs`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `contracts`
