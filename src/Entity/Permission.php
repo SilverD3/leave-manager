@@ -174,26 +174,6 @@ class Permission
     /**
      * @return mixed
      */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param mixed $status
-     *
-     * @return self
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getCreated()
     {
         return $this->created;

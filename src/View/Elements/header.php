@@ -36,6 +36,7 @@ AuthController::require_auth();
 
 	<!-- Template Main CSS File -->
 	<link href="<?= TEMPLATE_PATH ?>assets/css/style.css" rel="stylesheet">
+	<link href="<?= ASSETS ?>css/override.css" rel="stylesheet">
 
 </head>
 
@@ -123,24 +124,26 @@ AuthController::require_auth();
 
 			<li class="nav-heading">Application</li>
 
-			<li class="nav-item">
-				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Employés') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Employees' ?>">
-					<i class="bi bi-people"></i>
-					<span>Employés</span>
-				</a>
-			</li>
+			<?php if($auth_user->getRole()->getCode() == 'ADM'): ?>
+				<li class="nav-item">
+					<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Employés') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Employees' ?>">
+						<i class="bi bi-people"></i>
+						<span>Employés</span>
+					</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link collapsed" href="#">
+						<i class="bi bi-files-alt"></i>
+						<span>Contrats</span>
+					</a>
+				</li>
+			<?php endif; ?>
 
 			<li class="nav-item">
-				<a class="nav-link collapsed" href="#">
+				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Demandes de permission') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'PermissionRequests' ?>">
 					<i class="bi bi-person-dash"></i>
 					<span>Demandes de permission</span>
-				</a>
-			</li>
-
-			<li class="nav-item">
-				<a class="nav-link collapsed" href="#">
-					<i class="bi bi-files-alt"></i>
-					<span>Contrats</span>
 				</a>
 			</li>
 
@@ -160,19 +163,21 @@ AuthController::require_auth();
 				</a>
 			</li>
 
-			<li class="nav-item">
-				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Types de contrat') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'ContractTypes' ?>">
-					<i class="bi bi-journal-code"></i>
-					<span>Types de contrat</span>
-				</a>
-			</li>
+			<?php if($auth_user->getRole()->getCode() == 'ADM'): ?>
+				<li class="nav-item">
+					<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Types de contrat') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'ContractTypes' ?>">
+						<i class="bi bi-journal-code"></i>
+						<span>Types de contrat</span>
+					</a>
+				</li>
 
-			<li class="nav-item">
-				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Modèles de contrat') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'ContractModels' ?>">
-					<i class="bi bi-code-square"></i>
-					<span>Modèles de contrat</span>
-				</a>
-			</li>
+				<li class="nav-item">
+					<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Modèles de contrat') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'ContractModels' ?>">
+						<i class="bi bi-code-square"></i>
+						<span>Modèles de contrat</span>
+					</a>
+				</li>
+			<?php endif; ?>
 
 		</ul>
 

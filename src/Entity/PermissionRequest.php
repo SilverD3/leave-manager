@@ -16,6 +16,7 @@ class PermissionRequest
 	private $end_date;
 	private $status;
 	private $created;
+	private $modified;
 	private $etat;
 
     /**
@@ -208,6 +209,26 @@ class PermissionRequest
     public function setCreated($created)
     {
         $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModified()
+    {
+        return $this->modified;
+    }
+
+    /**
+     * @param mixed $modified
+     *
+     * @return self
+     */
+    public function setModified($modified)
+    {
+        $this->modified = $modified;
 
         return $this;
     }
