@@ -72,4 +72,24 @@ class AuthController
 
 		$GLOBALS['auth_user'] = (new Auth())->getAuthUser();
 	}
+
+	public static function require_admin_priv()
+	{
+		$auth_user = (new Auth())->getAuthUser();
+		if (empty($auth_user) || $auth_user->getRole()->getCode() != 'ADM') {
+			
+			if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+				http_response_code(403);
+				header('Content-Type: application/json');
+				echo json_encode(['status' => 'error', 'message' => "Défaut de privilège. Permission non accordée"]);
+	
+				exit;
+			}
+
+			Flash::error("Défaut de privilège. Permission non accordée");
+
+			header('Location: ' . BASE_URL);
+			exit;
+		}
+	}
 }
