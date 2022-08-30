@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Service\CompanyServices;
 use App\Service\ContractTypesServices;
+use Core\Auth\Auth;
 use Core\FlashMessages\Flash;
 use Core\Utils\Session;
 
@@ -28,6 +29,12 @@ class CompanyController
      */
     public function index()
 	{
+        $auth_user = (new Auth())->getAuthUser();
+        if(empty($auth_user) || $auth_user->getRole()->getCode() != 'ADM'){
+            header('Location: ' . VIEWS . 'Company/view.php');
+            exit;
+        }
+
         if (isset($_POST['update_company'])) {
             $updated = $this->service->update($_POST);
 
@@ -36,7 +43,20 @@ class CompanyController
             }
         }
 
+		$_SESSION['page_title'] = 'Entreprise';
+        unset($_SESSION['subpage_title']);
 
+        $company = $this->service->getCompany();
+
+        $GLOBALS['company'] = $company;
+	}
+
+    /**
+     * Index method
+     * @return void
+     */
+    public function view()
+	{
 		$_SESSION['page_title'] = 'Entreprise';
         unset($_SESSION['subpage_title']);
 
