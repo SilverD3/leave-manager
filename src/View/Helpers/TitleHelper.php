@@ -14,17 +14,19 @@ class TitleHelper
     public function getTitle(): string
     {
         $page_title = '';
-
-        if (isset($_SESSION["page_title"])) {
-            $page_title .= $_SESSION["page_title"];
+        
+        if (isset($_SESSION["subpage_title"])) {
+            $page_title .= $_SESSION["subpage_title"];
         }
 
-        if (isset($_SESSION["subpage_title"])) {
-            $page_title .= empty($page_title) ? $_SESSION["subpage_title"] : ' | ' . $_SESSION["subpage_title"];
+        if (isset($_SESSION["page_title"])) {
+            $page_title .= empty($page_title) ? $_SESSION["page_title"] : ' | ' . $_SESSION["page_title"];
         }
 
         if(empty($page_title)) {
             $page_title .= $this->app_name;
+        } else {
+            $page_title .= ' | ' . $this->app_name;
         }
 
         return $page_title;
