@@ -156,7 +156,7 @@ class CompanyServices
         $email = !empty($data['email']) ? $data['email'] : null;
         $logo = !empty($data['logo']) ? $data['logo'] : null;
         $about = !empty($data['about']) ? $data['about'] : null;
-        $modified_by = !empty($data['mo$modified_by']) ? $data['mo$modified_by'] : null;
+        $modified_by = !empty($data['modified_by']) ? $data['modified_by'] : null;
         $created = !empty($data['created']) ? $data['created'] : null;
         $modified = !empty($data['modified']) ? $data['modified'] : null;
 
