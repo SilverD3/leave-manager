@@ -165,6 +165,13 @@ AuthController::require_auth();
 
 			<?php if($auth_user->getRole()->getCode() == 'ADM'): ?>
 				<li class="nav-item">
+					<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Paramètres') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Configs' ?>">
+						<i class="bi bi-gear-wide-connected"></i>
+						<span>Paramètres</span>
+					</a>
+				</li>
+				
+				<li class="nav-item">
 					<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Types de contrat') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'ContractTypes' ?>">
 						<i class="bi bi-journal-code"></i>
 						<span>Types de contrat</span>
