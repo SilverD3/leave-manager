@@ -118,7 +118,7 @@ class ContractModelsController
         $contract_types = $contractTypesServices->getAll();
         $GLOBALS['contract_types'] = $contract_types;
 
-        $_SESSION['page_title'] = 'Types de contrat';
+        $_SESSION['page_title'] = 'Modèles de contrat';
 		$_SESSION['subpage_title'] = 'Editier';
 
         // Check if form data is cached
@@ -145,7 +145,7 @@ class ContractModelsController
 			exit;
 		}
 
-        $_SESSION['page_title'] = 'Types de contrat';
+        $_SESSION['page_title'] = 'Modèles de contrat';
 		$_SESSION['subpage_title'] = 'Editier';
 
         $GLOBALS['contractModel'] = $contractModel;
