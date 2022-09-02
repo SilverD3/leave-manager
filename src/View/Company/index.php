@@ -23,13 +23,13 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 	</div><!-- End Page Title -->
 
 	<section class="section profile">
-		<div class="row">
+		<div class="row mb-3">
             
             <?= Flash::render() ?>
 
             <div class="col-xl-4">
 
-                <div class="card">
+                <div class="card h-100">
                     <div class="card-body pt-4 d-flex flex-column align-items-center">
                         <img src="<?= IMAGES ?>company-illustration.png" alt="Company Image" class="w-100">
                         <h2 class="mt-2"><?= $company->getName() ?></h2>
@@ -40,7 +40,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
             <div class="col-xl-8">
 
-                <div class="card">
+                <div class="card h-100">
                     <div class="card-body pt-3">
                         <ul class="nav nav-tabs nav-tabs-bordered">
 
@@ -89,16 +89,6 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                 <th>Dernière modification</th>
                                                 <td><?= $company->getModified() ? DateHelper::dateTime($company->getModified()) : '/' ?></td>
                                             </tr>
-                                            <?php if($company->getAbout()): ?>
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <div class="text-justify" style="text-align:justify;">
-                                                            <h3 class="card-title">A propos de l'entreprise</h3>
-                                                            <?= $company->getAbout() ?>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -156,6 +146,19 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                 </div>
             </div>
         </div>
+
+        <?php if($company->getAbout()): ?>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-body">
+                        <h3 class="card-title">A propos de l'entreprise</h3>
+                        <div class="text-justify" style="text-align:justify;">
+                            <?= $company->getAbout() ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
     </section>
 </main>
 
