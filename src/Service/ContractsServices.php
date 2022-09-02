@@ -29,27 +29,36 @@ class ContractsServices
      * Count all contracts
      *
      * @param string $status Status to consider
+     * @param int|null $employee_id Employee id
      * @return int Number of contracts
      */
-    public function countAll(string $status = 'all'): int
+    public function countAll(string $status = 'all', $employee_id = null): int
     {
         $count = 0;
         $join = '';
 
-        $sql = "SELECT COUNT(*) AS count FROM contracts c WHERE c.etat = ?";
+        $sql = "SELECT COUNT(*) AS count FROM contracts c WHERE c.etat = :etat";
         if ($status != 'all') {
-            $sql .= " AND c.status = ?";
+            $sql .= " AND c.status = :status";
+        }
+
+        if ($employee_id != null) {
+            $sql .= " AND c.employee_id = :employee_id";
         }
 
         try {
             $query = $this->connectionManager->getConnection()->prepare($sql);
 
-            if ($status == 'all') {
-                $query->execute([1]);
-            } else {
-                $query->execute([1, $status]);
+            $query->bindValue(':etat', 1, \PDO::PARAM_BOOL);
+            if ($status != 'all') {
+                $query->bindValue(':status', $status, \PDO::PARAM_STR);
+            }
+            if ($employee_id != null) {
+                $query->bindValue(':employee_id', $employee_id, \PDO::PARAM_INT);
             }
 
+            $query->execute();
+            
             $result = $query->fetch(\PDO::FETCH_ASSOC);
 
             $count = (int)$result['count'];

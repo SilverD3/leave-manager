@@ -73,30 +73,30 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 						</div>
 					</div><!-- End Permission Requests Card -->
 
-					<?php if ($auth_user->getRole()->getCode() == 'ADM'): ?>
-						<!-- Contracts Card -->
-						<div class="col-xxl-3 col-md-6">
+					<!-- Contracts Card -->
+					<div class="col-xxl-3 col-md-6">
 
-							<div class="card info-card customers-card">
-								<div class="card-body">
-									<h5 class="card-title">Contrats</h5>
+						<div class="card info-card customers-card">
+							<div class="card-body">
+								<h5 class="card-title">Contrats</h5>
 
-									<div class="d-flex align-items-center">
-										<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-											<i class="bi bi-files-alt"></i>
-										</div>
-										<div class="ps-3">
-											<h6><?= $stats['nb_contracts'] ?></h6>
-											<span class="text-success small pt-1 fw-bold"> <?= $stats['nb_active_contracts'] ?> actifs </span> |
-											<span class="text-danger small pt-1 fw-bold"> <?= $stats['nb_terminated_contracts'] ?> resiliés</span>
-										</div>
+								<div class="d-flex align-items-center">
+									<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+										<i class="bi bi-files-alt"></i>
 									</div>
-
+									<div class="ps-3">
+										<h6><?= $stats['nb_contracts'] ?></h6>
+										<span class="text-success small pt-1 fw-bold"> <?= $stats['nb_active_contracts'] ?> actifs </span> |
+										<span class="text-danger small pt-1 fw-bold"> <?= $stats['nb_terminated_contracts'] ?> resiliés</span>
+									</div>
 								</div>
+
 							</div>
+						</div>
 
-						</div><!-- End Contracts Card -->
+					</div><!-- End Contracts Card -->
 
+					<?php if ($auth_user->getRole()->getCode() == 'ADM'): ?>
 						<!-- Contract Types Card -->
 						<div class="col-xxl-3 col-md-6">
 							<div class="card info-card sales-card">

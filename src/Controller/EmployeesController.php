@@ -43,10 +43,10 @@ class EmployeesController
 		$stats = [];
 
 		$permissionRequestsServices = new PermissionRequestsServices();
+		$contractsServices = new ContractsServices();
 
 		if ($auth_user->getRole()->getCode() == 'ADM') {
 			$contractTypesServices = new ContractTypesServices();
-			$contractsServices = new ContractsServices();
 			
 			$nb_contract_types = $contractTypesServices->countAll();
 			$nb_contracts = $contractsServices->countAll();
@@ -54,16 +54,16 @@ class EmployeesController
 			$nb_terminated_contracts = $contractsServices->countAll('terminated');
 
 			$stats['nb_contract_types'] = $nb_contract_types;
-			$stats['nb_contracts'] = $nb_contracts;
-			$stats['nb_active_contracts'] = $nb_active_contracts;
-			$stats['nb_terminated_contracts'] = $nb_terminated_contracts;
-
 
 			$nb_permission_requests = $permissionRequestsServices->countAll();
 			$nb_approved_permission_requests = $permissionRequestsServices->countAll('approved');
 			$nb_rejected_permission_requests = $permissionRequestsServices->countAll('rejected');
 			$recent_permission_requests = $permissionRequestsServices->getLatest(5);
 		} else {
+			$nb_contracts = $contractsServices->countAll('all', $auth_user->getId());
+			$nb_active_contracts = $contractsServices->countAll('active', $auth_user->getId());
+			$nb_terminated_contracts = $contractsServices->countAll('terminated', $auth_user->getId());
+
 			$nb_permission_requests = $permissionRequestsServices->countAll('all', $auth_user->getId());
 			$nb_approved_permission_requests = $permissionRequestsServices->countAll('approved', $auth_user->getId());
 			$nb_rejected_permission_requests = $permissionRequestsServices->countAll('rejected', $auth_user->getId());
@@ -72,6 +72,9 @@ class EmployeesController
 
 		$nb_employees = $this->service->countAll();
 
+		$stats['nb_contracts'] = $nb_contracts;
+		$stats['nb_active_contracts'] = $nb_active_contracts;
+		$stats['nb_terminated_contracts'] = $nb_terminated_contracts;
 		$stats['nb_employees'] = $nb_employees;
 		$stats['nb_permission_requests'] = $nb_permission_requests;
 		$stats['nb_approved_permission_requests'] = $nb_approved_permission_requests;
