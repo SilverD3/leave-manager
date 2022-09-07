@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : mar. 30 août 2022 à 17:15
+-- Généré le : mer. 07 sep. 2022 à 16:02
 -- Version du serveur : 8.0.29
 -- Version de PHP : 8.1.2
 
@@ -64,10 +64,11 @@ CREATE TABLE `configs` (
 --
 
 INSERT INTO `configs` (`id`, `code`, `description`, `default_value`, `value`, `modified`, `modified_by`, `value_type`) VALUES
-(1, 'LM_LEAVE_NB_DAYS', 'Nombre de jours de congés par an pour chaque employé', '18', '18', '2022-08-30 15:13:52', NULL, 'string'),
-(2, 'LM_MULTIPLE_LEAVES_IN_YEAR', "Permettre plusieurs prises de congés dans l'année", 'NON', 'NON', '2022-08-30 15:13:52', NULL, 'bool'),
+(1, 'LM_LEAVE_NB_DAYS', 'Nombre de jours de congés par an pour chaque employé', '18', '18', '2022-08-31 09:55:50', 1, 'string'),
+(2, 'LM_MULTIPLE_LEAVES_IN_YEAR', 'Permettre plusieurs prises de congés dans l\'année', 'NON', 'NON', '2022-08-31 09:55:38', 1, 'bool'),
 (3, 'LM_WORK_BEGIN_AT', 'Heure de début du travail', '08:00', '08:00', '2022-08-30 15:20:33', NULL, 'string'),
-(4, 'LM_WORK_END_AT', 'Heure de fin du travail', '18:00', '18:00', '2022-08-30 15:20:33', NULL, 'string');
+(4, 'LM_WORK_END_AT', 'Heure de fin du travail', '18:00', '18:00', '2022-08-30 15:20:33', NULL, 'string'),
+(5, 'LM_HOURLY_RATE', 'Nombre de d\'heures de travail par semaine', '40', '40', '2022-08-31 11:23:57', NULL, 'string');
 
 -- --------------------------------------------------------
 
@@ -83,9 +84,10 @@ CREATE TABLE `contracts` (
   `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL,
   `job_object` varchar(300) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `job_description` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `job_description` varchar(1500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `job_salary` decimal(13,4) DEFAULT NULL,
   `hourly_rate` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `pdf` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime DEFAULT NULL,
   `status` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
@@ -165,7 +167,6 @@ CREATE TABLE `leaves` (
   `year` int NOT NULL,
   `days` int NOT NULL,
   `start_date` date NOT NULL,
-  `used_days` int NOT NULL DEFAULT '0',
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime DEFAULT NULL,
   `note` varchar(1000) COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -313,7 +314,7 @@ ALTER TABLE `company`
 -- AUTO_INCREMENT pour la table `configs`
 --
 ALTER TABLE `configs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `contracts`
