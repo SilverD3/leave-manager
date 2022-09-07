@@ -64,6 +64,7 @@ class AuthController
 	public static function require_auth()
 	{
 		if (!Auth::isConnected()) {
+			Flash::clearMessages();
 			Flash::error("Veuillez vous connecter avant de continuer.");
 
 			header('Location: ' . self::UNAUTHORIZED_REDIRECT . '?redirect=' . $_SERVER['REQUEST_URI']);
@@ -76,8 +77,23 @@ class AuthController
 	public static function require_admin_priv()
 	{
 		$auth_user = (new Auth())->getAuthUser();
-		if (empty($auth_user) || $auth_user->getRole()->getCode() != 'ADM') {
-			
+		if (empty($auth_user)) {
+			Flash::clearMessages();
+
+			if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+				http_response_code(403);
+				header('Content-Type: application/json');
+				echo json_encode(['status' => 'error', 'message' => "Veuillez vous connecter avant de continuer"]);
+	
+				exit;
+			}
+
+			Flash::error("Veuillez vous connecter avant de continuer.");
+			header('Location: ' . self::UNAUTHORIZED_REDIRECT . '?redirect=' . $_SERVER['REQUEST_URI']);
+			exit;
+		}
+		
+		if($auth_user->getRole()->getCode() != 'ADM') {
 			if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
 				http_response_code(403);
 				header('Content-Type: application/json');
