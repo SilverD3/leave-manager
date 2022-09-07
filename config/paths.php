@@ -44,6 +44,14 @@ if (!defined('SERVICE_PATH')) {
     define('SERVICE_PATH', APP . 'Service' . DS);
 }
 
+if (!defined('VENDOR_PATH')) {
+    define('VENDOR_PATH', ROOT . DS . 'vendor' . DS);
+}
+
+if (!defined('ASSETS_PATH')) {
+    define('ASSETS_PATH', ROOT . DS . 'assets' . DS);
+}
+
 if (!defined('TEMPLATE_PATH')) {
     define('TEMPLATE_PATH', BASE_URL . 'template' . DS);
 }
@@ -59,4 +67,8 @@ if (!defined('ASSETS')) {
 
 if (!defined('IMAGES')) {
     define('IMAGES', ASSETS . 'images' . DS);
+}
+
+if (!defined('VENDOR')) {
+    define('VENDOR', BASE_URL . 'vendor' . DS);
 }
