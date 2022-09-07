@@ -29,4 +29,16 @@ class UtilsHelper
 
         return $string;
     }
+
+    /**
+     * Get money value of number
+     *
+     * @param int|float $amount Amount to be returned
+     * @param int $decimals Number of decimails
+     * @return string Money value
+     */
+    public static function currency($amount, $decimals = 2)
+    {
+        return number_format($amount, $decimals, '.', ' ');
+    }
 }
