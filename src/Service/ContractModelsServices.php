@@ -178,6 +178,80 @@ class ContractModelsServices
     }
 
     /**
+     * Retrieve specific contract model
+     * 
+     * @param int $type_id Contract type id
+     * @return ContractModel|null Return the contract model or null if not found
+     */
+    public function getCurrent(int $type_id): ?ContractModel
+    {
+        $sql = "SELECT cm.id AS ContractModel_id, cm.name AS ContractModel_name, cm.contract_type_id AS ContractModel_contract_type_id, cm.content AS ContractModel_content, "
+                ."cm.is_current AS ContractModel_is_current, cm.status AS ContractModel_status, cm.created AS ContractModel_created, cm.modified AS ContractModel_modified, cm.etat AS ContractModel_etat, "
+                ."ct.id AS ContractType_id, ct.name AS ContractType_name, ct.description AS ContractType_description, ct.created AS ContractType_created, "
+                ."ct.etat AS ContractType_etat "
+                ."FROM contract_models cm "
+                ."INNER JOIN contract_types ct ON ct.id = cm.contract_type_id "
+                ."WHERE cm.etat = :etat AND cm.is_current = :current AND cm.contract_type_id = :contract_type_id ";
+
+        try {
+            $query = $this->connectionManager->getConnection()->prepare($sql);
+            $query->bindValue(':etat', 1, \PDO::PARAM_BOOL);
+            $query->bindValue(':current', 1, \PDO::PARAM_BOOL);
+            $query->bindParam(':contract_type_id', $type_id, \PDO::PARAM_INT);
+
+            $query->execute();
+
+            $result = $query->fetch(\PDO::FETCH_ASSOC);
+
+            if (empty($result)) {
+                $sql = "SELECT cm.id AS ContractModel_id, cm.name AS ContractModel_name, cm.contract_type_id AS ContractModel_contract_type_id, cm.content AS ContractModel_content, "
+                        ."cm.is_current AS ContractModel_is_current, cm.status AS ContractModel_status, cm.created AS ContractModel_created, cm.modified AS ContractModel_modified, cm.etat AS ContractModel_etat, "
+                        ."ct.id AS ContractType_id, ct.name AS ContractType_name, ct.description AS ContractType_description, ct.created AS ContractType_created, "
+                        ."ct.etat AS ContractType_etat "
+                        ."FROM contract_models cm "
+                        ."INNER JOIN contract_types ct ON ct.id = cm.contract_type_id "
+                        ."WHERE cm.etat = :etat AND cm.contract_type_id = :contract_type_id ";
+                
+                $query = $this->connectionManager->getConnection()->prepare($sql);
+                $query->bindValue(':etat', 1, \PDO::PARAM_BOOL);
+                $query->bindParam(':contract_type_id', $type_id, \PDO::PARAM_INT);
+    
+                $query->execute();
+    
+                $result = $query->fetch(\PDO::FETCH_ASSOC);
+
+                if (empty($result)) {
+                    return null;
+                }
+            }
+
+            $model = new ContractModel();
+            $model->setId($result['ContractModel_id']);
+            $model->setName($result['ContractModel_name']);
+            $model->setContent($result['ContractModel_content']);
+            $model->setIsCurrent($result['ContractModel_is_current']);
+            $model->setContractTypeId($result['ContractModel_contract_type_id']);
+            $model->setStatus($result['ContractModel_status']);
+            $model->setCreated($result['ContractModel_created']);
+            $model->setModified($result['ContractModel_modified']);
+            $model->setEtat($result['ContractModel_etat']);
+
+            $contractType = new ContractType();
+            $contractType->setId($result['ContractType_id']);
+            $contractType->setName($result['ContractType_name']);
+            $contractType->setDescription($result['ContractType_description']);
+            $contractType->setCreated($result['ContractType_created']);
+            $contractType->setEtat($result['ContractType_etat']);
+
+            $model->setContractType($contractType);
+
+            return $model;
+        } catch (\PDOException $e) {
+            throw new \Exception("SQL Exception: " . $e->getMessage(), (int)$e->getCode());
+        }
+    }
+
+    /**
      * Add contract model
      *
      * @param array|ContractModel $contractModel Model to add

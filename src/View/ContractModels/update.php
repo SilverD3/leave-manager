@@ -73,7 +73,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                     <td> Date de naissance de l'employé </td>
                                                 </tr>
                                                 <tr>
-                                                    <td> $_candidate_birth_address <a href="#" title="Copier" class="link float-end me-3" onclick="copyToClipboard('$_candidate_birth_address')"><i class="bi bi-clipboard"></i></a></td>
+                                                    <td> $_candidate_baddress <a href="#" title="Copier" class="link float-end me-3" onclick="copyToClipboard('$_candidate_baddress')"><i class="bi bi-clipboard"></i></a></td>
                                                     <td> Lieu de naissance de l'employé </td>
                                                 </tr>
                                                 <tr>
@@ -93,8 +93,16 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                     <td>Date à partir de laquelle le contrat est effectif </td>
                                                 </tr>
                                                 <tr>
+                                                    <td> $_job_end_date <a href="#" title="Copier" class="link float-end me-3" onclick="copyToClipboard('$_job_end_date')"><i class="bi bi-clipboard"></i></a></td>
+                                                    <td>Date de fin du contrat </td>
+                                                </tr>
+                                                <tr>
                                                     <td> $_job_object <a href="#" title="Copier" class="link float-end me-3" onclick="copyToClipboard('$_job_object')"><i class="bi bi-clipboard"></i></a></td>
                                                     <td> Objet de l'offre </td>
+                                                </tr>
+                                                <tr>
+                                                    <td> $_job_description <a href="#" title="Copier" class="link float-end me-3" onclick="copyToClipboard('$_job_description')"><i class="bi bi-clipboard"></i></a></td>
+                                                    <td> Missions / Description des tâches </td>
                                                 </tr>
                                                 <tr>
                                                     <td> $_job_delay <a href="#" title="Copier" class="link float-end me-3" onclick="copyToClipboard('$_job_delay')"><i class="bi bi-clipboard"></i></a></td>
@@ -107,6 +115,10 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                 <tr>
                                                     <td> $_hourly_rate <a href="#" title="Copier" class="link float-end me-3" onclick="copyToClipboard('$_hourly_rate')"><i class="bi bi-clipboard"></i></a></td>
                                                     <td> Taux horaire </td>
+                                                </tr>
+                                                <tr>
+                                                    <td> $_generated_date <a href="#" title="Copier" class="link float-end me-3" onclick="copyToClipboard('$_generated_date')"><i class="bi bi-clipboard"></i></a></td>
+                                                    <td> L'heure à laquelle le contrat est généré </td>
                                                 </tr>
 
                                             </tbody>
