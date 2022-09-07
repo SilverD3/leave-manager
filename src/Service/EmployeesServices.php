@@ -131,19 +131,26 @@ class EmployeesServices
 		return $count;
 	}
 
-	public function getById($id): ?Employee
+	public function getById($id, bool $bypass = false): ?Employee
 	{
 		$result = [];
 
 		$sql = "SELECT e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, e.email AS Employee_email, e.username AS Employee_username, e.pwd AS Employee_pwd, e.role_id AS Employee_role_id, e.created AS Employee_created, e.modified AS Employee_modified, e.token AS Employee_token, e.token_exp_date, e.status AS Employee_status, e.etat AS Employee_etat, r.id AS Role_id, r.code AS Role_code, r.name AS Role_name
 			FROM employees e 
 			JOIN roles r ON r.id = e.role_id 
-			WHERE e.id = ? AND e.etat = ?";
+			WHERE e.id = ?";
+		
+		if (!$bypass) {
+			$sql .= " AND e.etat = ?";
+		}
 
 		try {
 			$query = $this->connectionManager->getConnection()->prepare($sql);
-
-			$query->execute([$id, 1]);
+			$query->bindValue(1, $id, \PDO::PARAM_INT);
+			if (!$bypass) {
+				$query->bindValue(2, true, \PDO::PARAM_BOOL);
+			}
+			$query->execute();
 
 			$result = $query->fetch(\PDO::FETCH_ASSOC);
 		} catch (\PDOException $e) {
