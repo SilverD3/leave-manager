@@ -18,10 +18,14 @@ class Contract
 	private $job_description;
 	private $job_salary;
 	private $hourly_rate;
+	private $pdf;
 	private $created;
 	private $modified;
     private $status;
 	private $etat;
+
+    private $employee;
+    private $contract_type;
 
     /**
      * Validates Contract
@@ -34,7 +38,7 @@ class Contract
         $errors = [];
 
         if (empty($this->employee_id)) {
-            $errors[] = "L'id de l'employé est requis";
+            $errors[] = "L'employé est requis";
         }
 
         if (empty($this->contract_type_id)) {
@@ -47,6 +51,10 @@ class Contract
 
         if (empty($this->job_object)) {
             $errors[] = "L'object du contrat est requis";
+        }
+
+        if (!empty($this->end_date) && strtotime($this->start_date) > strtotime($this->end_date)) {
+            $errors[] = "La date de début du contrat ne peut être postérieure à la date de fin";
         }
 
         return $errors;
@@ -201,11 +209,11 @@ class Contract
     }
 
     /**
-     * @param string $job_description
+     * @param string|null $job_description
      *
      * @return self
      */
-    public function setJobDescription(string $job_description)
+    public function setJobDescription($job_description)
     {
         $this->job_description = $job_description;
 
@@ -213,7 +221,7 @@ class Contract
     }
 
     /**
-     * @return float|int
+     * @return float|int|null
      */
     public function getJobSalary()
     {
@@ -221,11 +229,11 @@ class Contract
     }
 
     /**
-     * @param float|int $job_salary
+     * @param float|int|null $job_salary
      *
      * @return self
      */
-    public function setJobSalary(float|int $job_salary)
+    public function setJobSalary($job_salary)
     {
         $this->job_salary = $job_salary;
 
@@ -233,7 +241,7 @@ class Contract
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getHourlyRate()
     {
@@ -241,7 +249,7 @@ class Contract
     }
 
     /**
-     * @param mixed $hourly_rate
+     * @param string|null $hourly_rate
      *
      * @return self
      */
@@ -253,7 +261,27 @@ class Contract
     }
 
     /**
-     * @return mixed
+	 * Get the value of pdf
+	 */ 
+	public function getPdf()
+	{
+		return $this->pdf;
+	}
+
+	/**
+	 * Set the value of pdf
+	 *
+	 * @return  self
+	 */ 
+	public function setPdf($pdf)
+	{
+		$this->pdf = $pdf;
+
+		return $this;
+	}
+
+    /**
+     * @return string|null
      */
     public function getCreated()
     {
@@ -261,7 +289,7 @@ class Contract
     }
 
     /**
-     * @param mixed $created
+     * @param string|null $created
      *
      * @return self
      */
@@ -273,7 +301,7 @@ class Contract
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getModified()
     {
@@ -281,7 +309,7 @@ class Contract
     }
 
     /**
-     * @param mixed $modified
+     * @param string|null $modified
      *
      * @return self
      */
@@ -293,7 +321,7 @@ class Contract
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getStatus()
     {
@@ -301,7 +329,7 @@ class Contract
     }
 
     /**
-     * @param string $status
+     * @param string|null $status
      *
      * @return self
      */
@@ -313,7 +341,7 @@ class Contract
     }
 
     /**
-     * @return mixed
+     * @return bool|null
      */
     public function getEtat()
     {
@@ -321,13 +349,56 @@ class Contract
     }
 
     /**
-     * @param mixed $etat
+     * @param bool $etat
      *
      * @return self
      */
-    public function setEtat($etat)
+    public function setEtat(bool $etat)
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of employee
+     */ 
+    public function getEmployee(): ?Employee
+    {
+        return $this->employee;
+    }
+
+    /**
+     * Set the value of employee
+     *
+     * @param Employee $employee
+     * @return  self
+     */ 
+    public function setEmployee(Employee $employee)
+    {
+        $this->employee = $employee;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of contract_type
+     * @return ContractType|null Contract type of contract
+     */ 
+    public function getContractType(): ?ContractType
+    {
+        return $this->contract_type;
+    }
+
+    /**
+     * Set the value of contract_type
+     *
+     * @param ContractType $contract_type
+     * @return  self
+     */ 
+    public function setContractType(ContractType $contract_type)
+    {
+        $this->contract_type = $contract_type;
 
         return $this;
     }

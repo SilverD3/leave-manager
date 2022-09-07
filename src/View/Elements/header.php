@@ -132,13 +132,14 @@ AuthController::require_auth();
 					</a>
 				</li>
 
-				<li class="nav-item">
-					<a class="nav-link collapsed" href="#">
-						<i class="bi bi-files-alt"></i>
-						<span>Contrats</span>
-					</a>
-				</li>
 			<?php endif; ?>
+			
+			<li class="nav-item">
+				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Contrats') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Contracts' ?>">
+					<i class="bi bi-files-alt"></i>
+					<span>Contrats</span>
+				</a>
+			</li>
 
 			<li class="nav-item">
 				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Demandes de permission') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'PermissionRequests' ?>">
