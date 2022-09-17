@@ -29,17 +29,45 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 			<!-- Configs -->
             <div class="col-12">
                 <div class="card recent-sales overflow-auto">
-
-                    
                     <div class="card-body table-responsive">
                         <h5 class="card-title">Liste des paramètres d'application</h5>
                         
+                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#resetConfigsModal"><i class="bi bi-clock-history"></i> Tout réinitialiser</button>
+
+                        <div class="modal fade" id="resetConfigsModal" tabindex="-1" aria-labelledby="resetConfigsModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="resetConfigsModalLabel"><i class="bi bi-lightning"></i> Réinitialiser tous les paramètres</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="alert alert-info alert-dismissible fade show d-flex align-items-center" role="alert">
+                                            <span class="bi bi-exclamation-triangle flex-shrink-0 me-2" role="img" aria-label="Alerte:"></span>
+                                            <div class="fw-bold">
+                                                La réinitialisation des paramètres va restaurer les paramètres par défaut. Cliquez sur réinitialiser pour continuer
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <form action="" method="post">
+                                            <input type="submit" name="reset_configs" class="btn btn-primary" value="Réinitialiser">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <?= Flash::render() ?>
                         
                         <div class="alert alert-info alert-dismissible fade show d-flex align-items-center" role="alert">
                             <span class="bi bi-info-circle flex-shrink-0 me-2" role="img" aria-label="Info:"></span>
                             <div>
-                                <strong>N.B</strong> : Les paramètres definissent la façon l'application fonctionnera. <strong> A manipuler avec soin </strong>.
+                                <strong>N.B</strong> : Les paramètres influencent de très près le fonctionnement de l'application. <strong> A manipuler avec le plus grand soin </strong>.
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
@@ -60,9 +88,9 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     <?php foreach ($configs as $config): ?>
                                         <tr>
                                             <th scope="row"><?= $config->getCode() ?></th>
-                                            <td><?= $config->getDescription() ?></td>
-                                            <td><?= $config->getValue() ?></td>
-                                            <td><?= $config->getDefaultValue() ?></td>
+                                            <td class="text-break"><?= $config->getDescription() ?></td>
+                                            <td class="text-break"><?= $config->getValue() ?></td>
+                                            <td class="text-break"><?= $config->getDefaultValue() ?></td>
                                             <!-- <td><?= DateHelper::shortDate($config->getModified()) ?></td> -->
                                             <td>
                                                 <button class="btn btn-primary btn-sm" title="Modifier la valeur du paramètre" type="button" data-bs-toggle="modal" data-bs-target="#updateConfig-<?= $config->getId() ?>">
@@ -87,7 +115,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
                                                             <div class="mb-3">
                                                                 <label for="cfdesc-<?= $config->getId() ?>" class="form-label">Description</label>
-                                                                <textarea class="form-control" disabled id="cfdesc-<?= $config->getId() ?>" rows="2"><?= $config->getDescription() ?></textarea>
+                                                                <textarea class="form-control" disabled id="cfdesc-<?= $config->getId() ?>" rows="3"><?= $config->getDescription() ?></textarea>
                                                             </div>
 
                                                             <div class="mb-1">

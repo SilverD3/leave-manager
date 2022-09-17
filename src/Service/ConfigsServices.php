@@ -113,7 +113,7 @@ class ConfigsServices
 
         try {
             $query = $this->connectionManager->getConnection()->prepare($sql);
-            $query->bindParam(':code', $code, \PDO::PARAM_INT);
+            $query->bindParam(':code', $code, \PDO::PARAM_STR);
 
             $query->execute();
 
@@ -188,6 +188,34 @@ class ConfigsServices
         } catch(\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), (int)$e->getCode());
         }
+    }
+
+    /**
+     * Reset all configs
+     *
+     * @param int $reset_by Id of the authenticated user
+     * @return bool Returns true if all configs were reset successfully, false otherwise
+     */
+    public function resetAll($reset_by): bool
+    {
+        $configs = $this->getAll();
+        $errors = 0;
+        foreach ($configs as $config) {
+            $config->setValue($config->getDefaultValue());
+            $config->setModified(date('Y-m-d H:i:s'));
+            $config->setModifiedBy($reset_by);
+
+            $updated = $this->update($config);
+            if (!$updated) {
+                $errors++;
+            }
+        }
+
+        if ($errors > 0) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

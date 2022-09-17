@@ -31,8 +31,8 @@ class ConfigsController
         AuthController::require_admin_priv();
 
         if (isset($_POST['update_config'])) {
-            $data = $_POST;
             $auth_user = (new Auth())->getAuthUser();
+            $data = $_POST;
             $data['modified_by'] = $auth_user->getId();
 
             unset($data['update_config']);
@@ -41,6 +41,18 @@ class ConfigsController
 
             if ($updated) {
                 Flash::success("Le paramètre été mis à jour avec succès.");
+                header("Location: " . VIEWS . 'Configs');
+                exit;
+            }
+        }
+
+        if (isset($_POST['reset_configs'])) {
+            $auth_user = (new Auth())->getAuthUser();
+            $reset = $this->service->resetAll($auth_user->getId());
+            if ($reset) {
+                Flash::success("Tous les paramètres ont été réinitialisé avec succès.");
+                header("Location: " . VIEWS . 'Configs');
+                exit;
             }
         }
 

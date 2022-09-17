@@ -35,11 +35,11 @@ class Config
             $errors[] = "La description du paramètre est requise";
         }
 
-        if (empty($this->default_value)) {
+        if (is_null($this->default_value)) {
             $errors[] = "La valeur par défaut du paramètre est requise";
         }
 
-        if (empty($this->value)) {
+        if (is_null($this->value)) {
             $errors[] = "La valeur du paramètre est requise";
         }
 
