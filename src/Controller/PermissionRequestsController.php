@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Service\ConfigsServices;
 use App\Service\PermissionRequestsServices;
+use App\View\Helpers\DateHelper;
 use Core\Auth\Auth;
 use Core\Auth\AuthSession;
 use Core\FlashMessages\Flash;
@@ -18,9 +20,15 @@ class PermissionRequestsController
      */
     private $service;
 
+    /**
+     * @var ConfigsServices $configsServices Configs Services
+     */
+    private $configsServices;
+
     function __construct()
 	{
 		$this->service = new PermissionRequestsServices();
+        $this->configsServices = new ConfigsServices();
 	}
 
     /**
@@ -92,10 +100,11 @@ class PermissionRequestsController
      */
     public function add()
     {
+        $auth_user = (new Auth())->getAuthUser();
+
         if (isset($_POST['add_permission_request'])) {
             $data = $_POST;
 
-            $auth_user = (new Auth())->getAuthUser();
             $employee_id = $auth_user->getId();
 
             if (!empty($data['start_date_time'])) {
@@ -129,6 +138,20 @@ class PermissionRequestsController
 		if(!empty($formdata)) {
 			$GLOBALS['form_data'] = json_decode($formdata, true);
 		}
+
+        $permission_reduce_leave_config = $this->configsServices->getByCode('LM_PERMISSION_REDUCE_LEAVE');
+        $next_permission_delay_config = $this->configsServices->getByCode('LM_NEXT_PERMISSION_DELAY');
+        $employee_last_permission = $this->service->getLastPermission($auth_user->getId());
+        if (!empty($employee_last_permission)) {
+            $last_permission_nb_days = DateHelper::nbDaysBetween($employee_last_permission->getEndDate(), date('Y-m-d H:i:s'));
+        } else {
+            $last_permission_nb_days = null;
+        }
+
+        $GLOBALS['permission_reduce_leave_config'] = $permission_reduce_leave_config;
+        $GLOBALS['next_permission_delay_config'] = $next_permission_delay_config;
+        $GLOBALS['last_permission_nb_days'] = $last_permission_nb_days;
+        $GLOBALS['employee_last_permission'] = $employee_last_permission;
     }
 
     /**
@@ -197,6 +220,11 @@ class PermissionRequestsController
 		}
     }
 
+    /**
+     * View method
+     *
+     * @return void
+     */
     public function view()
     {
         if (!isset($_GET['id'])) {
@@ -213,12 +241,33 @@ class PermissionRequestsController
 			exit;
 		}
 
+        if ($permissionRequest->getStatus() == 'pending') {
+            $permission_reduce_leave_config = $this->configsServices->getByCode('LM_PERMISSION_REDUCE_LEAVE');
+            $next_permission_delay_config = $this->configsServices->getByCode('LM_NEXT_PERMISSION_DELAY');
+            $employee_last_permission = $this->service->getLastPermission($permissionRequest->getEmployeeId(), $permissionRequest->getId());
+            if (!empty($employee_last_permission)) {
+                $last_permission_nd_days = DateHelper::nbDaysBetween($employee_last_permission->getEndDate(), $permissionRequest->getStartDate());
+            } else {
+                $last_permission_nd_days = null;
+            }
+
+            $GLOBALS['permission_reduce_leave_config'] = $permission_reduce_leave_config;
+            $GLOBALS['next_permission_delay_config'] = $next_permission_delay_config;
+            $GLOBALS['last_permission_nd_days'] = $last_permission_nd_days;
+            $GLOBALS['employee_last_permission'] = $employee_last_permission;
+        }
+
         $_SESSION['page_title'] = 'Demandes de permission';
 		$_SESSION['subpage_title'] = 'Détails';
 
         $GLOBALS['permissionRequest'] = $permissionRequest;
     }
 
+    /**
+     * Approve permission request
+     *
+     * @return void
+     */
     public function approve()
     {
         AuthController::require_admin_priv();
@@ -232,6 +281,7 @@ class PermissionRequestsController
 				exit;
 			}
 
+            Flash::error("Mauvaise requête");
 			header('Location: ' . VIEWS . 'PermissionRequests');
 			exit;
 		}
@@ -253,7 +303,13 @@ class PermissionRequestsController
 			exit;
 		}
 
-		$approved = $this->service->approve((int)$_GET['id']);
+        if (isset($_GET['reduce']) && $_GET['reduce'] == 1) {
+            $reduce = true;
+        } else {
+            $reduce = false;
+        }
+
+		$approved = $this->service->approve((int)$_GET['id'], $reduce);
 
 		if ($approved) {
 			Flash::success("La demande de permission a été approuvé avec succès.");
@@ -276,7 +332,7 @@ class PermissionRequestsController
 			exit;
 		}
 
-		header('Location: ' . VIEWS . 'PermissionRequests');
+		header('Location: ' . VIEWS . 'PermissionRequests/view.php?id=' . $_GET['id']);
     }
 
     public function disapprove()

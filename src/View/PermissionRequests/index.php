@@ -126,14 +126,6 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                     <i class="bi bi-eye"></i>
                                                 </a>
                                                 <?php if ($permissionRequest->getStatus() == 'pending'): ?>
-                                                    <?php if($auth_user->getRole()->getCode() == 'ADM'): ?>
-                                                        <button type="button" class="btn btn-success btn-sm" onclick="approveRequest(<?= $permissionRequest->getId() ?>)" title="Approuver la demande">
-                                                            <i class="bi bi-check"></i>
-                                                        </button>
-                                                        <button type="button" class="btn btn-danger btn-sm" onclick="disapproveRequest(<?= $permissionRequest->getId() ?>)" title="Désapprouver la demande">
-                                                            <i class="bi bi-x"></i>
-                                                        </button>
-                                                    <?php endif; ?>
                                                     <?php if($auth_user->getId() == $permissionRequest->getEmployeeId()): ?>
                                                         <a href="<?= VIEWS . 'PermissionRequests/update.php?id=' . $permissionRequest->getId() ?>" class="btn btn-primary btn-sm" title="Editer la demande">
                                                             <i class="bi bi-pencil-square"></i>
@@ -175,63 +167,63 @@ function deleteRequest(request_id)
 {
     if (confirm("Voulez-vous vraiment supprimer cette demande ?")) {
         var xmlhttp = new XMLHttpRequest();
-			var url = "<?= VIEWS . 'PermissionRequests/delete.php?ajax=1&id=' ?>" + request_id;
+        var url = "<?= VIEWS . 'PermissionRequests/delete.php?ajax=1&id=' ?>" + request_id;
 
-			xmlhttp.onreadystatechange = function() {
-				if (xmlhttp.readyState == 4){
-                    if(xmlhttp.status == 200) {
-					    location.reload();
-                    }else {
-                        alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
-                    }
-				} 
-			};
-			
-			xmlhttp.open("POST", url, true);
-			xmlhttp.send();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4){
+                if(xmlhttp.status == 200) {
+                    location.reload();
+                }else {
+                    alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
+                }
+            } 
+        };
+        
+        xmlhttp.open("POST", url, true);
+        xmlhttp.send();
     }
 }
 
-function approveRequest(request_id)
-{
-    if (confirm("Voulez-vous vraiment approuver cette demande ?")) {
-        var xmlhttp = new XMLHttpRequest();
-			var url = "<?= VIEWS . 'PermissionRequests/approve.php?ajax=1&id=' ?>" + request_id;
+// function approveRequest(request_id)
+// {
+//     if (confirm("Voulez-vous vraiment approuver cette demande ?")) {
+//         var xmlhttp = new XMLHttpRequest();
+//         var url = "<?= VIEWS . 'PermissionRequests/approve.php?ajax=1&id=' ?>" + request_id;
 
-			xmlhttp.onreadystatechange = function() {
-				if (xmlhttp.readyState == 4){
-                    if(xmlhttp.status == 200) {
-					    location.reload();
-                    }else {
-                        alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
-                    }
-				} 
-			};
-			
-			xmlhttp.open("POST", url, true);
-			xmlhttp.send();
-    }
-}
+//         xmlhttp.onreadystatechange = function() {
+//             if (xmlhttp.readyState == 4){
+//                 if(xmlhttp.status == 200) {
+//                     location.reload();
+//                 }else {
+//                     alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
+//                 }
+//             } 
+//         };
+        
+//         xmlhttp.open("POST", url, true);
+//         xmlhttp.send();
+//     }
+// }
 
-function disapproveRequest(request_id)
-{
-    if (confirm("Voulez-vous vraiment rejeter cette demande ?")) {
-        var xmlhttp = new XMLHttpRequest();
-			var url = "<?= VIEWS . 'PermissionRequests/disapprove.php?ajax=1&id=' ?>" + request_id;
+// function disapproveRequest(request_id)
+// {
+//     if (confirm("Voulez-vous vraiment rejeter cette demande ?")) {
+//         var xmlhttp = new XMLHttpRequest();
+//         var url = "<?= VIEWS . 'PermissionRequests/disapprove.php?ajax=1&id=' ?>" + request_id;
 
-			xmlhttp.onreadystatechange = function() {
-				if (xmlhttp.readyState == 4){
-                    if(xmlhttp.status == 200) {
-					    location.reload();
-                    }else {
-                        alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
-                    }
-				} 
-			};
-			
-			xmlhttp.open("POST", url, true);
-			xmlhttp.send();
-    }
-}
+//         xmlhttp.onreadystatechange = function() {
+//             if (xmlhttp.readyState == 4){
+//                 if(xmlhttp.status == 200) {
+//                     location.reload();
+//                 }else {
+//                     alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
+//                 }
+//             } 
+//         };
+        
+//         xmlhttp.open("POST", url, true);
+//         xmlhttp.send();
+//     }
+// }
 
 </script>

@@ -91,15 +91,67 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                             <?= $permissionRequest->getDescription() ?>
                         </div>
 
-                        <?php if ($permissionRequest->getStatus() == 'pending' && $auth_user->getRole()->getCode() == 'ADM') : ?>
-                            <div class="actions text-center mt-5">
-                                <button type="button" class="btn btn-success px-sm-4" onclick="approveRequest(<?= $permissionRequest->getId() ?>)">
-                                    <i class="bi bi-check"></i> Approuver
-                                </button>
-                                <button type="button" class="btn btn-danger px-sm-4" onclick="disapproveRequest(<?= $permissionRequest->getId() ?>)">
-                                    <i class="bi bi-x"></i> Rejeter
-                                </button>
-                            </div>
+                        <?php if ($permissionRequest->getStatus() == 'pending') : ?>
+
+                            <!-- Check if delay has been reached -->
+                            <?php if ((int)$next_permission_delay_config->getValue() > 0): ?>
+                                <?php if($last_permission_nd_days != null && $last_permission_nd_days < (int) $next_permission_delay_config->getValue()): ?>
+                                    <div class="alert alert-danger fade show d-flex align-items-center my-2" role="alert">
+                                        <span class="bi bi-exclamation-triangle flex-shrink-0 me-2" style="font-size: 25px;" role="img" aria-label="Warning:"></span>
+                                        <div class="ms-md-2">
+                                            Le délai inter permission de <?= $next_permission_delay_config->getValue() ?> jours n'est pas respecté. 
+                                            <?php if (time() < strtotime($employee_last_permission->getEndDate())) : ?>
+                                                La dernière permission se terminera dans <?= $last_permission_nd_days ?> jours
+                                            <?php else: ?>
+                                                La dernière permission date d'il y a <?= $last_permission_nd_days ?> jours
+                                            <?php endif; ?>
+                                            <br> <a href="<?= VIEWS . 'PermissionRequests/view.php?id=' . $employee_last_permission->getId() ?>" target="_blank" class="alert-link fw-bold">Voir cette permission</a>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endif; ?>
+
+                            <!-- Action buttons -->
+                            <?php if($auth_user->getRole()->getCode() == 'ADM'): ?>
+                                <div class="actions text-center mt-5">
+                                    <button type="button" class="btn btn-success px-sm-4" data-bs-toggle="modal" data-bs-target="#approveRequest">
+                                        <i class="bi bi-check"></i> Approuver
+                                    </button>
+                                    <button type="button" class="btn btn-danger px-sm-4" onclick="disapproveRequest(<?= $permissionRequest->getId() ?>)">
+                                        <i class="bi bi-x"></i> Rejeter
+                                    </button>
+                                </div>
+
+                                <div class="modal fade" id="approveRequest" tabindex="-1" aria-labelledby="approveRequestLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="approveRequestLabel"><i class="bi bi-check"></i> Approuver la demande de permission</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form name="approveForm">
+                                                <div class="modal-body">
+                                                    <div class="alert alert-info fade show d-flex align-items-center" role="alert">
+                                                        <span class="bi bi-info-circle flex-shrink-0 me-2" role="img" aria-label="Info:"></span>
+                                                        <div>
+                                                            L'approbation de la demande est une opération irréversible
+                                                        </div>
+                                                    </div>
+                                                    <?php if ($permission_reduce_leave_config->getValue() == 'OUI'): ?>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" value="1" type="checkbox" name="reduce" id="reduceCheck"> Prendre en compte la durée de cette permission dans le calcul de la durée du congé de l'employé ?
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                    <button type="button" class="btn btn-success" onclick="approveRequest(<?= $permissionRequest->getId() ?>)">Approuver</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         <?php endif; ?>
 
                     </div>
@@ -116,43 +168,50 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
 function approveRequest(request_id)
 {
-    if (confirm("Voulez-vous vraiment approuver cette demande ?")) {
-        var xmlhttp = new XMLHttpRequest();
-			var url = "<?= VIEWS . 'PermissionRequests/approve.php?ajax=1&id=' ?>" + request_id;
-
-			xmlhttp.onreadystatechange = function() {
-				if (xmlhttp.readyState == 4){
-                    if(xmlhttp.status == 200) {
-					    location.reload();
-                    }else {
-                        alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
-                    }
-				} 
-			};
-			
-			xmlhttp.open("POST", url, true);
-			xmlhttp.send();
+    var reduce = 0;
+    
+    if (document.getElementById('reduceCheck')) {
+        var reduceCheck = document.forms['approveForm'].reduce.checked;
+        if (reduceCheck) {
+            reduce = 1;
+        } 
     }
+
+    var xmlhttp = new XMLHttpRequest();
+    var url = "<?= VIEWS . 'PermissionRequests/approve.php?ajax=1&id=' ?>" + request_id + "&reduce=" + reduce;
+
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4){
+            if(xmlhttp.status == 200) {
+                location.reload();
+            }else {
+                alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
+            }
+        } 
+    };
+    
+    xmlhttp.open("POST", url, true);
+    xmlhttp.send();
 }
 
 function disapproveRequest(request_id)
 {
     if (confirm("Voulez-vous vraiment rejeter cette demande ?")) {
         var xmlhttp = new XMLHttpRequest();
-			var url = "<?= VIEWS . 'PermissionRequests/disapprove.php?ajax=1&id=' ?>" + request_id;
+        var url = "<?= VIEWS . 'PermissionRequests/disapprove.php?ajax=1&id=' ?>" + request_id;
 
-			xmlhttp.onreadystatechange = function() {
-				if (xmlhttp.readyState == 4){
-                    if(xmlhttp.status == 200) {
-					    location.reload();
-                    }else {
-                        alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
-                    }
-				} 
-			};
-			
-			xmlhttp.open("POST", url, true);
-			xmlhttp.send();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4){
+                if(xmlhttp.status == 200) {
+                    location.reload();
+                }else {
+                    alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
+                }
+            } 
+        };
+        
+        xmlhttp.open("POST", url, true);
+        xmlhttp.send();
     }
 }
 

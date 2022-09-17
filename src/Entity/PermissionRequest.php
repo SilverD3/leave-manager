@@ -15,6 +15,7 @@ class PermissionRequest
 	private $start_date;
 	private $end_date;
 	private $status;
+	private $reduce;
 	private $created;
 	private $modified;
 	private $etat;
@@ -192,6 +193,28 @@ class PermissionRequest
 
         return $this;
     }
+
+    /**
+	 * Get the value of reduce
+     * @return bool
+	 */ 
+	public function getReduce()
+	{
+		return $this->reduce;
+	}
+
+	/**
+	 * Set the value of reduce
+	 *
+     * @param bool $reduce
+	 * @return  self
+	 */ 
+	public function setReduce($reduce)
+	{
+		$this->reduce = $reduce;
+
+		return $this;
+	}
 
     /**
      * @return mixed

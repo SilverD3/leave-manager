@@ -28,10 +28,30 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Remplissez les champs ci-après pour ajouter un modèle de contrat</h5>
+
+                        <!-- Check if delay has been reached -->
+                        <?php if ((int)$next_permission_delay_config->getValue() > 0): ?>
+                            <?php if($last_permission_nb_days != null && $last_permission_nb_days < (int) $next_permission_delay_config->getValue()): ?>
+                                <div class="alert alert-danger fade show d-flex align-items-center my-2" id="delayAlert" role="alert">
+                                    <span class="bi bi-exclamation-triangle flex-shrink-0 me-2" style="font-size: 25px;" role="img" aria-label="Warning:"></span>
+                                    <div class="ms-md-2">
+                                        Le délai inter permission de <?= $next_permission_delay_config->getValue() ?> jours ne sera pas respecté. 
+
+                                        <?php if (time() < strtotime($employee_last_permission->getEndDate())) : ?>
+                                            Votre dernière permission se terminera dans <?= $last_permission_nb_days ?> jours
+                                        <?php else: ?>
+                                            Votre dernière permission date d'il y a <?= $last_permission_nb_days ?> jours
+                                        <?php endif; ?>
+
+                                        <br> <a href="<?= VIEWS . 'PermissionRequests/view.php?id=' . $employee_last_permission->getId() ?>" target="_blank" class="alert-link fw-bold">Voir cette permission</a>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
                         
                         <?= Flash::render() ?>
 
-                        <form class="row g-3 needs-validation" action="" method="post" novalidate>
+                        <form class="row g-3 needs-validation" name="permissionForm" action="" method="post" novalidate>
                             <div class="mb-1">
                                 <label for="prreason" class="form-label">Motif de la demande <span class="text-danger">*</span></label>
                                 <input type="text" maxlength="500" class="form-control" name="reason" id="prreason" value="<?= isset($form_data['reason']) ? $form_data['reason'] : '' ?>" required>
@@ -91,11 +111,39 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
 <script src="<?= TEMPLATE_PATH ?>assets/vendor/tinymce/tinymce.min.js"></script>
 <script type="text/javascript">
-    tinymce.init({
-        selector: '#prdesc',
-        language: 'fr',
-        toolbar_sticky: true,
-        browser_spellcheck: true,
-        height: 500,
+
+tinymce.init({
+    selector: '#prdesc',
+    language: 'fr',
+    toolbar_sticky: true,
+    browser_spellcheck: true,
+    height: 500,
+});
+
+var last_permission_nb_days = parseInt("<?= $last_permission_nb_days ?>");
+var delay_config = parseInt("<?= $next_permission_delay_config->getValue() ?>");
+
+if(document.getElementById('delayAlert')) {
+    document.getElementById('prstartdate').addEventListener('change', function(){
+        var start_date = document.forms['permissionForm'].start_date.value + ' ' + document.forms['permissionForm'].start_date_time.value;
+
+        var delay = last_permission_nb_days + dateDiffFromNow(start_date);
+
+        if (delay >= delay_config ) {
+            document.getElementById('delayAlert').classList.add('d-none');
+        } else {
+            document.getElementById('delayAlert').classList.remove('d-none');
+        }
     });
+}
+
+function dateDiffFromNow(date) {
+    var date1 = new Date();
+    var date2 = new Date(date);
+
+    var days = Math.abs(date2.getTime() - date1.getTime()) / (1000 * 86400);
+
+    return Math.floor(days);
+}
+
 </script>

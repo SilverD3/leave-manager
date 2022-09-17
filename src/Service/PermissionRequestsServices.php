@@ -9,6 +9,7 @@ use Core\Database\ConnectionManager;
 use App\Entity\PermissionRequest;
 use App\Entity\Employee;
 use App\Entity\Permission;
+use App\View\Helpers\DateHelper;
 use Core\FlashMessages\Flash;
 use Core\Utils\Session;
 
@@ -39,7 +40,7 @@ class PermissionRequestsServices
 
         $select = "SELECT pr.id AS PermissionRequest_id, pr.employee_id AS PermissionRequest_employee_id, pr.reason AS PermissionRequest_reason, "
                     ."pr.description AS PermissionRequest_description, pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, "
-                    ."pr.status AS PermissionRequest_status, pr.created AS PermissionRequest_created, pr.etat AS PermissionRequest_etat ";
+                    ."pr.status AS PermissionRequest_status, pr.reduce AS PermissionRequest_reduce, pr.created AS PermissionRequest_created, pr.etat AS PermissionRequest_etat ";
 
         if ($joinEmployee) {
             $select .= " , e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, e.email AS Employee_email ";
@@ -99,6 +100,7 @@ class PermissionRequestsServices
             $permissionRequest->setStartDate($row['PermissionRequest_start_date']);
             $permissionRequest->setEndDate($row['PermissionRequest_end_date']);
             $permissionRequest->setStatus($row['PermissionRequest_status']);
+            $permissionRequest->setReduce($row['PermissionRequest_reduce']);
             $permissionRequest->setCreated($row['PermissionRequest_created']);
             $permissionRequest->setEtat($row['PermissionRequest_etat']);
 
@@ -212,7 +214,7 @@ class PermissionRequestsServices
 
         $sql = "SELECT pr.id AS PermissionRequest_id, pr.employee_id AS PermissionRequest_employee_id, pr.reason AS PermissionRequest_reason, pr.description AS PermissionRequest_description, "
                 ."pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, pr.status AS PermissionRequest_status, pr.created AS PermissionRequest_created, "
-                ."pr.etat AS PermissionRequest_etat, e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, e.email AS Employee_email "
+                ."pr.etat AS PermissionRequest_etat, pr.reduce AS PermissionRequest_reduce, e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, e.email AS Employee_email "
                 ."FROM permission_requests pr JOIN employees e ON e.id = pr.employee_id ". $where ." ORDER BY pr.created DESC LIMIT 0, :size";
         
         try {
@@ -251,6 +253,7 @@ class PermissionRequestsServices
             $permissionRequest->setStartDate($row['PermissionRequest_start_date']);
             $permissionRequest->setEndDate($row['PermissionRequest_end_date']);
             $permissionRequest->setStatus($row['PermissionRequest_status']);
+            $permissionRequest->setReduce($row['PermissionRequest_reduce']);
             $permissionRequest->setCreated($row['PermissionRequest_created']);
             $permissionRequest->setEtat($row['PermissionRequest_etat']);
             
@@ -279,7 +282,7 @@ class PermissionRequestsServices
     {
         $select = "SELECT pr.id AS PermissionRequest_id, pr.employee_id AS PermissionRequest_employee_id, pr.reason AS PermissionRequest_reason, pr.description AS PermissionRequest_description, "
                 ."pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, pr.status AS PermissionRequest_status, pr.created AS PermissionRequest_created, "
-                ."pr.etat AS PermissionRequest_etat ";
+                ."pr.etat AS PermissionRequest_etat, pr.reduce AS PermissionRequest_reduce ";
             
         $join = "";
         $from = "FROM permission_requests pr ";
@@ -317,6 +320,7 @@ class PermissionRequestsServices
         $permissionRequest->setStartDate($result['PermissionRequest_start_date']);
         $permissionRequest->setEndDate($result['PermissionRequest_end_date']);
         $permissionRequest->setStatus($result['PermissionRequest_status']);
+        $permissionRequest->setReduce($result['PermissionRequest_reduce']);
         $permissionRequest->setCreated($result['PermissionRequest_created']);
         $permissionRequest->setEtat($result['PermissionRequest_etat']);
         
@@ -329,6 +333,61 @@ class PermissionRequestsServices
     
             $permissionRequest->setEmployee($employee);  
         }
+
+        return $permissionRequest;
+    }
+
+    /**
+     * Get the last permission of the employee
+     *
+     * @param int $employee_id Employee id
+     * @param int|null $permission_id Permission id
+     * @return PermissionRequest|null Return the last permission if found, null otherwise
+     */
+    public function getLastPermission($employee_id, $permission_id = null): ?PermissionRequest
+    {
+        $sql = "SELECT pr.id AS PermissionRequest_id, pr.employee_id AS PermissionRequest_employee_id, pr.reason AS PermissionRequest_reason, pr.description AS PermissionRequest_description, "
+                ."pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, pr.status AS PermissionRequest_status, pr.created AS PermissionRequest_created, "
+                ."pr.etat AS PermissionRequest_etat, pr.reduce AS PermissionRequest_reduce FROM permission_requests pr WHERE pr.employee_id = :employee_id AND pr.etat = :etat AND pr.status = :status";
+
+        if (!is_null($permission_id)) {
+            $sql .= ' AND pr.id != :id';
+        }
+
+        $sql .= ' ORDER BY pr.id DESC LIMIT 0,1';
+
+        try {
+            $query = $this->connectionManager->getConnection()->prepare($sql);
+
+            $query->bindValue(':employee_id', $employee_id, \PDO::PARAM_INT);
+            if (!is_null($permission_id)) {
+                $query->bindValue(':id', $permission_id, \PDO::PARAM_INT);
+            }
+            $query->bindValue(':etat', true, \PDO::PARAM_BOOL);
+            $query->bindValue(':status', 'approved', \PDO::PARAM_STR);
+            $query->execute();
+
+            $result = $query->fetch(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
+        }
+        
+        if (empty($result)) {
+            return null;
+        }
+
+        $permissionRequest = new PermissionRequest();
+
+        $permissionRequest->setId($result['PermissionRequest_id']);
+        $permissionRequest->setEmployeeId($result['PermissionRequest_employee_id']);
+        $permissionRequest->setReason($result['PermissionRequest_reason']);
+        $permissionRequest->setDescription($result['PermissionRequest_description']);
+        $permissionRequest->setStartDate($result['PermissionRequest_start_date']);
+        $permissionRequest->setEndDate($result['PermissionRequest_end_date']);
+        $permissionRequest->setStatus($result['PermissionRequest_status']);
+        $permissionRequest->setReduce($result['PermissionRequest_reduce']);
+        $permissionRequest->setCreated($result['PermissionRequest_created']);
+        $permissionRequest->setEtat($result['PermissionRequest_etat']);
 
         return $permissionRequest;
     }
@@ -360,7 +419,8 @@ class PermissionRequestsServices
 			return false;
 		}
 
-        $sql = "INSERT INTO permission_requests(employee_id, reason, description, start_date, end_date, status, created, modified, etat) VALUES(?,?,?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO permission_requests(employee_id, reason, description, start_date, end_date, status, reduce, created, modified, etat) "
+                ." VALUES(?,?,?,?,?,?,?,?,?,?)";
 
         try {
 
@@ -374,9 +434,10 @@ class PermissionRequestsServices
             $query->bindValue(4, $permissionRequest->getStartDate(), \PDO::PARAM_STR);
             $query->bindValue(5, $permissionRequest->getEndDate(), \PDO::PARAM_STR);
             $query->bindValue(6, $permissionRequest->getStatus(), \PDO::PARAM_STR);
-            $query->bindValue(7, $permissionRequest->getCreated(), \PDO::PARAM_STR);
-            $query->bindValue(8, $permissionRequest->getModified(), \PDO::PARAM_STR);
-            $query->bindValue(9, $permissionRequest->getEtat(), \PDO::PARAM_BOOL);
+            $query->bindValue(7, $permissionRequest->getReduce(), \PDO::PARAM_BOOL);
+            $query->bindValue(8, $permissionRequest->getCreated(), \PDO::PARAM_STR);
+            $query->bindValue(9, $permissionRequest->getModified(), \PDO::PARAM_STR);
+            $query->bindValue(10, $permissionRequest->getEtat(), \PDO::PARAM_BOOL);
 
             $query->execute();
 
@@ -453,9 +514,10 @@ class PermissionRequestsServices
      * Approve permission request
      *
      * @param int $id Permission request id
+     * @param bool $reduce Whether to reduce leave duration or not
      * @return bool Returns true if permission request has been approved, false otherwise.
      */
-    public function approve($id): bool
+    public function approve($id, $reduce = false): bool
     {
         $permissionRequest = $this->get($id, false);
         if (empty($permissionRequest)) {
@@ -464,12 +526,13 @@ class PermissionRequestsServices
 			return false;
         }
 
-        $sql = "UPDATE permission_requests SET status = :status WHERE id = :id";
+        $sql = "UPDATE permission_requests SET status = :status, reduce = :reduce WHERE id = :id";
 
         try {
 			$query = $this->connectionManager->getConnection()->prepare($sql);
             
             $query->bindValue(':status', 'approved', \PDO::PARAM_STR);
+            $query->bindValue(':reduce', $reduce, \PDO::PARAM_BOOL);
             $query->bindValue(':id', $id, \PDO::PARAM_INT);
 
             $approved = $query->execute();
@@ -548,7 +611,8 @@ class PermissionRequestsServices
         $description = !empty($data['description']) ? $data['description'] : null;
         $start_date = !empty($data['start_date']) ? $data['start_date'] : null;
         $end_date = !empty($data['end_date']) ? $data['end_date'] : null;
-        $status = !empty($data['status']) ? $data['status'] : null;
+        $status = !empty($data['status']) ? $data['status'] : false;
+        $reduce = !empty($data['reduce']) ? $data['reduce'] : null;
         $created = !empty($data['created']) ? $data['created'] : null;
         $modified = !empty($data['modified']) ? $data['modified'] : null;
         $etat = !empty($data['etat']) ? $data['etat'] : null;
@@ -561,6 +625,7 @@ class PermissionRequestsServices
         $permissionRequest->setStartDate($start_date);
         $permissionRequest->setEndDate($end_date);
         $permissionRequest->setStatus($status);
+        $permissionRequest->setReduce((bool)$reduce);
         $permissionRequest->setCreated($created);
         $permissionRequest->setModified($modified);
         $permissionRequest->setEtat($etat);
@@ -582,7 +647,9 @@ class PermissionRequestsServices
         $permissions = [];
         $join = '';
 
-        $select = "SELECT pr.id AS PermissionRequest_id, pr.employee_id AS PermissionRequest_employee_id, pr.reason AS PermissionRequest_reason, pr.description AS PermissionRequest_description, pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, pr.status AS PermissionRequest_status, pr.created AS PermissionRequest_created, pr.etat AS PermissionRequest_etat ";
+        $select = "SELECT pr.id AS PermissionRequest_id, pr.employee_id AS PermissionRequest_employee_id, pr.reason AS PermissionRequest_reason, "
+                    ." pr.description AS PermissionRequest_description, pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, "
+                    ." pr.reduce AS PermissionRequest_reduce, pr.created AS PermissionRequest_created, pr.etat AS PermissionRequest_etat ";
 
         if ($joinEmployee) {
             $select .= " , e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, e.email AS Employee_email ";
@@ -641,6 +708,7 @@ class PermissionRequestsServices
             $permission->setDescription($row['PermissionRequest_description']);
             $permission->setStartDate($row['PermissionRequest_start_date']);
             $permission->setEndDate($row['PermissionRequest_end_date']);
+            $permission->setReduce((bool)$row['PermissionRequest_reduce']);
             $permission->setCreated($row['PermissionRequest_created']);
             $permission->setEtat($row['PermissionRequest_etat']);
 
@@ -658,6 +726,84 @@ class PermissionRequestsServices
         }
 
         return $permissions;
+    }
+
+    /**
+     * Compute total days spent in permissions by employee and by year
+     *
+     * @param int|null $employee_id Employee to consider. If null, all employees will be considered
+     * @param int|string|null $year Year of permission
+     * @return int Number of spent days
+     */
+    public function getSentDays($employee_id = null, $year = null): int
+    {
+        $configsServices = new ConfigsServices();
+        $hourlyRateConfig = $configsServices->getByCode('LM_HOURLY_RATE');
+        $hourlyRate = (int)$hourlyRateConfig->getValue();
+
+        $workingDaysConfigs = $configsServices->getByCode('LM_WORKING_DAYS');
+        $nbWorkingDays = count(explode(',', $workingDaysConfigs->getValue()));
+
+        if ($year === null) {
+            $year = (string)date('Y');
+        }
+
+        $nb_spent_days = 0;
+        $nb_spent_minutes = 0;
+        $permissions = $this->getAllPermissions(false, $employee_id, $year);
+
+        foreach ($permissions as $permission) {
+            if ($permission->getReduce()) {
+                $nb_spent_minutes += $this->getWorkingMinutes($permission->getStartDate(), $permission->getEndDate(), $year);
+            }
+        }
+
+        $nb_hours = $nb_spent_minutes / 60;
+        
+        $nb_spent_days = round($nb_hours / ($hourlyRate / $nbWorkingDays), 0, PHP_ROUND_HALF_DOWN);
+
+        return (int)$nb_spent_days;
+    }
+
+    /**
+     * Compute the number of hours between two dates
+     *
+     * @param mixed $dateFrom First date
+     * @param mixed $dateTo Second date
+     * @param string $year Year to consider
+     * @return int Number of hours between the dates
+     */
+    public function getWorkingMinutes($dateFrom, $dateTo, $year)
+    {
+        $configsServices = new ConfigsServices();
+        $periodWorkingMinutes = 0;
+
+        $year = (string)$year;
+
+        // Get holidays
+        $holidays = [];
+        $holidaysConfig = $configsServices->getByCode('LM_HOLIDAYS');
+        $holidays = explode(',', str_replace('*', $year, $holidaysConfig->getValue()));
+
+        // Get daily breaks
+        $dailyBreaks = [];
+        $dailyBreaksConfig = $configsServices->getByCode('LM_DAILY_BREAKS');
+        $dailyBreaks = explode(',', $dailyBreaksConfig->getValue());
+
+        // Get work start and end time
+        $workBeginAtConfig = $configsServices->getByCode('LM_WORK_BEGIN_AT');
+        $workEndAtConfig = $configsServices->getByCode('LM_WORK_END_AT');
+        $workBeginAt = $workBeginAtConfig->getValue();
+        $workEndAt = $workEndAtConfig->getValue();
+
+        // Get working days
+        $workingDays = [];
+        $workingDaysConfigs = $configsServices->getByCode('LM_WORKING_DAYS');
+        $workingDays = DateHelper::daysNumbers(explode(',', $workingDaysConfigs->getValue()));
+
+        $periodWorkingMinutes = DateHelper::getWorkingMinutes($dateFrom, $dateTo, $workBeginAt, $workEndAt, $holidays, $workingDays, $dailyBreaks);
+
+        return $periodWorkingMinutes;
     }
 
     /**
