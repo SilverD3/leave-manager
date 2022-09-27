@@ -175,6 +175,12 @@ class PermissionRequestsController
 			exit;
 		}
 
+        if ($permissionRequest->getStatus() != 'pending') {
+            Flash::error("Cette demande de permission ne plus être modifiée car elle n'est plus en attente");
+			header('Location: '.VIEWS . 'PermissionRequests');
+			exit;
+        }
+
         $auth_user = (new Auth())->getAuthUser();
         if (empty($auth_user) || $auth_user->getId() != $permissionRequest->getEmployeeId()) {
             Flash::error("Défaut de privilège. Permission non accordée");
@@ -303,6 +309,20 @@ class PermissionRequestsController
 			exit;
 		}
 
+        if ($check_permission_request->getStatus() != 'pending') {
+            if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+                http_response_code(500);
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => "Cette demande de permission ne plus être approuvée car elle n'est plus en attente"]);
+
+                exit;
+            }
+
+            Flash::error("Cette demande de permission ne plus être approuvée car elle n'est plus en attente");
+			header('Location: ' . VIEWS . 'PermissionRequests/view.php?id=' . $_GET['id']);
+			exit;
+        }
+
         if (isset($_GET['reduce']) && $_GET['reduce'] == 1) {
             $reduce = true;
         } else {
@@ -368,6 +388,20 @@ class PermissionRequestsController
 			header('Location: '.VIEWS . 'PermissionRequests');
 			exit;
 		}
+
+        if ($check_permission_request->getStatus() != 'pending') {
+            if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+                http_response_code(500);
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => "Cette demande de permission ne plus être rejetée car elle n'est plus en attente"]);
+
+                exit;
+            }
+
+            Flash::error("Cette demande de permission ne plus être rejetée car elle n'est plus en attente");
+			header('Location: ' . VIEWS . 'PermissionRequests/view.php?id=' . $_GET['id']);
+			exit;
+        }
 
 		$approved = $this->service->disapprove((int)$_GET['id']);
 

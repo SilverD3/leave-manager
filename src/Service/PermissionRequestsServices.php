@@ -63,7 +63,7 @@ class PermissionRequestsServices
             $year_val = $year;
         }
 
-        $sql .= $year_clause;
+        $sql .= $year_clause . ' ORDER BY pr.status DESC, pr.created DESC ';
 
         try {
             $query = $this->connectionManager->getConnection()->prepare($sql);
