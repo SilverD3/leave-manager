@@ -342,20 +342,20 @@ class DateHelper
         } else {
             $remaining_days = [];
 
-            // Memoize the first day of the week in a variable $j;
+            // Memorize the first day of the week in a variable $j;
             $j = $the_first_day_of_week;
 
             // Loop through the number of remaining days to determine the days of the week  
             for ($i = 0; $i < $no_remaining_days; $i++) {
 
-                if ($j < 7) {
-                    // If $j is lower than 7, i.e. the day is before Sunday, we add one day before storing
-                    $j++;
-                    $remaining_days[] = $j;
-                } else {
+                if ($j >= 7) {
                     // $j is Sunday, we add just add it and reinitialize $j to 0, .i.e. Monday
                     $remaining_days[] = $j;
-                    $j = 0;
+                    $j = 1;
+                } else {
+                    // If $j is lower than 7, i.e. the day is before Sunday, we add one day before storing
+                    $remaining_days[] = $j;
+                    $j++;
                 }
             }
 
@@ -494,7 +494,7 @@ class DateHelper
      * @param mixed $ts Date to check
      * @return boolean
      */
-    private static function isTimestamp($ts)
+    public static function isTimestamp($ts)
     {
         return is_numeric($ts) && ((int) $ts == $ts);
     }
@@ -505,7 +505,7 @@ class DateHelper
      * @param [type] $date
      * @return integer|null
      */
-    private static function toTimestamp($date): ?int
+    public static function toTimestamp($date): ?int
     {
         if (self::isTimestamp($date)) {
             return $date;
