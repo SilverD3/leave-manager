@@ -44,6 +44,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 									</div>
 									<div class="ps-3">
 										<h6><?= $stats['nb_employees'] ?></h6>
+										<span class="text-danger small pt-1 fw-bold"> <?= $stats['nb_current_leaves'] ?> en congés</span>
 									</div>
 								</div>
 							</div>

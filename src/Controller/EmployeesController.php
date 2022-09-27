@@ -9,6 +9,7 @@ use App\Service\EmployeesServices;
 use App\Service\PermissionRequestsServices;
 use App\Service\ContractTypesServices;
 use App\Service\ContractsServices;
+use App\Service\LeavesServices;
 use App\Service\RolesServices;
 use Core\Auth\Auth;
 use Core\Auth\PasswordHasher;
@@ -31,6 +32,7 @@ class EmployeesController
 	{
 		// Set page_title
 		$_SESSION['page_title'] = 'Tableau de bord';
+		unset($_SESSION['subpage_title']);
 		$auth_user = (new Auth())->getAuthUser();
 
 		if (empty($auth_user)) {
@@ -47,6 +49,7 @@ class EmployeesController
 
 		if ($auth_user->getRole()->getCode() == 'ADM') {
 			$contractTypesServices = new ContractTypesServices();
+			$leavesServices = new LeavesServices();
 			
 			$nb_contract_types = $contractTypesServices->countAll();
 			$nb_contracts = $contractsServices->countAll();
@@ -54,10 +57,10 @@ class EmployeesController
 			$nb_terminated_contracts = $contractsServices->countAll('terminated');
 
 			$stats['nb_contract_types'] = $nb_contract_types;
-
+			
 			$nb_permission_requests = $permissionRequestsServices->countAll();
 			$nb_approved_permission_requests = $permissionRequestsServices->countAll('approved');
-			$nb_rejected_permission_requests = $permissionRequestsServices->countAll('rejected');
+			$nb_rejected_permission_requests = $permissionRequestsServices->countAll('disapproved');
 			$recent_permission_requests = $permissionRequestsServices->getLatest(5);
 		} else {
 			$nb_contracts = $contractsServices->countAll('all', $auth_user->getId());
@@ -66,12 +69,14 @@ class EmployeesController
 
 			$nb_permission_requests = $permissionRequestsServices->countAll('all', $auth_user->getId());
 			$nb_approved_permission_requests = $permissionRequestsServices->countAll('approved', $auth_user->getId());
-			$nb_rejected_permission_requests = $permissionRequestsServices->countAll('rejected', $auth_user->getId());
+			$nb_rejected_permission_requests = $permissionRequestsServices->countAll('disapproved', $auth_user->getId());
 			$recent_permission_requests = $permissionRequestsServices->getLatest(5, $auth_user->getId());
 		}
 
 		$nb_employees = $this->service->countAll();
-
+		$nbCurrentLeaves = $leavesServices->getByPeriod(date('Y-m-d'), date('Y-m-d'), true, false);
+		
+		$stats['nb_current_leaves'] = $nbCurrentLeaves;
 		$stats['nb_contracts'] = $nb_contracts;
 		$stats['nb_active_contracts'] = $nb_active_contracts;
 		$stats['nb_terminated_contracts'] = $nb_terminated_contracts;
@@ -90,6 +95,7 @@ class EmployeesController
 		AuthController::require_admin_priv();
 
 		$_SESSION['page_title'] = 'Employés';
+		unset($_SESSION['subpage_title']);
 
 		$employees = $this->service->getAll(true);
 
@@ -209,7 +215,11 @@ class EmployeesController
 			exit;
 		}
 
+		$leavesServices = new LeavesServices();
+		$isInVaccations = $leavesServices->isEmployeeInLeave($employee->getId());
+
 		$GLOBALS['employee'] = $employee;
+		$GLOBALS['isInVaccations'] = $isInVaccations;
 	}
 
 	public function profile()

@@ -36,6 +36,10 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                         <img src="<?= IMAGES ?>user_icon.png" alt="User icon" class="rounded-circle w-75">
                         <h2><?= $employee->getFirstName() . ' ' . $employee->getLastName() ?></h2>
                         <h6><?= $employee->getRole()->getName() ?> </h6>
+
+                        <?php if($isInVaccations): ?>
+                            <p class="text-center"><span class="badge bg-primary p-2"><i class="bi bi-person-dash me-2"></i> En congé</span></p>
+                        <?php endif; ?>
                     </div>
                 </div>
 
