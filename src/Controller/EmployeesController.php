@@ -46,10 +46,10 @@ class EmployeesController
 
 		$permissionRequestsServices = new PermissionRequestsServices();
 		$contractsServices = new ContractsServices();
+		$leavesServices = new LeavesServices();
 
 		if ($auth_user->getRole()->getCode() == 'ADM') {
 			$contractTypesServices = new ContractTypesServices();
-			$leavesServices = new LeavesServices();
 			
 			$nb_contract_types = $contractTypesServices->countAll();
 			$nb_contracts = $contractsServices->countAll();
