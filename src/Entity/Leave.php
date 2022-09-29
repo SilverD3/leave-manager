@@ -12,12 +12,13 @@ class Leave
 	private $employee_id;
 	private $year;
 	private $days;
-	private $used_days;
 	private $start_date;
+	private $end_date;
 	private $created;
 	private $modified;
 	private $note;
 	private $etat;
+	private $employee;
 
     /**
      * Validates Leave
@@ -37,8 +38,8 @@ class Leave
             $errors[] = "L'année du congé est requis";
         }
 
-        if (empty($this->days)) {
-            $errors[] = "Le nombre de jour de congé est requis";
+        if (empty($this->end_date)) {
+            $errors[] = "La de retour du congé est requise";
         }
 
         if (empty($this->start_date)) {
@@ -131,26 +132,6 @@ class Leave
     /**
      * @return mixed
      */
-    public function getUsedDays()
-    {
-        return $this->used_days;
-    }
-
-    /**
-     * @param mixed $used_days
-     *
-     * @return self
-     */
-    public function setUsedDays($used_days)
-    {
-        $this->used_days = $used_days;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getStartDate()
     {
         return $this->start_date;
@@ -168,6 +149,26 @@ class Leave
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getEndDate()
+    {
+        return $this->end_date;
+    }
+
+    /**
+     * @param mixed $end_date
+     *
+     * @return self
+     */
+    public function setEndDate($end_date)
+    {
+        $this->end_date = $end_date;
+
+        return $this;
+    }
+    
     /**
      * @return mixed
      */
@@ -247,4 +248,25 @@ class Leave
 
         return $this;
     }
+
+	/**
+	 * Get the related employee
+     * @return Employee|null 
+	 */ 
+	public function getEmployee(): ?Employee
+	{
+		return $this->employee;
+	}
+
+	/**
+	 * Set the related employee
+	 *
+	 * @return  self
+	 */ 
+	public function setEmployee(?Employee $employee)
+	{
+		$this->employee = $employee;
+
+		return $this;
+	}
 }

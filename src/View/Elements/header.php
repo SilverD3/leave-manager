@@ -149,7 +149,7 @@ AuthController::require_auth();
 			</li>
 
 			<li class="nav-item">
-				<a class="nav-link collapsed" href="#">
+				<a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Congés') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Leaves' ?>">
 					<i class="bi bi-emoji-sunglasses"></i>
 					<span>Congés</span>
 				</a>
