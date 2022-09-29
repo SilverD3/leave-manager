@@ -3,7 +3,6 @@ require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoloa
 
 use App\Controller\LeavesController;
 use App\View\Helpers\DateHelper;
-use App\View\Helpers\UtilsHelper;
 use Core\FlashMessages\Flash;
 
 (new LeavesController())->index();
@@ -27,7 +26,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 		<div class="row mt-2 mb-1">
 			<div class="col-12">
 				<a href="<?= VIEWS . 'Leaves/add.php' ?>" class="btn btn-primary me-3 mt-2"><i class="bi bi-plus-circle me-1"></i> Planifier </a>
-				<!-- <a href="<?= VIEWS . 'Leaves/calendar.php' ?>" class="btn btn-primary mt-2"><i class="bi bi-calendar me-1"></i> Calendrier </a> -->
+				<a href="<?= VIEWS . 'Leaves/calendar.php' ?>" class="btn btn-primary mt-2"><i class="bi bi-calendar me-1"></i> Calendrier </a>
 			</div>
 		</div>
 

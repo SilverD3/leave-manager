@@ -7,7 +7,6 @@ use App\Service\ConfigsServices;
 use App\Service\EmployeesServices;
 use App\Service\LeavesServices;
 use App\Service\PermissionRequestsServices;
-use App\View\Helpers\DateHelper;
 use Core\Auth\Auth;
 use Core\FlashMessages\Flash;
 use Core\Utils\Session;
@@ -63,6 +62,48 @@ class LeavesController
         $GLOBALS['years'] = $years;
         $GLOBALS['current_year'] = $year;
         $GLOBALS['leaves'] = $leaves;
+    }
+
+    public function calendar()
+    {
+        $_SESSION['page_title'] = 'Congés';
+        $_SESSION['subpage_title'] = 'Calendrier';
+
+    }
+
+    /**
+     * Get leaves by period
+     *
+     * @return void
+     */
+    public function getByPeriodJson()
+    {
+        if (!isset($_GET['start']) || !isset($_GET['end'])) {
+            die("Veuillez spécifier une période !");
+        }
+
+        $start = date('Y-m-d H:i:s', strtotime($_GET['start']));
+        $end = date('Y-m-d H:i:s', strtotime($_GET['end']));
+
+        $leaves = $this->service->getByPeriod($start, $end);
+
+        $json_leaves = [];
+
+        if (!empty($leaves)) {
+            foreach($leaves as $leave) {
+                $leave_infos = [
+                    'id' => $leave->getId(),
+                    'title' => 'Congés de ' . $leave->getEmployee()->getFirstName() . ' ' . $leave->getEmployee()->getLastName(),
+                    'start' => $leave->getStartDate(),
+                    'end' => $leave->getEndDate(),
+                    'url' => VIEWS . 'Leaves/view.php?id=' . $leave->getId()
+                ];
+
+                $json_leaves[] = $leave_infos;
+            }
+        }
+
+        echo json_encode($json_leaves);
     }
 
     public function view()

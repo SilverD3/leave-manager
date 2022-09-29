@@ -202,8 +202,7 @@ class LeavesServices
                     ."lv.note AS Leave_note, lv.etat AS Leave_etat ";
         $from = ' FROM leaves lv ';
         $join = '';
-        $where = ' WHERE lv.etat = :etat AND ((DATE(lv.start_date) <= :start_date AND DATE(lv.end_date) >= :start_date) '
-                    .'OR (DATE(lv.start_date) <= :end_date AND DATE(lv.end_date) >= :end_date))';
+        $where = ' WHERE lv.etat = :etat AND ((DATE(lv.start_date) BETWEEN :start_date AND :end_date) OR (DATE(lv.end_date) BETWEEN :start_date AND :end_date))';
 
         if(!empty($skip)) {
             $where .= " AND lv.id NOT IN (". implode(',', $skip) .") ";
