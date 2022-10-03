@@ -7,6 +7,7 @@ use App\Service\ConfigsServices;
 use App\Service\EmployeesServices;
 use App\Service\LeavesServices;
 use App\Service\PermissionRequestsServices;
+use App\View\Helpers\DateHelper;
 use Core\Auth\Auth;
 use Core\FlashMessages\Flash;
 use Core\Utils\Session;
@@ -347,5 +348,16 @@ class LeavesController
         header('Content-Type: application/json');
         echo json_encode(['status' => 'success', 'nb_spent_days' => $nb_spent_days]);
         exit;
+    }
+
+    public function getWorkingDaysAndHours()
+    {
+        $workBeginAt = $this->configsServices->getByCode('LM_WORK_BEGIN_AT')->getValue();
+        $workEndAt = $this->configsServices->getByCode('LM_WORK_END_AT')->getValue();
+        $workingDays = DateHelper::daysNumbers(explode(',', $this->configsServices->getByCode('LM_WORKING_DAYS')->getValue()));
+
+        $json_response = ['businessDays' => $workingDays, 'workEndAt' => $workEndAt, 'workBeginAt' => $workBeginAt];
+
+        echo json_encode($json_response);
     }
 }

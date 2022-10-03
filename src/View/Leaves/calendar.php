@@ -80,6 +80,14 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                     document.getElementById('script-warning').classList.remove('d-none')
                 }
             },
+            eventClick: function(info) {
+                info.jsEvent.preventDefault();
+                
+                if (info.event.url) {
+                    window.open(info.event.url, "_blank");
+                    return false;
+                }
+            },
             loading: function(bool) {
                 document.getElementById('loading').style.display =
                     bool ? 'block' : 'none';
@@ -89,5 +97,30 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
         calendar.setOption('locale', 'fr');
 
         calendar.render();
+
+        /**
+         * Get working day in select period via Ajax request
+         */
+        var xmlhttp = new XMLHttpRequest();
+        var url = "<?= VIEWS . 'Leaves/getbusinesshours.php?' ?>";
+
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4){
+                if(xmlhttp.status == 200) {
+                    var response = JSON.parse(xmlhttp.responseText);
+                    calendar.setOption('businessHours', {
+                        daysOfWeek: response.businessDays,
+
+                        startTime: response.workBeginAt,
+                        endTime: response.workEndAt,
+                    });
+                }else {
+                    alert("Une erreur est survenue lors du chargement des heures de travail");
+                }
+            } 
+        };
+        
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
     });
 </script>
