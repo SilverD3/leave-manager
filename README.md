@@ -2,6 +2,10 @@
 
 A simple web application to manage leaves and contracts.
 
+## Prerequisites
+
+To run this project, you need php 8.1 or latest and MySQL >= 5.7 or MariaDB >= 10.4 .
+
 ## Installation
 
 1. Clone the repository from GitHub
