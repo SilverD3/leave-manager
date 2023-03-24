@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Service;
@@ -70,7 +71,7 @@ class EmployeesServices
 		} catch (\PDOException $e) {
 			throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
 		}
-		
+
 		if (empty($result)) {
 			return [];
 		}
@@ -96,11 +97,11 @@ class EmployeesServices
 				$role->setCode($row['Role_code']);
 				$role->setName($row['Role_name']);
 				$employee->setRole($role);
-			} 
-			
+			}
+
 			$employees[] = $employee;
 		}
-		
+
 		return $employees;
 	}
 
@@ -127,7 +128,7 @@ class EmployeesServices
 		} catch (\PDOException $e) {
 			throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
 		}
-		
+
 		return $count;
 	}
 
@@ -139,7 +140,7 @@ class EmployeesServices
 			FROM employees e 
 			JOIN roles r ON r.id = e.role_id 
 			WHERE e.id = ?";
-		
+
 		if (!$bypass) {
 			$sql .= " AND e.etat = ?";
 		}
@@ -156,7 +157,7 @@ class EmployeesServices
 		} catch (\PDOException $e) {
 			throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
 		}
-		
+
 		if (empty($result)) {
 			return null;
 		}
@@ -195,7 +196,7 @@ class EmployeesServices
 		if (is_array($employee)) {
 			$employee = $this->toEntity($employee);
 		}
-	
+
 		$employee->setCreated(date('Y-m-d H:i:s'));
 		$employee->setModified(null);
 		$employee->setToken(null);
@@ -206,9 +207,9 @@ class EmployeesServices
 		if ($this->checkEmployee($employee)) {
 			Flash::error("Un employé avec les mêmes informations existe déjà.");
 
-            Session::write('__formdata__', json_encode($_POST));
+			Session::write('__formdata__', json_encode($_POST));
 
-            return false;
+			return false;
 		}
 
 		$errors = $employee->validation();
@@ -247,7 +248,7 @@ class EmployeesServices
 
 			$this->connectionManager->getConnection()->commit();
 
-			return $employeeId;
+			return (int)$employeeId;
 		} catch (\PDOException $e) {
 			throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
 		}
@@ -278,9 +279,9 @@ class EmployeesServices
 		if ($this->checkEmployee($employee)) {
 			Flash::error("Un employé avec les mêmes informations existe déjà.");
 
-            Session::write('__formdata__', json_encode($_POST));
+			Session::write('__formdata__', json_encode($_POST));
 
-            return false;
+			return false;
 		}
 
 		$sql = "UPDATE employees SET first_name = ?, last_name = ?, email = ?, username = ?, pwd = ?, role_id = ?, modified = ? WHERE id = ?";
