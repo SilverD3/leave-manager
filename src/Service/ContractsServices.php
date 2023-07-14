@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Service;
 
@@ -17,7 +26,7 @@ use Core\Utils\Session;
  */
 class ContractsServices
 {
-	private $connectionManager;
+    private $connectionManager;
 
     function __construct()
     {
@@ -37,22 +46,22 @@ class ContractsServices
     {
         $results = [];
         $contracts = [];
-        
+
         $select = "SELECT c.id AS Contract_id, c.title AS Contract_title, c.employee_id AS Contract_employee_id, c.start_date AS Contract_start_date, "
-                    ."c.end_date AS Contract_end_date, c.job_object AS Contract_job_object, c.job_description AS Contract_job_description, c.job_salary AS Contract_job_salary, "
-                    ."c.hourly_rate AS Contract_hourly_rate, c.pdf AS Contract_pdf, c.created AS Contract_created, c.contract_type_id AS Contract_contract_type_id, "
-                    ."c.modified AS Contract_modified, c.status AS Contract_status, c.etat AS Contract_etat ";
-                    
+            . "c.end_date AS Contract_end_date, c.job_object AS Contract_job_object, c.job_description AS Contract_job_description, c.job_salary AS Contract_job_salary, "
+            . "c.hourly_rate AS Contract_hourly_rate, c.pdf AS Contract_pdf, c.created AS Contract_created, c.contract_type_id AS Contract_contract_type_id, "
+            . "c.modified AS Contract_modified, c.status AS Contract_status, c.etat AS Contract_etat ";
+
         $from = " FROM contracts c";
         $join = "";
         $where = " WHERE c.etat = :etat ";
-        
+
         if ($joinType) {
             $join = " INNER JOIN contract_types ct ON ct.id = c.contract_type_id ";
             $select .= ", ct.id AS ContractType_id, ct.name AS ContractType_name, ct.description AS ContractType_description, ct.created AS ContractType_created, "
-                    ."ct.etat AS ContractType_etat ";
+                . "ct.etat AS ContractType_etat ";
         }
-        
+
         if ($joinEmployee) {
             $select .= " , e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, e.email AS Employee_email ";
             $join .= " INNER JOIN employees e ON e.id = c.employee_id ";
@@ -80,7 +89,7 @@ class ContractsServices
             if (!is_null($employee_id)) {
                 $query->bindValue(':employee_id', $employee_id, \PDO::PARAM_INT);
             }
-            
+
             $query->execute();
 
             $results = $query->fetchAll(\PDO::FETCH_ASSOC);
@@ -89,8 +98,8 @@ class ContractsServices
         }
 
         if (empty($results)) {
-			return [];
-		}
+            return [];
+        }
 
         foreach ($results as $row) {
             $contract = new Contract();
@@ -126,9 +135,9 @@ class ContractsServices
                 $employee->setId($row['Employee_id']);
                 $employee->setFirstName($row['Employee_first_name']);
                 $employee->setLastName($row['Employee_last_name']);
-                $employee->setEmail($row['Employee_email']);   
+                $employee->setEmail($row['Employee_email']);
 
-                $contract->setEmployee($employee);        
+                $contract->setEmployee($employee);
             }
 
             $contracts[] = $contract;
@@ -147,20 +156,20 @@ class ContractsServices
     public function getExpired(bool $joinType = true, bool $joinEmployee = true)
     {
         $select = "SELECT c.id AS Contract_id, c.title AS Contract_title, c.employee_id AS Contract_employee_id, c.start_date AS Contract_start_date, "
-                    ."c.end_date AS Contract_end_date, c.job_object AS Contract_job_object, c.job_description AS Contract_job_description, c.job_salary AS Contract_job_salary, "
-                    ."c.hourly_rate AS Contract_hourly_rate, c.pdf AS Contract_pdf, c.created AS Contract_created, c.contract_type_id AS Contract_contract_type_id, "
-                    ."c.modified AS Contract_modified, c.status AS Contract_status, c.etat AS Contract_etat ";
-                    
+            . "c.end_date AS Contract_end_date, c.job_object AS Contract_job_object, c.job_description AS Contract_job_description, c.job_salary AS Contract_job_salary, "
+            . "c.hourly_rate AS Contract_hourly_rate, c.pdf AS Contract_pdf, c.created AS Contract_created, c.contract_type_id AS Contract_contract_type_id, "
+            . "c.modified AS Contract_modified, c.status AS Contract_status, c.etat AS Contract_etat ";
+
         $from = " FROM contracts c";
         $join = "";
         $where = " WHERE c.etat = :etat AND c.end_date < :end_date and c.status = :status";
-        
+
         if ($joinType) {
             $join = " INNER JOIN contract_types ct ON ct.id = c.contract_type_id ";
             $select .= ", ct.id AS ContractType_id, ct.name AS ContractType_name, ct.description AS ContractType_description, ct.created AS ContractType_created, "
-                    ."ct.etat AS ContractType_etat ";
+                . "ct.etat AS ContractType_etat ";
         }
-        
+
         if ($joinEmployee) {
             $select .= " , e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, e.email AS Employee_email ";
             $join .= " INNER JOIN employees e ON e.id = c.employee_id ";
@@ -174,7 +183,7 @@ class ContractsServices
             $query->bindValue(':etat', 1, \PDO::PARAM_BOOL);
             $query->bindValue(':status', 'active', \PDO::PARAM_STR);
             $query->bindValue(':end_date', date('Y-m-d'), \PDO::PARAM_STR);
-            
+
             $query->execute();
 
             $results = $query->fetchAll(\PDO::FETCH_ASSOC);
@@ -183,8 +192,8 @@ class ContractsServices
         }
 
         if (empty($results)) {
-			return [];
-		}
+            return [];
+        }
 
         foreach ($results as $row) {
             $contract = new Contract();
@@ -220,9 +229,9 @@ class ContractsServices
                 $employee->setId($row['Employee_id']);
                 $employee->setFirstName($row['Employee_first_name']);
                 $employee->setLastName($row['Employee_last_name']);
-                $employee->setEmail($row['Employee_email']);   
+                $employee->setEmail($row['Employee_email']);
 
-                $contract->setEmployee($employee);        
+                $contract->setEmployee($employee);
             }
 
             $contracts[] = $contract;
@@ -257,7 +266,7 @@ class ContractsServices
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
         }
-        
+
         return $count;
     }
 
@@ -300,7 +309,7 @@ class ContractsServices
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
         }
-        
+
         return $count;
     }
 
@@ -315,20 +324,20 @@ class ContractsServices
     public function get($id, bool $joinType = false, bool $joinEmployee = false): ?Contract
     {
         $select = "SELECT c.id AS Contract_id, c.title AS Contract_title, c.employee_id AS Contract_employee_id, c.start_date AS Contract_start_date, "
-                    ."c.end_date AS Contract_end_date, c.job_object AS Contract_job_object, c.job_description AS Contract_job_description, c.job_salary AS Contract_job_salary, "
-                    ."c.hourly_rate AS Contract_hourly_rate, c.pdf AS Contract_pdf, c.created AS Contract_created, c.contract_type_id AS Contract_contract_type_id, "
-                    ."c.modified AS Contract_modified, c.status AS Contract_status, c.etat AS Contract_etat ";
-                    
+            . "c.end_date AS Contract_end_date, c.job_object AS Contract_job_object, c.job_description AS Contract_job_description, c.job_salary AS Contract_job_salary, "
+            . "c.hourly_rate AS Contract_hourly_rate, c.pdf AS Contract_pdf, c.created AS Contract_created, c.contract_type_id AS Contract_contract_type_id, "
+            . "c.modified AS Contract_modified, c.status AS Contract_status, c.etat AS Contract_etat ";
+
         $from = " FROM contracts c";
         $join = "";
         $where = " WHERE c.etat = :etat AND c.id = :id ";
-        
+
         if ($joinType) {
             $join = " INNER JOIN contract_types ct ON ct.id = c.contract_type_id ";
             $select .= ", ct.id AS ContractType_id, ct.name AS ContractType_name, ct.description AS ContractType_description, ct.created AS ContractType_created, "
-                    ."ct.etat AS ContractType_etat ";
+                . "ct.etat AS ContractType_etat ";
         }
-        
+
         if ($joinEmployee) {
             $select .= " , e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, e.email AS Employee_email ";
             $join .= " INNER JOIN employees e ON e.id = c.employee_id ";
@@ -342,7 +351,7 @@ class ContractsServices
             $query->bindValue(':etat', 1, \PDO::PARAM_BOOL);
 
             $query->bindValue(':id', $id);
-            
+
             $query->execute();
 
             $results = $query->fetch(\PDO::FETCH_ASSOC);
@@ -351,8 +360,8 @@ class ContractsServices
         }
 
         if (empty($results)) {
-			return null;
-		}
+            return null;
+        }
 
         $contract = new Contract();
         $contract->setId($results['Contract_id']);
@@ -387,9 +396,9 @@ class ContractsServices
             $employee->setId($results['Employee_id']);
             $employee->setFirstName($results['Employee_first_name']);
             $employee->setLastName($results['Employee_last_name']);
-            $employee->setEmail($results['Employee_email']);   
+            $employee->setEmail($results['Employee_email']);
 
-            $contract->setEmployee($employee);        
+            $contract->setEmployee($employee);
         }
 
         return $contract;
@@ -416,15 +425,15 @@ class ContractsServices
         }
 
         $errors = $contract->validation();
-		if (!empty($errors)) {
-			foreach ($errors as $error) {
-				Flash::error($error);
-			}
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                Flash::error($error);
+            }
 
-			Session::write('__formdata__', json_encode($_POST));
+            Session::write('__formdata__', json_encode($_POST));
 
-			return false;
-		}
+            return false;
+        }
 
         if (strtotime($contract->getStartDate()) < time()) {
             $contract->setStatus('active');
@@ -437,7 +446,7 @@ class ContractsServices
         $contract->setEtat(true);
 
         $sql = "INSERT INTO contracts(employee_id, title, contract_type_id, start_date, end_date, job_object, job_description, job_salary, "
-                ."hourly_rate, created, modified, status, etat) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            . "hourly_rate, created, modified, status, etat) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
             $this->connectionManager->getConnection()->beginTransaction();
@@ -468,8 +477,8 @@ class ContractsServices
         } catch (\PDOException $e) {
             $this->connectionManager->getConnection()->rollBack();
 
-			throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
-		}
+            throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
+        }
     }
 
     /**
@@ -485,15 +494,15 @@ class ContractsServices
         $existedContract = $this->get($id);
         if (empty($existedContract)) {
             Flash::error("Aucun contrat trouvé avec l'id " . $id);
-            
-			return false;
-		}
+
+            return false;
+        }
 
         $sql = "UPDATE contracts SET end_date = :end_date WHERE id = :id";
 
         try {
             $query = $this->connectionManager->getConnection()->prepare($sql);
-            
+
             $query->bindValue(':end_date', $end_date, \PDO::PARAM_STR);
             $query->bindValue(':id', $id, \PDO::PARAM_INT);
 
@@ -521,9 +530,9 @@ class ContractsServices
         $existedContract = $this->get($contract->getId());
         if (empty($existedContract)) {
             Flash::error("Aucun contrat trouvé avec l'id " . $contract->getId());
-            
-			return false;
-		}
+
+            return false;
+        }
 
         // Check if another contract with same data already exists
         if ($this->checkContract($contract)) {
@@ -554,18 +563,18 @@ class ContractsServices
 
         // Validation
         $errors = $existedContract->validation();
-		if (!empty($errors)) {
-			foreach ($errors as $error) {
-				Flash::error($error);
-			}
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                Flash::error($error);
+            }
 
-			Session::write('__formdata__', json_encode($_POST));
+            Session::write('__formdata__', json_encode($_POST));
 
-			return false;
-		}
+            return false;
+        }
 
         $sql = "UPDATE contracts SET title = :title, start_date = :start_date, end_date = :end_date, job_object = :job_object, job_description = :job_description, "
-                ."job_salary = :job_salary, hourly_rate = :hourly_rate, pdf = :pdf, modified = :modified, status = :status WHERE id = :id";
+            . "job_salary = :job_salary, hourly_rate = :hourly_rate, pdf = :pdf, modified = :modified, status = :status WHERE id = :id";
 
         try {
             $query = $this->connectionManager->getConnection()->prepare($sql);
@@ -602,9 +611,9 @@ class ContractsServices
         $existedContract = $this->get($id);
         if (empty($existedContract)) {
             Flash::error("Aucun contrat trouvé avec l'id " . $id);
-            
-			return false;
-		}
+
+            return false;
+        }
 
         $sql = "UPDATE contracts SET status = :status, etat = :etat WHERE id = :id";
 
@@ -635,9 +644,9 @@ class ContractsServices
         $existedContract = $this->get($id);
         if (empty($existedContract)) {
             Flash::error("Aucun contrat trouvé avec l'id " . $id);
-            
-			return false;
-		}
+
+            return false;
+        }
 
         $sql = "UPDATE contracts SET status = :status WHERE id = :id";
 
@@ -666,8 +675,8 @@ class ContractsServices
         $existed = false;
 
         $sql = "SELECT * FROM contracts c WHERE c.etat = :etat AND c.employee_id = :employee_id AND c.contract_type_id = :contract_type_id "
-                ." AND c.start_date = :start_date AND c.end_date = :end_date";
-            
+            . " AND c.start_date = :start_date AND c.end_date = :end_date";
+
         if (!empty($contract->getId())) {
             $sql .= " AND c.id != :id";
         }
@@ -681,7 +690,7 @@ class ContractsServices
             $query->bindValue(':start_date', $contract->getStartDate(), \PDO::PARAM_STR);
             $query->bindValue(':end_date', $contract->getEndDate(), \PDO::PARAM_STR);
             if (!empty($contract->getId())) {
-                $query->bindValue(':id',$contract->getId(), \PDO::PARAM_INT);
+                $query->bindValue(':id', $contract->getId(), \PDO::PARAM_INT);
             }
 
             $query->execute();
@@ -736,7 +745,7 @@ class ContractsServices
         $contract->setCreated($created);
         $contract->setModified($modified);
         $contract->setStatus($status);
-        
+
         if ($etat != null) {
             $contract->setEtat($etat);
         }

@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Entity;
 
@@ -49,7 +58,7 @@ class Company
 
     /**
      * Get the value of id
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -59,7 +68,7 @@ class Company
      * Set the value of id
      *
      * @return  self
-     */ 
+     */
     public function setId($id)
     {
         $this->id = $id;
@@ -69,7 +78,7 @@ class Company
 
     /**
      * Get the value of name
-     */ 
+     */
     public function getName()
     {
         return $this->name;
@@ -79,7 +88,7 @@ class Company
      * Set the value of name
      *
      * @return  self
-     */ 
+     */
     public function setName($name)
     {
         $this->name = $name;
@@ -89,7 +98,7 @@ class Company
 
     /**
      * Get the value of director_name
-     */ 
+     */
     public function getDirectorName()
     {
         return $this->director_name;
@@ -99,7 +108,7 @@ class Company
      * Set the value of director_name
      *
      * @return  self
-     */ 
+     */
     public function setDirectorName($director_name)
     {
         $this->director_name = $director_name;
@@ -109,7 +118,7 @@ class Company
 
     /**
      * Get the value of address
-     */ 
+     */
     public function getAddress()
     {
         return $this->address;
@@ -119,7 +128,7 @@ class Company
      * Set the value of address
      *
      * @return  self
-     */ 
+     */
     public function setAddress($address)
     {
         $this->address = $address;
@@ -129,7 +138,7 @@ class Company
 
     /**
      * Get the value of tel1
-     */ 
+     */
     public function getTel1()
     {
         return $this->tel1;
@@ -139,7 +148,7 @@ class Company
      * Set the value of tel1
      *
      * @return  self
-     */ 
+     */
     public function setTel1($tel1)
     {
         $this->tel1 = $tel1;
@@ -149,7 +158,7 @@ class Company
 
     /**
      * Get the value of tel2
-     */ 
+     */
     public function getTel2()
     {
         return $this->tel2;
@@ -159,7 +168,7 @@ class Company
      * Set the value of tel2
      *
      * @return  self
-     */ 
+     */
     public function setTel2($tel2)
     {
         $this->tel2 = $tel2;
@@ -169,7 +178,7 @@ class Company
 
     /**
      * Get the value of email
-     */ 
+     */
     public function getEmail()
     {
         return $this->email;
@@ -179,7 +188,7 @@ class Company
      * Set the value of email
      *
      * @return  self
-     */ 
+     */
     public function setEmail($email)
     {
         $this->email = $email;
@@ -189,7 +198,7 @@ class Company
 
     /**
      * Get the value of logo
-     */ 
+     */
     public function getLogo()
     {
         return $this->logo;
@@ -199,7 +208,7 @@ class Company
      * Set the value of logo
      *
      * @return  self
-     */ 
+     */
     public function setLogo($logo)
     {
         $this->logo = $logo;
@@ -209,7 +218,7 @@ class Company
 
     /**
      * Get the value of about
-     */ 
+     */
     public function getAbout()
     {
         return $this->about;
@@ -219,7 +228,7 @@ class Company
      * Set the value of about
      *
      * @return  self
-     */ 
+     */
     public function setAbout($about)
     {
         $this->about = $about;
@@ -229,7 +238,7 @@ class Company
 
     /**
      * Get the value of created
-     */ 
+     */
     public function getCreated()
     {
         return $this->created;
@@ -239,7 +248,7 @@ class Company
      * Set the value of created
      *
      * @return  self
-     */ 
+     */
     public function setCreated($created)
     {
         $this->created = $created;
@@ -249,7 +258,7 @@ class Company
 
     /**
      * Get the value of modified
-     */ 
+     */
     public function getModified()
     {
         return $this->modified;
@@ -259,7 +268,7 @@ class Company
      * Set the value of modified
      *
      * @return  self
-     */ 
+     */
     public function setModified($modified)
     {
         $this->modified = $modified;
@@ -269,7 +278,7 @@ class Company
 
     /**
      * Get the value of modified_by
-     */ 
+     */
     public function getModifiedBy()
     {
         return $this->modified_by;
@@ -279,7 +288,7 @@ class Company
      * Set the value of modified_by
      *
      * @return  self
-     */ 
+     */
     public function setModifiedBy($modified_by)
     {
         $this->modified_by = $modified_by;
@@ -290,7 +299,7 @@ class Company
     /**
      * Get the value of modifier
      * @return Employee 
-     */ 
+     */
     public function getModifier()
     {
         return $this->modifier;
@@ -301,7 +310,7 @@ class Company
      *
      * @param Employee $modifier
      * @return  self
-     */ 
+     */
     public function setModifier(Employee $modifier)
     {
         $this->modifier = $modifier;

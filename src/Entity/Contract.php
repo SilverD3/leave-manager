@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Entity;
 
@@ -8,21 +17,21 @@ namespace App\Entity;
  */
 class Contract
 {
-	private $id;
-	private $employee_id;
-	private $title;
-	private $contract_type_id;
-	private $start_date;
-	private $end_date;
-	private $job_object;
-	private $job_description;
-	private $job_salary;
-	private $hourly_rate;
-	private $pdf;
-	private $created;
-	private $modified;
+    private $id;
+    private $employee_id;
+    private $title;
+    private $contract_type_id;
+    private $start_date;
+    private $end_date;
+    private $job_object;
+    private $job_description;
+    private $job_salary;
+    private $hourly_rate;
+    private $pdf;
+    private $created;
+    private $modified;
     private $status;
-	private $etat;
+    private $etat;
 
     private $employee;
     private $contract_type;
@@ -261,24 +270,24 @@ class Contract
     }
 
     /**
-	 * Get the value of pdf
-	 */ 
-	public function getPdf()
-	{
-		return $this->pdf;
-	}
+     * Get the value of pdf
+     */
+    public function getPdf()
+    {
+        return $this->pdf;
+    }
 
-	/**
-	 * Set the value of pdf
-	 *
-	 * @return  self
-	 */ 
-	public function setPdf($pdf)
-	{
-		$this->pdf = $pdf;
+    /**
+     * Set the value of pdf
+     *
+     * @return  self
+     */
+    public function setPdf($pdf)
+    {
+        $this->pdf = $pdf;
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * @return string|null
@@ -362,7 +371,7 @@ class Contract
 
     /**
      * Get the value of employee
-     */ 
+     */
     public function getEmployee(): ?Employee
     {
         return $this->employee;
@@ -373,7 +382,7 @@ class Contract
      *
      * @param Employee $employee
      * @return  self
-     */ 
+     */
     public function setEmployee(Employee $employee)
     {
         $this->employee = $employee;
@@ -384,7 +393,7 @@ class Contract
     /**
      * Get the value of contract_type
      * @return ContractType|null Contract type of contract
-     */ 
+     */
     public function getContractType(): ?ContractType
     {
         return $this->contract_type;
@@ -395,7 +404,7 @@ class Contract
      *
      * @param ContractType $contract_type
      * @return  self
-     */ 
+     */
     public function setContractType(ContractType $contract_type)
     {
         $this->contract_type = $contract_type;

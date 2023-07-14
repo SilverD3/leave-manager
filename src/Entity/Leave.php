@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Entity;
 
@@ -8,17 +17,17 @@ namespace App\Entity;
  */
 class Leave
 {
-	private $id;
-	private $employee_id;
-	private $year;
-	private $days;
-	private $start_date;
-	private $end_date;
-	private $created;
-	private $modified;
-	private $note;
-	private $etat;
-	private $employee;
+    private $id;
+    private $employee_id;
+    private $year;
+    private $days;
+    private $start_date;
+    private $end_date;
+    private $created;
+    private $modified;
+    private $note;
+    private $etat;
+    private $employee;
 
     /**
      * Validates Leave
@@ -26,7 +35,7 @@ class Leave
      * 
      * @return array Array of errors
      */
-	public function validation(): array
+    public function validation(): array
     {
         $errors = [];
 
@@ -168,7 +177,7 @@ class Leave
 
         return $this;
     }
-    
+
     /**
      * @return mixed
      */
@@ -249,24 +258,24 @@ class Leave
         return $this;
     }
 
-	/**
-	 * Get the related employee
+    /**
+     * Get the related employee
      * @return Employee|null 
-	 */ 
-	public function getEmployee(): ?Employee
-	{
-		return $this->employee;
-	}
+     */
+    public function getEmployee(): ?Employee
+    {
+        return $this->employee;
+    }
 
-	/**
-	 * Set the related employee
-	 *
-	 * @return  self
-	 */ 
-	public function setEmployee(?Employee $employee)
-	{
-		$this->employee = $employee;
+    /**
+     * Set the related employee
+     *
+     * @return  self
+     */
+    public function setEmployee(?Employee $employee)
+    {
+        $this->employee = $employee;
 
-		return $this;
-	}
+        return $this;
+    }
 }

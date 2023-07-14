@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Entity;
 
@@ -8,19 +17,19 @@ namespace App\Entity;
  */
 class ContractModel
 {
-	private $id;
-	private $contract_type_id;
-	private $name;
-	private $content;
-	private $is_current;
-	private $status;
-	private $created;
-	private $modified;
-	private $etat;
+    private $id;
+    private $contract_type_id;
+    private $name;
+    private $content;
+    private $is_current;
+    private $status;
+    private $created;
+    private $modified;
+    private $etat;
 
     private $contractType;
 
-	/**
+    /**
      * Validates Contract Model
      * Check if all required fields are provided
      * 

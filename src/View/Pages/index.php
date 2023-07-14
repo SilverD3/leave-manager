@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\View\Helpers\TitleHelper;
@@ -14,12 +22,13 @@ use App\Controller\PagesController;
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <?=(new TitleHelper())->getTitle();?>
+        <?= (new TitleHelper())->getTitle(); ?>
     </title>
 
     <link rel="icon" href="https://getbootstrap.com/docs/5.1/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
@@ -28,9 +37,10 @@ use App\Controller\PagesController;
 
     <link rel="stylesheet" href="<?= TEMPLATE_PATH ?>assets/vendor/bootstrap/css/bootstrap.min.css">
 </head>
+
 <body>
-    <div class="container-sm justify-content-center" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"> 
-        <div class="row"> 
+    <div class="container-sm justify-content-center" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+        <div class="row">
             <div class="col-md-10 m-auto">
                 <div class="card text-center">
                     <div class="bg-primary text-white card-header p-2">
@@ -39,11 +49,12 @@ use App\Controller\PagesController;
                     <div class="card-body">
                         <h5 class="card-title m-2">Leave Manager App Skeleton</h5>
                         <p class="card-text mt-3">
-                            The basic structure based on the MVC pattern to facilitate the development of small applications with PHP from Scratch. </br>
-                            <a href="https://getbootstrap.com/docs/5.1" class="alert-link link-primary" style="text-decoration: none" target="_blank"> 
-                                <img src="https://getbootstrap.com/docs/5.1/assets/img/favicons/favicon-16x16.png" alt=""> 
-                                Bootstrap 5.1 
-                            </a> 
+                            The basic structure based on the MVC pattern to facilitate the development of small applications with PHP
+                            from Scratch. </br>
+                            <a href="https://getbootstrap.com/docs/5.1" class="alert-link link-primary" style="text-decoration: none" target="_blank">
+                                <img src="https://getbootstrap.com/docs/5.1/assets/img/favicons/favicon-16x16.png" alt="">
+                                Bootstrap 5.1
+                            </a>
                             is already included.
 
                             <?= $dbconnection ?>
@@ -56,4 +67,5 @@ use App\Controller\PagesController;
 
     <script src="<?= TEMPLATE_PATH ?>assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 </body>
+
 </html>

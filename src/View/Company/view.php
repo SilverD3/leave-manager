@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\CompanyController;
@@ -12,19 +21,19 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 ?>
 
 <main id="main" class="main">
-	<div class="pagetitle">
-		<h1> Informations de l'entreprise </h1>
-		<nav>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="<?= BASE_URL ?>"> Accueil </a></li>
-				<li class="breadcrumb-item active"> L'entreprise </li>
-			</ol>
-		</nav>
-	</div><!-- End Page Title -->
+    <div class="pagetitle">
+        <h1> Informations de l'entreprise </h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>"> Accueil </a></li>
+                <li class="breadcrumb-item active"> L'entreprise </li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
-	<section class="section profile">
-		<div class="row mb-3">
-            
+    <section class="section profile">
+        <div class="row mb-3">
+
             <?= Flash::render() ?>
 
             <div class="col-xl-4">
@@ -83,7 +92,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
             </div>
         </div>
 
-        <?php if($company->getAbout()): ?>
+        <?php if ($company->getAbout()) : ?>
             <div class="row">
                 <div class="col-12">
                     <div class="card card-body">

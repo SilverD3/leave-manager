@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace Core\Utils;
 
@@ -14,7 +23,7 @@ class Cookies
 	 * @var array
 	 */
 	private static $_default_config = [
-		'expires' => 60*60*24, // 1 day
+		'expires' => 60 * 60 * 24, // 1 day
 		'path' => '/',
 		'domain' => '',
 		'secure' => true,
@@ -45,7 +54,7 @@ class Cookies
 	static function expire(string $name)
 	{
 		if (isset($_COOKIE[sha1($name)])) {
-			$config = array_merge(self::$_default_config, ['expires' => -60*60]);
+			$config = array_merge(self::$_default_config, ['expires' => -60 * 60]);
 
 			setcookie(sha1($name), '', ...array_values($config));
 		}
@@ -74,11 +83,10 @@ class Cookies
 			$cookie = $_COOKIE[sha1($name)];
 
 			self::expire(sha1($name));
-			
+
 			return $cookie;
 		}
 
 		return null;
 	}
-
 }

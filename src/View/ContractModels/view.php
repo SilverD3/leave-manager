@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\ContractModelsController;
@@ -12,27 +21,27 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 ?>
 
 <main id="main" class="main">
-	<div class="pagetitle">
-		<h1>Détails du modèle de contrat</h1>
-		<nav>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
-				<li class="breadcrumb-item"><a href="<?= VIEWS . 'ContractModels' ?>">Modèles de contrat</a></li>
-				<li class="breadcrumb-item active">Détails</li>
-			</ol>
-		</nav>
-	</div><!-- End Page Title -->
+    <div class="pagetitle">
+        <h1>Détails du modèle de contrat</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="<?= VIEWS . 'ContractModels' ?>">Modèles de contrat</a></li>
+                <li class="breadcrumb-item active">Détails</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
-	<section class="section dashboard">
-		<div class="row">
-			<div class="col-md-12 col-xl-12 col-xxl-10">
-				<div class="card">
-					<div class="card-body">
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-md-12 col-xl-12 col-xxl-10">
+                <div class="card">
+                    <div class="card-body">
 
                         <?= Flash::render() ?>
 
-			  			<h5 class="card-title"><i class="bi bi-info-circle"></i> Informations détaillées</h5>
-                        
+                        <h5 class="card-title"><i class="bi bi-info-circle"></i> Informations détaillées</h5>
+
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <tbody>
@@ -47,9 +56,9 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     <tr>
                                         <th>Modèle par defaut</th>
                                         <td>
-                                            <?php if ($contractModel->getIsCurrent()): ?>
+                                            <?php if ($contractModel->getIsCurrent()) : ?>
                                                 <span class="text-success"><i class="bi bi-check-lg"></i></span>
-                                            <?php else: ?>
+                                            <?php else : ?>
                                                 <span class="text-danger"><i class="bi bi-x-lg"></i></span>
                                             <?php endif; ?>
                                         </td>
@@ -65,8 +74,8 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                 </tbody>
                             </table>
                         </div>
-                          
-			  			<h5 class="card-title my-3"><i class="bi bi-file-earmark-text"></i> Contenu du modèle</h5>
+
+                        <h5 class="card-title my-3"><i class="bi bi-file-earmark-text"></i> Contenu du modèle</h5>
 
                         <div class="editior-wrapper border p-5">
                             <?= $contractModel->getContent() ?>
@@ -82,10 +91,8 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
 <script src="<?= TEMPLATE_PATH ?>assets/vendor/tinymce/tinymce.min.js"></script>
 <script type="text/javascript">
-
-// tinymce.init({
-//     selector: '#cmcontent',
-//     readonly : 1
-// });
-
+    // tinymce.init({
+    //     selector: '#cmcontent',
+    //     readonly : 1
+    // });
 </script>

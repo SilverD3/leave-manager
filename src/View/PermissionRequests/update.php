@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\PermissionRequestsController;
@@ -28,7 +37,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Veuillez completer les champs ci-après</h5>
-                        
+
                         <?= Flash::render() ?>
 
                         <form class="row g-3 needs-validation" action="" method="post" novalidate>

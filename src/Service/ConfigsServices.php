@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Service;
 
@@ -43,10 +52,10 @@ class ConfigsServices
         }
 
         if (empty($result)) {
-			return [];
-		}
+            return [];
+        }
 
-		foreach ($result as $row) {
+        foreach ($result as $row) {
             $config = new Config();
             $config->setId($row['id']);
             $config->setCode($row['code']);
@@ -150,7 +159,7 @@ class ConfigsServices
         if (is_array($config_data)) {
             $config_data = $this->toEntity($config_data);
         }
-        
+
         $config = $this->get($config_data->getId());
 
         if (empty($config)) {
@@ -166,7 +175,7 @@ class ConfigsServices
             foreach ($errors as $error) {
                 Flash::error($error);
             }
-            
+
             Session::write('__formdata__', json_encode($_POST));
 
             return false;
@@ -176,7 +185,7 @@ class ConfigsServices
 
         try {
             $query = $this->connectionManager->getConnection()->prepare($sql);
-            
+
             $query->bindValue(':value', $config->getValue(), \PDO::PARAM_STR);
             $query->bindValue(':modified', $config->getModified(), \PDO::PARAM_STR);
             $query->bindValue(':modified_by', $config->getModifiedBy(), \PDO::PARAM_INT);
@@ -185,7 +194,7 @@ class ConfigsServices
             $updated = $query->execute();
 
             return $updated;
-        } catch(\PDOException $e) {
+        } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), (int)$e->getCode());
         }
     }

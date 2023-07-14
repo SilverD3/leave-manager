@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -20,16 +28,16 @@ class AutoLoader
                 switch ($fqnParts[1]) {
                     case 'Entity':
                         $this->__autoLoadModel($className);
-                        break; 
+                        break;
                     case 'Controller':
                         $this->__autoLoadController($className);
-                        break; 
+                        break;
                     case 'Service':
                         $this->__autoLoadService($className);
-                        break; 
+                        break;
                     case 'View':
                         $this->__autoLoadView($className);
-                        break; 
+                        break;
                     default:
                         $this->__autoloadClass($className);
                         break;
@@ -52,7 +60,7 @@ class AutoLoader
             $fqnParts = explode('\\', $className);
             $filePath = implode(DS, $fqnParts) . '.php';
         }
-        
+
         if (file_exists($filePath)) {
             require_once $filePath;
         } else {
@@ -65,7 +73,7 @@ class AutoLoader
         $fqnParts = explode('\\', $className);
 
         unset($fqnParts[0]);
-        
+
         $filePath = CORE_PATH . implode(DS, $fqnParts) . '.php';
 
         if (file_exists($filePath)) {
@@ -73,7 +81,7 @@ class AutoLoader
         } else {
             throw new \Exception(sprintf('Could not load Core class "%s".', $className));
         }
-    }    
+    }
 
     public function __autoLoadModel($className)
     {
@@ -163,15 +171,15 @@ if (session_status() === PHP_SESSION_NONE) {
     $configure = new Configure();
 
     $default_session_config = [
-        'timeout' => 60*60*24*2 // 2 days
+        'timeout' => 60 * 60 * 24 * 2 // 2 days
     ];
 
     $session_config = $configure->read('Session', $default_session_config);
-    
+
     ini_set('session.gc_maxlifetime', $session_config['timeout']);
-    session_set_cookie_params($session_config['timeout']); 
+    session_set_cookie_params($session_config['timeout']);
 
     session_start();
-    
+
     $_SESSION['__configure__'] = serialize($configure);
 }

@@ -1,10 +1,18 @@
 <?php
 
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 return [
     'DataSource' => [
         'host' => 'localhost',
         'username' => 'root',
-        'password' => 'silevester',
+        'password' => '',
         'database' => 'leave_manager',
     ],
 

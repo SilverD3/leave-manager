@@ -1,6 +1,14 @@
-<?php 
+<?php
 
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Entity;
 
@@ -9,19 +17,19 @@ namespace App\Entity;
  */
 class Employee
 {
-	private $id;
-	private $first_name;
-	private $last_name;
-	private $email;
-	private $username;
-	private $pwd;
-	private $role_id;
-	private $created;
-	private $modified;
-	private $token;
-	private $token_exp_date;
-	private $status;
-	private $etat;
+    private $id;
+    private $first_name;
+    private $last_name;
+    private $email;
+    private $username;
+    private $pwd;
+    private $role_id;
+    private $created;
+    private $modified;
+    private $token;
+    private $token_exp_date;
+    private $status;
+    private $etat;
 
     /**
      * @var Role $role

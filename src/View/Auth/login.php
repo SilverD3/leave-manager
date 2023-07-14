@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\View\Helpers\TitleHelper;
@@ -16,7 +25,7 @@ use Core\FlashMessages\Flash;
 	<meta charset="utf-8">
 	<meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-	<title><?=(new TitleHelper())->getTitle();?></title>
+	<title><?= (new TitleHelper())->getTitle(); ?></title>
 	<meta content="Simple Leave Manager Application" name="description">
 	<meta content="Leaves, Manager, Contracts" name="keywords">
 
@@ -97,7 +106,8 @@ use Core\FlashMessages\Flash;
 							</div>
 
 							<div class="credits">
-								&copy; Copyright <strong><span><a href="https://github.com/SilverD3" target="_blank">Silevester D.</a></span>, 2022</strong>. Tout droits reservés
+								&copy; Copyright <strong><span><a href="https://github.com/SilverD3" target="_blank">Silevester
+											D.</a></span>, 2022</strong>. Tout droits reservés
 							</div>
 
 						</div>

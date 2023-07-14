@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\ContractsController;
@@ -11,16 +20,16 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 ?>
 
 <main id="main" class="main">
-	<div class="pagetitle">
-		<h1>Ajouter un contrat</h1>
-		<nav>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
-				<li class="breadcrumb-item"><a href="<?= VIEWS . 'Contracts' ?>">Contrats</a></li>
-				<li class="breadcrumb-item active">Ajout</li>
-			</ol>
-		</nav>
-	</div><!-- End Page Title -->
+    <div class="pagetitle">
+        <h1>Ajouter un contrat</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="<?= VIEWS . 'Contracts' ?>">Contrats</a></li>
+                <li class="breadcrumb-item active">Ajout</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
     <section class="section dashboard">
         <div class="row">
@@ -31,9 +40,11 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                         <?= Flash::render() ?>
 
                         <form class="row g-3 needs-validation" action="" method="post" novalidate>
-                            
-                            <div class="py-1"><h4 class="card-title py-0">Généralités</h4></div>
-                        
+
+                            <div class="py-1">
+                                <h4 class="card-title py-0">Généralités</h4>
+                            </div>
+
                             <div class=" col-md-7">
                                 <label for="ctitle" class="form-label"> Intitulé du contrat </label>
                                 <input type="text" maxlength="500" placeholder="E.g: CDD de l'employé Jean" class="form-control" name="title" id="ctitle" value="<?= isset($form_data['title']) ? $form_data['title'] : '' ?>">
@@ -41,30 +52,31 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
                             <div class="col-sm-6 col-md-5">
                                 <label for="ceid" class="form-label">Employé <span class="text-danger">*</span></label>
-                                <?php if (!empty($employees)): ?>
+                                <?php if (!empty($employees)) : ?>
                                     <select name="employee_id" class="form-control" id="ceid" required>
                                         <option value="">Choisir un employé</option>
-                                        <?php foreach($employees as $employee): ?>
-                                            <option value="<?= $employee->getId() ?>"> <?= $employee->getFirstName() . ' ' . $employee->getLastName() ?></option>
+                                        <?php foreach ($employees as $employee) : ?>
+                                            <option value="<?= $employee->getId() ?>">
+                                                <?= $employee->getFirstName() . ' ' . $employee->getLastName() ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <div class="invalid-feedback">Veuillez choisir un employé.</div>
-                                <?php else: ?>
+                                <?php else : ?>
                                     <div class="alert alert-danger" role="alert">Aucun employé trouvé</div>
                                 <?php endif; ?>
                             </div>
 
                             <div class="col-sm-6 col-md-4">
                                 <label for="cctid" class="form-label">Type de contrat <span class="text-danger">*</span></label>
-                                <?php if (!empty($contract_types)): ?>
+                                <?php if (!empty($contract_types)) : ?>
                                     <select name="contract_type_id" class="form-control" id="cctid" required>
                                         <option value="">Choisir un type de contrat</option>
-                                        <?php foreach($contract_types as $contract_type): ?>
+                                        <?php foreach ($contract_types as $contract_type) : ?>
                                             <option value="<?= $contract_type->getId() ?>"> <?= $contract_type->getName() ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <div class="invalid-feedback">Veuillez choisir un type de contrat.</div>
-                                <?php else: ?>
+                                <?php else : ?>
                                     <div class="alert alert-danger" role="alert">Aucun type contrat trouvé</div>
                                 <?php endif; ?>
                             </div>
@@ -80,7 +92,9 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                 <input type="date" class="form-control" name="end_date" id="cenddate" value="<?= isset($form_data['end_date']) ? $form_data['end_date'] : '' ?>">
                             </div>
 
-                            <div class="mt-4"><h4 class="card-title py-0">Responsabilités et conditions de travail</h4></div>
+                            <div class="mt-4">
+                                <h4 class="card-title py-0">Responsabilités et conditions de travail</h4>
+                            </div>
 
                             <div class="col-sm-6 col-md-4">
                                 <label for="cjobobject" class="form-label">Poste occupé (Objet du contrat) <span class="text-danger">*</span></label>

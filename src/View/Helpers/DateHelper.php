@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 namespace App\View\Helpers;
 
 /**
@@ -136,7 +144,7 @@ class DateHelper
             if (in_array(date('Y-m-d', $start_date), $holidays) || in_array(date('N', $start_date), $nonWorkingDays)) {
                 return 0;
             }
-            
+
             $start_hour = (int)date('H', $start_date);
             $start_minute = (int)date('i', $start_date);
             $end_hour = (int)date('H', $end_date);
@@ -151,22 +159,22 @@ class DateHelper
                 return 0;
             }
 
-            if($end_hour == $work_end_hour) {
+            if ($end_hour == $work_end_hour) {
                 if ($end_minute < $work_end_minute) {
                     $work_end_minute = $end_minute;
                 }
-            } 
-            
-            if($end_hour < $work_end_hour) {
+            }
+
+            if ($end_hour < $work_end_hour) {
                 $work_end_hour = $end_hour;
                 $work_end_minute = $end_minute;
             }
-            
-            if($start_hour == $work_start_hour) {
+
+            if ($start_hour == $work_start_hour) {
                 if ($start_minute < $work_start_minute) {
                     $work_start_minute = $start_minute;
                 }
-            } 
+            }
 
             if ($start_hour > $work_start_hour) {
                 $work_start_hour = $start_hour;
@@ -186,7 +194,7 @@ class DateHelper
             return floor($nb_minutes);
         };
 
-        $getBreakMinutes = function($start_date, $end_date) use ($dailyBreaks, $getNbMinutes) {
+        $getBreakMinutes = function ($start_date, $end_date) use ($dailyBreaks, $getNbMinutes) {
             if (empty($dailyBreaks)) {
                 return 0;
             }
@@ -210,25 +218,25 @@ class DateHelper
                 $break_end_minute = (int)(explode(':', $breakParts[1]))[1];
 
                 if ($end_hour < $break_start_hour || ($end_hour == $break_start_hour && $end_minute < $break_start_minute)) {
-                   continue;
+                    continue;
                 }
-                
-                if($end_hour == $break_end_hour) {
+
+                if ($end_hour == $break_end_hour) {
                     if ($end_minute < $break_end_minute) {
                         $break_end_minute = $end_minute;
                     }
-                } 
-                
-                if($end_hour < $break_end_hour) {
+                }
+
+                if ($end_hour < $break_end_hour) {
                     $break_end_hour = $end_hour;
                     $break_end_minute = $end_minute;
                 }
-                
-                if($start_hour == $break_start_hour) {
+
+                if ($start_hour == $break_start_hour) {
                     if ($start_minute < $break_start_minute) {
                         $break_start_minute = $start_minute;
                     }
-                } 
+                }
 
                 if ($start_hour > $break_start_hour) {
                     $break_start_hour = $start_hour;
@@ -242,7 +250,7 @@ class DateHelper
                 $break_end_minute = $break_end_minute > 9 ? $break_end_minute : '0' . $break_end_minute;
 
                 $break_nb_minutes = $getNbMinutes(
-                    strtotime(date('Y-m-d', $start_date) . ' ' . $break_start_hour . ':' . $break_start_minute), 
+                    strtotime(date('Y-m-d', $start_date) . ' ' . $break_start_hour . ':' . $break_start_minute),
                     strtotime(date('Y-m-d', $end_date) . ' ' . $break_end_hour . ':' . $break_end_minute)
                 );
 
@@ -273,10 +281,9 @@ class DateHelper
             ) {
                 $secondDayStartDate = strtotime(date('Y-m-d', $secondDayStartDate) . ' ' . $workBeginAt);
                 $nb_minutes += $getNbMinutes($secondDayStartDate, $endDate) - $getBreakMinutes($secondDayStartDate, $endDate);
-
-             } else {
+            } else {
                 $work_start_hour = date('H', strtotime(date('Y-m-d', $endDate) . ' ' . $workBeginAt));
-                
+
                 if ((int)date('H', $endDate) < (int)$work_start_hour) {
                     $lastDayStartDate = date('Y-m-d', $endDate) . ' ' . $workBeginAt;
                     $lastDayEndDate = date('Y-m-d', $endDate) . ' ' . $workEndAt;
@@ -290,7 +297,7 @@ class DateHelper
 
                 $nb_days = self::nbDaysBetween($nextDay, $prevDay);
                 $nbMinutes = 0;
-                for ($i=0; $i < $nb_days; $i++) { 
+                for ($i = 0; $i < $nb_days; $i++) {
                     $dayStartDate = date('Y-m-d', strtotime("+$i day", $nextDay)) . ' ' . $workBeginAt;
                     $dayEndDate = date('Y-m-d', strtotime("+$i day", $nextDay)) . ' ' . $workEndAt;
 

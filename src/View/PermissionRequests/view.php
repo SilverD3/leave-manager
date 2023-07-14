@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\PermissionRequestsController;
@@ -36,11 +45,12 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                         <hr class="mt-0">
 
                         <div class="p-y mb-3">
-                            <img class="rounded-circle m-e-sm" style="width: 30px;" src="<?= IMAGES ?>user_icon.png" alt="User Icon"> Redigée par 
-                            <a href="<?= VIEWS . 'Employees/view.php?id='.$permissionRequest->getEmployee()->getID() ?>">
+                            <img class="rounded-circle m-e-sm" style="width: 30px;" src="<?= IMAGES ?>user_icon.png" alt="User Icon">
+                            Redigée par
+                            <a href="<?= VIEWS . 'Employees/view.php?id=' . $permissionRequest->getEmployee()->getID() ?>">
                                 <?= $permissionRequest->getEmployee()->getFirstName() . ' ' . $permissionRequest->getEmployee()->getLastName() ?>
-                            </a> 
-                            <span class="text-muted">le <?= DateHelper::dateTime($permissionRequest->getCreated()) ?> </span> 
+                            </a>
+                            <span class="text-muted">le <?= DateHelper::dateTime($permissionRequest->getCreated()) ?> </span>
 
                             <a class="link" data-bs-toggle="collapse" href="#more-details" role="button" aria-expanded="false" aria-controls="more-details">
                                 <i class="bi bi-eye"></i> Plus de détails
@@ -62,18 +72,18 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                 <tr>
                                                     <th>Statut</th>
                                                     <td>
-                                                        <?php if ($permissionRequest->getStatus() == 'pending'): ?>
+                                                        <?php if ($permissionRequest->getStatus() == 'pending') : ?>
                                                             <span class="badge text-bg-primary">En attente</span>
-                                                        <?php elseif($permissionRequest->getStatus() == 'approved'): ?>
+                                                        <?php elseif ($permissionRequest->getStatus() == 'approved') : ?>
                                                             <span class="badge text-bg-success">Approuvée</span>
-                                                        <?php elseif($permissionRequest->getStatus() == 'disapproved'): ?>
+                                                        <?php elseif ($permissionRequest->getStatus() == 'disapproved') : ?>
                                                             <span class="badge text-bg-danger">Rejetée</span>
-                                                        <?php else: ?>
+                                                        <?php else : ?>
                                                             <span class="badge text-bg-info"> <?= $permissionRequest->getStatus() ?></span>
                                                         <?php endif; ?>
                                                     </td>
                                                 </tr>
-                                                <?php if (!empty($permissionRequest->getModified())): ?>
+                                                <?php if (!empty($permissionRequest->getModified())) : ?>
                                                     <tr>
                                                         <th>Dernière modification</th>
                                                         <td><?= DateHelper::dateTime($permissionRequest->getModified()) ?></td>
@@ -81,7 +91,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                 <?php endif; ?>
                                             </tbody>
                                         </table>
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
 
@@ -94,15 +104,15 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                         <?php if ($permissionRequest->getStatus() == 'pending') : ?>
 
                             <!-- Check if delay has been reached -->
-                            <?php if ((int)$next_permission_delay_config->getValue() > 0): ?>
-                                <?php if($last_permission_nd_days != null && $last_permission_nd_days < (int) $next_permission_delay_config->getValue()): ?>
+                            <?php if ((int)$next_permission_delay_config->getValue() > 0) : ?>
+                                <?php if ($last_permission_nd_days != null && $last_permission_nd_days < (int) $next_permission_delay_config->getValue()) : ?>
                                     <div class="alert alert-danger fade show d-flex align-items-center my-2" role="alert">
                                         <span class="bi bi-exclamation-triangle flex-shrink-0 me-2" style="font-size: 25px;" role="img" aria-label="Warning:"></span>
                                         <div class="ms-md-2">
-                                            Le délai inter permission de <?= $next_permission_delay_config->getValue() ?> jours n'est pas respecté. 
+                                            Le délai inter permission de <?= $next_permission_delay_config->getValue() ?> jours n'est pas respecté.
                                             <?php if (time() < strtotime($employee_last_permission->getEndDate())) : ?>
                                                 La dernière permission se terminera dans <?= $last_permission_nd_days ?> jours
-                                            <?php else: ?>
+                                            <?php else : ?>
                                                 La dernière permission date d'il y a <?= $last_permission_nd_days ?> jours
                                             <?php endif; ?>
                                             <br> <a href="<?= VIEWS . 'PermissionRequests/view.php?id=' . $employee_last_permission->getId() ?>" target="_blank" class="alert-link fw-bold">Voir cette permission</a>
@@ -112,7 +122,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                             <?php endif; ?>
 
                             <!-- Action buttons -->
-                            <?php if($auth_user->getRole()->getCode() == 'ADM'): ?>
+                            <?php if ($auth_user->getRole()->getCode() == 'ADM') : ?>
                                 <div class="actions text-center mt-5">
                                     <button type="button" class="btn btn-success px-sm-4" data-bs-toggle="modal" data-bs-target="#approveRequest">
                                         <i class="bi bi-check"></i> Approuver
@@ -126,7 +136,8 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="approveRequestLabel"><i class="bi bi-check"></i> Approuver la demande de permission</h5>
+                                                <h5 class="modal-title" id="approveRequestLabel"><i class="bi bi-check"></i> Approuver la demande de
+                                                    permission</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <form name="approveForm">
@@ -137,9 +148,11 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                             L'approbation de la demande est une opération irréversible
                                                         </div>
                                                     </div>
-                                                    <?php if ($permission_reduce_leave_config->getValue() == 'OUI'): ?>
+                                                    <?php if ($permission_reduce_leave_config->getValue() == 'OUI') : ?>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" value="1" type="checkbox" name="reduce" id="reduceCheck"> Prendre en compte la durée de cette permission dans le calcul de la durée du congé de l'employé ?
+                                                            <input class="form-check-input" value="1" type="checkbox" name="reduce" id="reduceCheck">
+                                                            Prendre en compte la durée de cette permission dans le calcul de la durée du congé de l'employé
+                                                            ?
                                                         </div>
                                                     <?php endif; ?>
                                                 </div>
@@ -165,54 +178,50 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 <?php require_once dirname(__DIR__) . DS . 'Elements' . DS . 'footer.php'; ?>
 
 <script type="text/javascript">
+    function approveRequest(request_id) {
+        var reduce = 0;
 
-function approveRequest(request_id)
-{
-    var reduce = 0;
-    
-    if (document.getElementById('reduceCheck')) {
-        var reduceCheck = document.forms['approveForm'].reduce.checked;
-        if (reduceCheck) {
-            reduce = 1;
-        } 
-    }
-
-    var xmlhttp = new XMLHttpRequest();
-    var url = "<?= VIEWS . 'PermissionRequests/approve.php?ajax=1&id=' ?>" + request_id + "&reduce=" + reduce;
-
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4){
-            if(xmlhttp.status == 200) {
-                location.reload();
-            }else {
-                alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
+        if (document.getElementById('reduceCheck')) {
+            var reduceCheck = document.forms['approveForm'].reduce.checked;
+            if (reduceCheck) {
+                reduce = 1;
             }
-        } 
-    };
-    
-    xmlhttp.open("POST", url, true);
-    xmlhttp.send();
-}
+        }
 
-function disapproveRequest(request_id)
-{
-    if (confirm("Voulez-vous vraiment rejeter cette demande ?")) {
         var xmlhttp = new XMLHttpRequest();
-        var url = "<?= VIEWS . 'PermissionRequests/disapprove.php?ajax=1&id=' ?>" + request_id;
+        var url = "<?= VIEWS . 'PermissionRequests/approve.php?ajax=1&id=' ?>" + request_id + "&reduce=" + reduce;
 
         xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4){
-                if(xmlhttp.status == 200) {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
                     location.reload();
-                }else {
+                } else {
                     alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
                 }
-            } 
+            }
         };
-        
+
         xmlhttp.open("POST", url, true);
         xmlhttp.send();
     }
-}
 
+    function disapproveRequest(request_id) {
+        if (confirm("Voulez-vous vraiment rejeter cette demande ?")) {
+            var xmlhttp = new XMLHttpRequest();
+            var url = "<?= VIEWS . 'PermissionRequests/disapprove.php?ajax=1&id=' ?>" + request_id;
+
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4) {
+                    if (xmlhttp.status == 200) {
+                        location.reload();
+                    } else {
+                        alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
+                    }
+                }
+            };
+
+            xmlhttp.open("POST", url, true);
+            xmlhttp.send();
+        }
+    }
 </script>

@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Entity;
 
@@ -52,7 +61,7 @@ class Config
 
     /**
      * Get the value of id
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -62,7 +71,7 @@ class Config
      * Set the value of id
      *
      * @return  self
-     */ 
+     */
     public function setId($id)
     {
         $this->id = $id;
@@ -72,7 +81,7 @@ class Config
 
     /**
      * Get the value of code
-     */ 
+     */
     public function getCode()
     {
         return $this->code;
@@ -82,7 +91,7 @@ class Config
      * Set the value of code
      *
      * @return  self
-     */ 
+     */
     public function setCode($code)
     {
         $this->code = $code;
@@ -92,7 +101,7 @@ class Config
 
     /**
      * Get the value of description
-     */ 
+     */
     public function getDescription()
     {
         return $this->description;
@@ -102,7 +111,7 @@ class Config
      * Set the value of description
      *
      * @return  self
-     */ 
+     */
     public function setDescription($description)
     {
         $this->description = $description;
@@ -112,7 +121,7 @@ class Config
 
     /**
      * Get the value of default_value
-     */ 
+     */
     public function getDefaultValue()
     {
         return $this->default_value;
@@ -122,7 +131,7 @@ class Config
      * Set the value of default_value
      *
      * @return  self
-     */ 
+     */
     public function setDefaultValue($default_value)
     {
         $this->default_value = $default_value;
@@ -132,7 +141,7 @@ class Config
 
     /**
      * Get the value of value
-     */ 
+     */
     public function getValue()
     {
         return $this->value;
@@ -142,7 +151,7 @@ class Config
      * Set the value of value
      *
      * @return  self
-     */ 
+     */
     public function setValue($value)
     {
         $this->value = $value;
@@ -152,7 +161,7 @@ class Config
 
     /**
      * Get the value of value_type
-     */ 
+     */
     public function getValueType()
     {
         return $this->value_type;
@@ -162,7 +171,7 @@ class Config
      * Set the value of value_type
      *
      * @return  self
-     */ 
+     */
     public function setValueType($value_type)
     {
         $this->value_type = $value_type;
@@ -172,7 +181,7 @@ class Config
 
     /**
      * Get the value of modified
-     */ 
+     */
     public function getModified()
     {
         return $this->modified;
@@ -182,7 +191,7 @@ class Config
      * Set the value of modified
      *
      * @return  self
-     */ 
+     */
     public function setModified($modified)
     {
         $this->modified = $modified;
@@ -192,7 +201,7 @@ class Config
 
     /**
      * Get the value of modified_by
-     */ 
+     */
     public function getModifiedBy()
     {
         return $this->modified_by;
@@ -202,7 +211,7 @@ class Config
      * Set the value of modified_by
      *
      * @return  self
-     */ 
+     */
     public function setModifiedBy($modified_by)
     {
         $this->modified_by = $modified_by;

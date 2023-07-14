@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Entity;
 
@@ -8,24 +17,24 @@ namespace App\Entity;
  */
 class PermissionRequest
 {
-	private $id;
-	private $employee_id;
-	private $reason;
-	private $description;
-	private $start_date;
-	private $end_date;
-	private $status;
-	private $reduce;
-	private $created;
-	private $modified;
-	private $etat;
+    private $id;
+    private $employee_id;
+    private $reason;
+    private $description;
+    private $start_date;
+    private $end_date;
+    private $status;
+    private $reduce;
+    private $created;
+    private $modified;
+    private $etat;
 
     /**
      * @var Employee $employee;
      */
     private $employee;
 
-	/**
+    /**
      * Validates Permission Request
      * Check if all required fields are provided
      * 
@@ -195,26 +204,26 @@ class PermissionRequest
     }
 
     /**
-	 * Get the value of reduce
+     * Get the value of reduce
      * @return bool
-	 */ 
-	public function getReduce()
-	{
-		return $this->reduce;
-	}
+     */
+    public function getReduce()
+    {
+        return $this->reduce;
+    }
 
-	/**
-	 * Set the value of reduce
-	 *
+    /**
+     * Set the value of reduce
+     *
      * @param bool $reduce
-	 * @return  self
-	 */ 
-	public function setReduce($reduce)
-	{
-		$this->reduce = $reduce;
+     * @return  self
+     */
+    public function setReduce($reduce)
+    {
+        $this->reduce = $reduce;
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * @return mixed

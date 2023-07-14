@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Controller;
 
@@ -28,16 +37,16 @@ class ContractsController
     private $service;
 
     function __construct()
-	{
-		$this->service = new ContractsServices();
-	}
+    {
+        $this->service = new ContractsServices();
+    }
 
     /**
      * Index method
      * @return void
      */
     public function index()
-	{
+    {
         $_SESSION['page_title'] = 'Contrats';
         unset($_SESSION['subpage_title']);
 
@@ -96,17 +105,17 @@ class ContractsController
         }
 
         if (!isset($_GET['id'])) {
-			Flash::error("Mauvaise requête");
-			header('Location: '.VIEWS . 'Contracts');
-			exit;
-		}
+            Flash::error("Mauvaise requête");
+            header('Location: ' . VIEWS . 'Contracts');
+            exit;
+        }
 
         $contract = $this->service->get((int)$_GET['id'], true, true);
-        if(!$contract) {
-			Flash::error("Aucun contrat trouvé avec l'id ". $_GET['id']);
-			header('Location: '.VIEWS . 'Contracts');
-			exit;
-		}
+        if (!$contract) {
+            Flash::error("Aucun contrat trouvé avec l'id " . $_GET['id']);
+            header('Location: ' . VIEWS . 'Contracts');
+            exit;
+        }
 
         // Check privileges
         if ($auth_user->getRole()->getCode() != 'ADM') {
@@ -136,17 +145,17 @@ class ContractsController
         AuthController::require_admin_priv();
 
         if (!isset($_GET['id'])) {
-			Flash::error("Mauvaise requête");
-			header('Location: '.VIEWS . 'Contracts');
-			exit;
-		}
+            Flash::error("Mauvaise requête");
+            header('Location: ' . VIEWS . 'Contracts');
+            exit;
+        }
 
         $contract = $this->service->get((int)$_GET['id'], true, true);
-        if(!$contract) {
-			Flash::error("Aucun contrat trouvé avec l'id ". $_GET['id']);
-			header('Location: '.VIEWS . 'Contracts');
-			exit;
-		}
+        if (!$contract) {
+            Flash::error("Aucun contrat trouvé avec l'id " . $_GET['id']);
+            header('Location: ' . VIEWS . 'Contracts');
+            exit;
+        }
 
         $_SESSION['page_title'] = 'Contrats';
         $_SESSION['subpage_title'] = 'Exporter en PDF';
@@ -160,22 +169,22 @@ class ContractsController
     {
         if (isset($_POST['export_contract'])) {
             $contract = $this->service->get($_POST['contract_id'], true, true);
-            if(!$contract) {
-                Flash::error("Aucun contrat trouvé avec l'id ". $_GET['id']);
-                header('Location: '.VIEWS . 'Contracts');
+            if (!$contract) {
+                Flash::error("Aucun contrat trouvé avec l'id " . $_GET['id']);
+                header('Location: ' . VIEWS . 'Contracts');
                 exit;
             }
 
             $filepath = ASSETS_PATH . 'pdf';
             $filename =  $contract->getContractType()->getName();
             $filename .= '_' . $contract->getEmployee()->getFirstName() . '_' . $contract->getEmployee()->getLastName();
-            $filename .= '_' . $contract->getId() .'.pdf';
+            $filename .= '_' . $contract->getId() . '.pdf';
 
             $html = '
                 <!DOCTYPE html>
                 <html lang="fr">
                     <head>
-                        <title>'. $filename .'</title>
+                        <title>' . $filename . '</title>
                         <meta charset="utf-8">
                         <meta name="author" content="Silevester D.">
                         <meta name="keywords" content="Congés, Contrats, Permissions, ERP">
@@ -184,14 +193,14 @@ class ContractsController
                                 font-family: "DejaVuSans";
                                 font-style: normal;
                                 font-weight: normal;
-                                src: url('. VENDOR . 'dompdf/vendor/dompdf/dompdf/lib/fonts/DejaVuSans.ttf);
+                                src: url(' . VENDOR . 'dompdf/vendor/dompdf/dompdf/lib/fonts/DejaVuSans.ttf);
                             }
 
                             @font-face {
                                 font-family: "Helvetica";
                                 font-style: normal;
                                 font-weight: normal;
-                                src: url('. VENDOR . 'dompdf/vendor/dompdf/dompdf/lib/fonts/Helvetica.afm);
+                                src: url(' . VENDOR . 'dompdf/vendor/dompdf/dompdf/lib/fonts/Helvetica.afm);
                             }
 
                             body * {
@@ -203,7 +212,7 @@ class ContractsController
                         </style> -->
                     </head>
                     <body>
-                        '. $_POST['content'] .'
+                        ' . $_POST['content'] . '
                     </body>
                 </html>
             ';
@@ -242,8 +251,8 @@ class ContractsController
             exit;
         }
 
-        header('Location: '.VIEWS . 'Contracts');
-		exit;    
+        header('Location: ' . VIEWS . 'Contracts');
+        exit;
     }
 
     /**
@@ -271,7 +280,7 @@ class ContractsController
 
         $contractTypesServices = new ContractTypesServices();
         $employeesServices = new EmployeesServices();
-        
+
         $contract_types = $contractTypesServices->getAll();
         $employees = $employeesServices->getAll();
 
@@ -279,11 +288,11 @@ class ContractsController
         $GLOBALS['employees'] = $employees;
 
         // Check if form data is cached
-		$formdata = Session::consume('__formdata__');
-        
-		if(!empty($formdata)) {
-			$GLOBALS['form_data'] = json_decode($formdata, true);
-		}
+        $formdata = Session::consume('__formdata__');
+
+        if (!empty($formdata)) {
+            $GLOBALS['form_data'] = json_decode($formdata, true);
+        }
     }
 
     /**
@@ -296,23 +305,23 @@ class ContractsController
         AuthController::require_admin_priv();
 
         if (!isset($_GET['id'])) {
-			Flash::error("Mauvaise requête");
-			header('Location: '.VIEWS . 'Contracts');
-			exit;
-		}
+            Flash::error("Mauvaise requête");
+            header('Location: ' . VIEWS . 'Contracts');
+            exit;
+        }
 
         $contract = $this->service->get((int)$_GET['id'], true, true);
-        if(!$contract) {
-			Flash::error("Aucun contrat trouvé avec l'id ". $_GET['id']);
-			header('Location: '.VIEWS . 'Contracts');
-			exit;
-		}
+        if (!$contract) {
+            Flash::error("Aucun contrat trouvé avec l'id " . $_GET['id']);
+            header('Location: ' . VIEWS . 'Contracts');
+            exit;
+        }
 
         // Check contract status
         if ($contract->getStatus() != 'pending' && $contract->getStatus() != 'active') {
             Flash::error("Vous ne pouvez pas modifier un contrat qui n'est ni en cours ni en attente ");
-			header('Location: '.VIEWS . 'Contracts');
-			exit;
+            header('Location: ' . VIEWS . 'Contracts');
+            exit;
         }
 
         if (isset($_POST['update_contract'])) {
@@ -332,11 +341,11 @@ class ContractsController
         $_SESSION['subpage_title'] = 'Mis à jour';
 
         // Check if form data is cached
-		$formdata = Session::consume('__formdata__');
-        
-		if(!empty($formdata)) {
-			$GLOBALS['form_data'] = json_decode($formdata, true);
-		}
+        $formdata = Session::consume('__formdata__');
+
+        if (!empty($formdata)) {
+            $GLOBALS['form_data'] = json_decode($formdata, true);
+        }
 
         $GLOBALS['contract'] = $contract;
     }
@@ -373,41 +382,41 @@ class ContractsController
     {
         AuthController::require_admin_priv();
 
-        if(!isset($_GET['id']) || empty($_GET['id'])) {
+        if (!isset($_GET['id']) || empty($_GET['id'])) {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(403);
-				header('Content-Type: application/json');
-				echo json_encode(['status' => 'error', 'message' => "Mauvaise requête"]);
-	
-				exit;
-			}
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => "Mauvaise requête"]);
 
-			header('Location: ' . VIEWS . 'Contracts');
-			exit;
-		}
+                exit;
+            }
 
-		// check if the contract exists
-		$check_contract = $this->service->get((int)$_GET['id']);
-		if(!$check_contract) {
-			if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+            header('Location: ' . VIEWS . 'Contracts');
+            exit;
+        }
+
+        // check if the contract exists
+        $check_contract = $this->service->get((int)$_GET['id']);
+        if (!$check_contract) {
+            if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(404);
-				header('Content-Type: application/json');
-				echo json_encode(['status' => 'error', 'message' => "Aucun contrat trouvé avec l'id ". $_GET['id']]);
-	
-				exit;
-			}
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => "Aucun contrat trouvé avec l'id " . $_GET['id']]);
 
-			Flash::error("Aucun contrat trouvé avec l'id ". $_GET['id']);
+                exit;
+            }
 
-			header('Location: '.VIEWS . 'Contracts');
-			exit;
-		}
+            Flash::error("Aucun contrat trouvé avec l'id " . $_GET['id']);
 
-		$terminated = $this->service->terminate((int)$_GET['id']);
+            header('Location: ' . VIEWS . 'Contracts');
+            exit;
+        }
 
-		if ($terminated) {
-			Flash::success("Le contrat a été résilié avec succès.");
-		} else {
+        $terminated = $this->service->terminate((int)$_GET['id']);
+
+        if ($terminated) {
+            Flash::success("Le contrat a été résilié avec succès.");
+        } else {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(500);
                 header('Content-Type: application/json');
@@ -416,17 +425,17 @@ class ContractsController
                 exit;
             }
 
-			Flash::error("Le contrat n'a pas pu être résilié. Veuillez réessayer !");
-		}
+            Flash::error("Le contrat n'a pas pu être résilié. Veuillez réessayer !");
+        }
 
-		if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
-			header('Content-Type: application/json');
-			echo json_encode(['status' => 'success', 'message' => "Contrat résilié avec succès."]);
+        if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'success', 'message' => "Contrat résilié avec succès."]);
 
-			exit;
-		}
+            exit;
+        }
 
-		header('Location: ' . VIEWS . 'Contracts');
+        header('Location: ' . VIEWS . 'Contracts');
     }
 
     /**
@@ -438,41 +447,41 @@ class ContractsController
     {
         AuthController::require_admin_priv();
 
-        if(!isset($_GET['id']) || empty($_GET['id'])) {
+        if (!isset($_GET['id']) || empty($_GET['id'])) {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(403);
-				header('Content-Type: application/json');
-				echo json_encode(['status' => 'error', 'message' => "Mauvaise requête"]);
-	
-				exit;
-			}
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => "Mauvaise requête"]);
 
-			header('Location: ' . VIEWS . 'Contracts');
-			exit;
-		}
+                exit;
+            }
 
-		// check if the contract exists
-		$check_contract = $this->service->get((int)$_GET['id']);
-		if(!$check_contract) {
-			if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+            header('Location: ' . VIEWS . 'Contracts');
+            exit;
+        }
+
+        // check if the contract exists
+        $check_contract = $this->service->get((int)$_GET['id']);
+        if (!$check_contract) {
+            if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(404);
-				header('Content-Type: application/json');
-				echo json_encode(['status' => 'error', 'message' => "Aucun contrat trouvé avec l'id ". $_GET['id']]);
-	
-				exit;
-			}
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => "Aucun contrat trouvé avec l'id " . $_GET['id']]);
 
-			Flash::error("Aucun contrat trouvé avec l'id ". $_GET['id']);
+                exit;
+            }
 
-			header('Location: '.VIEWS . 'Contracts');
-			exit;
-		}
+            Flash::error("Aucun contrat trouvé avec l'id " . $_GET['id']);
 
-		$deleted = $this->service->delete((int)$_GET['id']);
+            header('Location: ' . VIEWS . 'Contracts');
+            exit;
+        }
 
-		if ($deleted) {
-			Flash::success("Le contrat a été supprimé avec succès.");
-		} else {
+        $deleted = $this->service->delete((int)$_GET['id']);
+
+        if ($deleted) {
+            Flash::success("Le contrat a été supprimé avec succès.");
+        } else {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(500);
                 header('Content-Type: application/json');
@@ -481,17 +490,17 @@ class ContractsController
                 exit;
             }
 
-			Flash::error("Le contrat n'a pas pu être supprimé. Veuillez réessayer !");
-		}
+            Flash::error("Le contrat n'a pas pu être supprimé. Veuillez réessayer !");
+        }
 
-		if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
-			header('Content-Type: application/json');
-			echo json_encode(['status' => 'success', 'message' => "Contrat supprimé avec succès."]);
+        if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'success', 'message' => "Contrat supprimé avec succès."]);
 
-			exit;
-		}
+            exit;
+        }
 
-		header('Location: ' . VIEWS . 'Contracts');
+        header('Location: ' . VIEWS . 'Contracts');
     }
 
     /**
@@ -534,17 +543,17 @@ class ContractsController
 
         $replacementsArray = [];
         $placeholders = [
-            '$_company_name', 
-            '$_company_address', 
-            '$_employer_name', 
-            '$_candidate_name', 
-            '$_candidate_birth', 
-            '$_candidate_baddress', 
-            '$_candidate_nationality', 
-            '$_candidate_nss', 
-            '$_candidate_address', 
-            '$_job_start_date', 
-            '$_job_end_date', 
+            '$_company_name',
+            '$_company_address',
+            '$_employer_name',
+            '$_candidate_name',
+            '$_candidate_birth',
+            '$_candidate_baddress',
+            '$_candidate_nationality',
+            '$_candidate_nss',
+            '$_candidate_address',
+            '$_job_start_date',
+            '$_job_end_date',
             '$_job_object',
             '$_job_description',
             '$_job_delay',
@@ -552,7 +561,7 @@ class ContractsController
             '$_hourly_rate',
             '$_generated_date',
         ];
-        
+
         $replacementsArray[] = !empty($company->getName()) ? $company->getName() : '________________________________';
         $replacementsArray[] = !empty($company->getAddress()) ? $company->getAddress() : '________________________________';
         $replacementsArray[] = !empty($company->getDirectorName()) ? $company->getDirectorName() : '________________________________';

@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\ContractsController;
@@ -11,20 +20,20 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 ?>
 
 <main id="main" class="main">
-	<div class="pagetitle">
-		<h1>Exporter le contrat au format PDF</h1>
-		<nav>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
-				<li class="breadcrumb-item"><a href="<?= VIEWS . "Contracts" ?>">Contrats</a></li>
-				<li class="breadcrumb-item active">Exporter en PDF</li>
-			</ol>
-		</nav>
-	</div><!-- End Page Title -->
+    <div class="pagetitle">
+        <h1>Exporter le contrat au format PDF</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="<?= VIEWS . "Contracts" ?>">Contrats</a></li>
+                <li class="breadcrumb-item active">Exporter en PDF</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
     <section class="section dashboard">
-		<div class="row">
-			<div class="col-md-12 col-xl-12 col-xxl-10">
+        <div class="row">
+            <div class="col-md-12 col-xl-12 col-xxl-10">
 
                 <?= Flash::render() ?>
 
@@ -62,20 +71,19 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 <script src="<?= TEMPLATE_PATH ?>assets/vendor/tinymce/tinymce.min.js"></script>
 
 <script type="text/javascript">
-
-tinymce.init({
-    selector: '#ccontent',
-    language: 'fr',
-    plugins: "advlist table preview autolink visualblocks visualchars fullscreen link charmap pagebreak nonbreaking anchor insertdatetime lists wordcount help quickbars emoticons",
-    menubar: true,
-    quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-    noneditable_noneditable_class: "mceNonEditable",
-    toolbar_drawer: 'sliding',
-    contextmenu: false,
-    menubar: 'file edit view insert format tools table help',
-    toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | ltr rtl',
-    toolbar_sticky: true,
-    browser_spellcheck: true,
-    height: 500,
-});
+    tinymce.init({
+        selector: '#ccontent',
+        language: 'fr',
+        plugins: "advlist table preview autolink visualblocks visualchars fullscreen link charmap pagebreak nonbreaking anchor insertdatetime lists wordcount help quickbars emoticons",
+        menubar: true,
+        quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+        noneditable_noneditable_class: "mceNonEditable",
+        toolbar_drawer: 'sliding',
+        contextmenu: false,
+        menubar: 'file edit view insert format tools table help',
+        toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | ltr rtl',
+        toolbar_sticky: true,
+        browser_spellcheck: true,
+        height: 500,
+    });
 </script>

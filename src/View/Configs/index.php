@@ -1,9 +1,17 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\ConfigsController;
 use App\View\Helpers\DateHelper;
-use App\View\Helpers\UtilsHelper;
 use Core\FlashMessages\Flash;
 
 (new ConfigsController())->index();
@@ -13,32 +21,33 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 ?>
 
 <main id="main" class="main">
-	<div class="pagetitle">
-		<h1>Les paramètres</h1>
-		<nav>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
-				<li class="breadcrumb-item active">Paramètres</li>
-			</ol>
-		</nav>
-	</div><!-- End Page Title -->
+    <div class="pagetitle">
+        <h1>Les paramètres</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
+                <li class="breadcrumb-item active">Paramètres</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
-	<section class="section dashboard">
+    <section class="section dashboard">
 
-		<div class="row mt-1">
-			<!-- Configs -->
+        <div class="row mt-1">
+            <!-- Configs -->
             <div class="col-12">
                 <div class="card recent-sales overflow-auto">
                     <div class="card-body table-responsive">
                         <h5 class="card-title">Liste des paramètres d'application</h5>
-                        
+
                         <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#resetConfigsModal"><i class="bi bi-clock-history"></i> Tout réinitialiser</button>
 
                         <div class="modal fade" id="resetConfigsModal" tabindex="-1" aria-labelledby="resetConfigsModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="resetConfigsModalLabel"><i class="bi bi-lightning"></i> Réinitialiser tous les paramètres</h5>
+                                        <h5 class="modal-title" id="resetConfigsModalLabel"><i class="bi bi-lightning"></i> Réinitialiser
+                                            tous les paramètres</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
 
@@ -46,12 +55,13 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                         <div class="alert alert-info alert-dismissible fade show d-flex align-items-center" role="alert">
                                             <span class="bi bi-exclamation-triangle flex-shrink-0 me-2" role="img" aria-label="Alerte:"></span>
                                             <div class="fw-bold">
-                                                La réinitialisation des paramètres va restaurer les paramètres par défaut. Cliquez sur réinitialiser pour continuer
+                                                La réinitialisation des paramètres va restaurer les paramètres par défaut. Cliquez sur
+                                                réinitialiser pour continuer
                                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                                         <form action="" method="post">
@@ -63,16 +73,17 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                         </div>
 
                         <?= Flash::render() ?>
-                        
+
                         <div class="alert alert-info alert-dismissible fade show d-flex align-items-center" role="alert">
                             <span class="bi bi-info-circle flex-shrink-0 me-2" role="img" aria-label="Info:"></span>
                             <div>
-                                <strong>N.B</strong> : Les paramètres influencent de très près le fonctionnement de l'application. <strong> A manipuler avec le plus grand soin </strong>.
+                                <strong>N.B</strong> : Les paramètres influencent de très près le fonctionnement de l'application.
+                                <strong> A manipuler avec le plus grand soin </strong>.
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
 
-                        <?php if (!empty($configs)): ?>
+                        <?php if (!empty($configs)) : ?>
                             <table class="table table-border table-striped">
                                 <thead class="">
                                     <tr>
@@ -85,7 +96,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($configs as $config): ?>
+                                    <?php foreach ($configs as $config) : ?>
                                         <tr>
                                             <th scope="row"><?= $config->getCode() ?></th>
                                             <td class="text-break"><?= $config->getDescription() ?></td>
@@ -103,7 +114,8 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="updateConfigLabel"><i class="bi bi-calendar"></i> Modifier le paramètre</h5>
+                                                        <h5 class="modal-title" id="updateConfigLabel"><i class="bi bi-calendar"></i> Modifier le
+                                                            paramètre</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <form action="" method="post" class="g-3 needs-validation" novalidate>
@@ -121,7 +133,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                             <div class="mb-1">
                                                                 <label for="cfdvalue1-<?= $config->getId() ?>" class="form-label">Valeur par défaut</label>
 
-                                                                <?php if ($config->getValueType() == 'bool'): ?>
+                                                                <?php if ($config->getValueType() == 'bool') : ?>
                                                                     <br>
                                                                     <div class="form-check form-check-inline form-switch">
                                                                         <input class="form-check-input" role="switch" disabled <?= $config->getDefaultValue() == 'OUI' ? ' checked' : '' ?> type="radio" id="dyesval-<?= $config->getId() ?>">
@@ -131,7 +143,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                                         <input class="form-check-input" role="switch" disabled <?= $config->getDefaultValue() == 'NON' ? ' checked' : '' ?> type="radio" id="noval1-<?= $config->getId() ?>">
                                                                         <label class="form-check-label" for="noval1-<?= $config->getId() ?>">NON</label>
                                                                     </div>
-                                                                <?php else: ?>
+                                                                <?php else : ?>
                                                                     <input type="text" disabled class="form-control" id="cfdvalue1-<?= $config->getId() ?>" value="<?= $config->getDefaultValue() ?>">
                                                                 <?php endif; ?>
 
@@ -139,7 +151,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
                                                             <div class="mb-1">
                                                                 <label for="cfvalue-<?= $config->getId() ?>" class="form-label">Valeur</label>
-                                                                <?php if ($config->getValueType() == 'bool'): ?>
+                                                                <?php if ($config->getValueType() == 'bool') : ?>
                                                                     <br>
                                                                     <div class="form-check form-check-inline form-switch">
                                                                         <input class="form-check-input" role="switch" <?= $config->getValue() == 'OUI' ? ' checked' : '' ?> type="radio" name="value" value="OUI" id="yesval-<?= $config->getId() ?>">
@@ -149,7 +161,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                                         <input class="form-check-input" role="switch" <?= $config->getValue() == 'NON' ? ' checked' : '' ?> type="radio" name="value" value="NON" id="noval-<?= $config->getId() ?>">
                                                                         <label class="form-check-label" for="noval-<?= $config->getId() ?>">NON</label>
                                                                     </div>
-                                                                <?php else: ?>
+                                                                <?php else : ?>
                                                                     <input type="text" name="value" class="form-control" id="cfvalue-<?= $config->getId() ?>" value="<?= $config->getValue() ?>">
                                                                 <?php endif; ?>
                                                             </div>
@@ -168,7 +180,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     <?php endforeach ?>
                                 </tbody>
                             </table>
-                        <?php else: ?>
+                        <?php else : ?>
                             <div class="alert alert-primary d-flex align-items-center" role="alert">
                                 <span class="bi bi-info-circle flex-shrink-0 me-2" role="img" aria-label="Info:"></span>
                                 <div>
@@ -182,9 +194,9 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                 </div>
             </div><!-- End Configs -->
 
-		</div>
+        </div>
 
-	</section>
+    </section>
 
 </main>
 

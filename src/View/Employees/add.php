@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\EmployeesController;
@@ -27,9 +36,9 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 			<div class="col-md-12 col-xl-8">
 				<div class="card">
 					<div class="card-body">
-			  			<h5 class="card-title">Remplissez les champs ci-après pour ajouter un employé</h5>
+						<h5 class="card-title">Remplissez les champs ci-après pour ajouter un employé</h5>
 
-			  			<form class="row g-3 needs-validation" action="" method="post" novalidate>
+						<form class="row g-3 needs-validation" action="" method="post" novalidate>
 
 							<?= Flash::render() ?>
 
@@ -53,17 +62,17 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 								<label for="urole" class="form-label">Rôle</label>
 								<select id="urole" class="form-select" name="role_id" required>
 									<option selected value="">Choisir un rôle</option>
-									<?php if(empty($roles)):?>
+									<?php if (empty($roles)) : ?>
 										<div class="alert alert-danger">
 											Aucun rôle trouvé.
 										</div>
-									<?php else:?>
-										<?php foreach($roles as $role): ?>
-											<option <?= (isset($form_data['role_id']) && $form_data['role_id'] == $role->getId()) ? 'selected': '' ?> value="<?= $role->getId() ?>">
-												<?= $role->getName();?>
+									<?php else : ?>
+										<?php foreach ($roles as $role) : ?>
+											<option <?= (isset($form_data['role_id']) && $form_data['role_id'] == $role->getId()) ? 'selected' : '' ?> value="<?= $role->getId() ?>">
+												<?= $role->getName(); ?>
 											</option>
 										<?php endforeach; ?>
-									<?php endif;?>
+									<?php endif; ?>
 								</select>
 								<div class="invalid-feedback">Veuillez choisir le rôle de l'employé.</div>
 							</div>
@@ -86,7 +95,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 						</form>
 
 					</div>
-		  		</div>
+				</div>
 			</div>
 
 		</div>

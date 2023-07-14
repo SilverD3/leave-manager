@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace Core;
 
@@ -19,7 +28,7 @@ class Configure
 
 	public function read(string $configKey, $default = null)
 	{
-		if (isset($this->_config[$configKey])) { 
+		if (isset($this->_config[$configKey])) {
 			return $this->_config[$configKey];
 		} else if (isset($this->_default_config[$configKey])) {
 			return $this->_default_config[$configKey];

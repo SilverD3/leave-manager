@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\LeavesController;
@@ -12,16 +21,16 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 ?>
 
 <main id="main" class="main">
-	<div class="pagetitle">
-		<h1>Détails du congé</h1>
-		<nav>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
-				<li class="breadcrumb-item"><a href="<?= VIEWS . 'Leaves' ?>">Congés</a></li>
-				<li class="breadcrumb-item active">Détails</li>
-			</ol>
-		</nav>
-	</div><!-- End Page Title -->
+    <div class="pagetitle">
+        <h1>Détails du congé</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="<?= VIEWS . 'Leaves' ?>">Congés</a></li>
+                <li class="breadcrumb-item active">Détails</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
     <section class="section dashboard">
         <div class="row">
@@ -32,7 +41,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                         <?= Flash::render() ?>
 
                         <h5 class="card-title"><i class="bi bi-info-circle"></i> Informations détaillées sur le congé</h5>
-			  			
+
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover">
                                 <tbody>
@@ -61,13 +70,13 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     <tr>
                                         <th>Statut</th>
                                         <td>
-                                            <?php if (DateHelper::periodStatus($leave->getStartDate(), $leave->getEndDate()) == 'past'): ?>
+                                            <?php if (DateHelper::periodStatus($leave->getStartDate(), $leave->getEndDate()) == 'past') : ?>
                                                 <span class="badge text-bg-secondary">Passé</span>
-                                            <?php elseif(DateHelper::periodStatus($leave->getStartDate(), $leave->getEndDate()) == 'present'): ?>
+                                            <?php elseif (DateHelper::periodStatus($leave->getStartDate(), $leave->getEndDate()) == 'present') : ?>
                                                 <span class="badge text-bg-success">En cours</span>
-                                            <?php elseif(DateHelper::periodStatus($leave->getStartDate(), $leave->getEndDate()) == 'future'): ?>
+                                            <?php elseif (DateHelper::periodStatus($leave->getStartDate(), $leave->getEndDate()) == 'future') : ?>
                                                 <span class="badge text-bg-primary">Prochainement</span>
-                                            <?php else: ?>
+                                            <?php else : ?>
                                                 <span class="badge text-bg-info"> <?= $leave->getStatus() ?></span>
                                             <?php endif; ?>
                                         </td>
@@ -84,7 +93,8 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                             </table>
                         </div>
 
-                        <h5 class="card-title"><i class="bi bi-person-lines-fill"></i> Récapitulatif des congés pour l'année <?= $leave->getYear() ?></h5>
+                        <h5 class="card-title"><i class="bi bi-person-lines-fill"></i> Récapitulatif des congés pour l'année
+                            <?= $leave->getYear() ?></h5>
 
                         <div class="table-responsive">
                             <table class="table table-bordered">
@@ -93,7 +103,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                         <th>Total des jours de congés</th>
                                         <td><?= $leave_nb_days . ' jours' ?></td>
                                     </tr>
-                                    <?php if(isset($spent_days_in_permissions)): ?>
+                                    <?php if (isset($spent_days_in_permissions)) : ?>
                                         <tr>
                                             <th>Jours dépensés dans les permissions</th>
                                             <td><?= $spent_days_in_permissions . ' jour(s)' ?></td>
@@ -101,17 +111,17 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     <?php endif; ?>
                                     <tr>
                                         <th>Nombre de jours restant</th>
-                                        <td><?= $nb_remaining_days. ' jour(s)' ?></td>
+                                        <td><?= $nb_remaining_days . ' jour(s)' ?></td>
                                     </tr>
 
-                                    <?php if(!empty($other_leaves)): ?>
+                                    <?php if (!empty($other_leaves)) : ?>
                                         <tr>
                                             <th>Autres congés pour la même année</th>
                                             <td>
-                                                <?php foreach($other_leaves as $oth_leave): ?>
+                                                <?php foreach ($other_leaves as $oth_leave) : ?>
                                                     <p><a href="<?= VIEWS . 'Leaves/view.php?id=' . $oth_leave->getId() ?>">
-                                                        <?= DateHelper::shortDate($oth_leave->getStartDate()) . ' -> ' . DateHelper::shortDate($oth_leave->getEndDate()) ?>
-                                                    </a></p>
+                                                            <?= DateHelper::shortDate($oth_leave->getStartDate()) . ' -> ' . DateHelper::shortDate($oth_leave->getEndDate()) ?>
+                                                        </a></p>
                                                 <?php endforeach; ?>
                                             </td>
                                         </tr>

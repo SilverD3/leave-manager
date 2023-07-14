@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Controller;
 
@@ -50,14 +59,14 @@ class EmployeesController
 
 		if ($auth_user->getRole()->getCode() == 'ADM') {
 			$contractTypesServices = new ContractTypesServices();
-			
+
 			$nb_contract_types = $contractTypesServices->countAll();
 			$nb_contracts = $contractsServices->countAll();
 			$nb_active_contracts = $contractsServices->countAll('active');
 			$nb_terminated_contracts = $contractsServices->countAll('terminated');
 
 			$stats['nb_contract_types'] = $nb_contract_types;
-			
+
 			$nb_permission_requests = $permissionRequestsServices->countAll();
 			$nb_approved_permission_requests = $permissionRequestsServices->countAll('approved');
 			$nb_rejected_permission_requests = $permissionRequestsServices->countAll('disapproved');
@@ -75,7 +84,7 @@ class EmployeesController
 
 		$nb_employees = $this->service->countAll();
 		$nbCurrentLeaves = $leavesServices->getByPeriod(date('Y-m-d'), date('Y-m-d'), true, false);
-		
+
 		$stats['nb_current_leaves'] = $nbCurrentLeaves;
 		$stats['nb_contracts'] = $nb_contracts;
 		$stats['nb_active_contracts'] = $nb_active_contracts;
@@ -85,7 +94,7 @@ class EmployeesController
 		$stats['nb_approved_permission_requests'] = $nb_approved_permission_requests;
 		$stats['nb_rejected_permission_requests'] = $nb_rejected_permission_requests;
 
-		$GLOBALS['stats'] = $stats; 
+		$GLOBALS['stats'] = $stats;
 
 		$GLOBALS['recent_permission_requests'] = $recent_permission_requests;
 	}
@@ -112,8 +121,8 @@ class EmployeesController
 			if ($employee_id) {
 				Flash::success("L'employé a été ajouté avec succès.");
 
-                header("Location: " . VIEWS . "Employees");
-                exit;
+				header("Location: " . VIEWS . "Employees");
+				exit;
 			}
 		}
 
@@ -128,7 +137,7 @@ class EmployeesController
 
 		// Check if form data is cached
 		$formdata = Session::consume('__formdata__');
-		if(!empty($formdata)) {
+		if (!empty($formdata)) {
 			$GLOBALS['form_data'] = json_decode($formdata, true);
 		}
 	}
@@ -139,15 +148,15 @@ class EmployeesController
 
 		if (!isset($_GET['id'])) {
 			Flash::error("Mauvaise requête");
-			header('Location: '.VIEWS . 'Employees');
+			header('Location: ' . VIEWS . 'Employees');
 			exit;
 		}
 
 		// check if the employee exists
 		$checkEmployee = $this->service->getById($_GET['id']);
-		if(!$checkEmployee) {
-			Flash::error("Aucun employé trouvé avec l'id ". $_GET['id']);
-			header('Location: '.VIEWS . 'Employees');
+		if (!$checkEmployee) {
+			Flash::error("Aucun employé trouvé avec l'id " . $_GET['id']);
+			header('Location: ' . VIEWS . 'Employees');
 			exit;
 		}
 
@@ -159,8 +168,8 @@ class EmployeesController
 			if ($employee_id) {
 				Flash::success("L'employé a été mis à jour avec succès.");
 
-                header("Location: " . VIEWS . "Employees/view.php?id=" . $_GET['id']);
-                exit;
+				header("Location: " . VIEWS . "Employees/view.php?id=" . $_GET['id']);
+				exit;
 			}
 		}
 
@@ -177,7 +186,7 @@ class EmployeesController
 
 		// Check if form data is cached
 		$formdata = Session::consume('__formdata__');
-		if(!empty($formdata)) {
+		if (!empty($formdata)) {
 			$GLOBALS['form_data'] = json_decode($formdata, true);
 		}
 	}
@@ -186,7 +195,7 @@ class EmployeesController
 	{
 		if (!isset($_GET['id'])) {
 			Flash::error("Mauvaise requête");
-			header('Location: '.VIEWS . 'Employees');
+			header('Location: ' . VIEWS . 'Employees');
 			exit;
 		}
 
@@ -199,7 +208,7 @@ class EmployeesController
 		}
 
 		if ($auth_user->getRole()->getCode() != 'ADM') {
-			header('Location: '.VIEWS . 'Employees/profile.php');
+			header('Location: ' . VIEWS . 'Employees/profile.php');
 			exit;
 		}
 
@@ -211,7 +220,7 @@ class EmployeesController
 		if (empty($employee)) {
 			Flash::error("Aucun employé trouvé avec l'id " . $_GET['id']);
 
-			header('Location: '.VIEWS . 'Employees');
+			header('Location: ' . VIEWS . 'Employees');
 			exit;
 		}
 
@@ -231,7 +240,7 @@ class EmployeesController
 			header('Location: ' . AuthController::UNAUTHORIZED_REDIRECT . '?redirect=' . $_SERVER['REQUEST_URI']);
 			exit;
 		}
-		
+
 		$employee = $this->service->getById($auth_user->getId());
 
 		if (empty($employee)) {
@@ -246,7 +255,7 @@ class EmployeesController
 			// check password
 			if (!$passwordHasher->check($data['upwd'], $employee->getPwd())) {
 				Flash::error("Mot de passe incorrect");
-			} elseif(!empty($data['password']) && $data['password'] != $data['cfmpwd']) {
+			} elseif (!empty($data['password']) && $data['password'] != $data['cfmpwd']) {
 				Flash::error("Les mots de passe ne correspondent pas");
 			} else {
 				$data['id'] = $employee->getId();
@@ -268,24 +277,24 @@ class EmployeesController
 	{
 		AuthController::require_admin_priv();
 
-		if(!isset($_GET['id']) || empty($_GET['id'])) {
+		if (!isset($_GET['id']) || empty($_GET['id'])) {
 			header('Location: ' . VIEWS . 'Employees');
 			exit;
 		}
 
 		// check if the employee exists
 		$checkEmployee = $this->service->getById($_GET['id']);
-		if(!$checkEmployee) {
+		if (!$checkEmployee) {
 			if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
 				header('Content-Type: application/json');
-				echo json_encode(['status' => 'success', 'message' => "Aucun employé trouvé avec l'id ". $_GET['id']]);
-	
+				echo json_encode(['status' => 'success', 'message' => "Aucun employé trouvé avec l'id " . $_GET['id']]);
+
 				exit;
 			}
 
-			Flash::error("Aucun employé trouvé avec l'id ". $_GET['id']);
+			Flash::error("Aucun employé trouvé avec l'id " . $_GET['id']);
 
-			header('Location: '.VIEWS . 'Employees');
+			header('Location: ' . VIEWS . 'Employees');
 			exit;
 		}
 

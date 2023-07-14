@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace Core\Utils;
 
@@ -17,7 +26,7 @@ class Session
 	 */
 	static function write(string $name, mixed $value)
 	{
-        $_SESSION[sha1($name)] = $value;
+		$_SESSION[sha1($name)] = $value;
 	}
 
 	/**
@@ -29,7 +38,7 @@ class Session
 	static function delete(string $name)
 	{
 		if (isset($_SESSION[sha1($name)])) {
-            $_SESSION[sha1($name)] = null;
+			$_SESSION[sha1($name)] = null;
 			unset($_SESSION[sha1($name)]);
 		}
 	}
@@ -53,12 +62,12 @@ class Session
 	 */
 	static function consume(string $name)
 	{
-        $var = isset($_SESSION[sha1($name)]) ? $_SESSION[sha1($name)] : null;
+		$var = isset($_SESSION[sha1($name)]) ? $_SESSION[sha1($name)] : null;
 
 		if ($var) {
 			self::delete($name);
 		}
 
-        return $var;
+		return $var;
 	}
 }

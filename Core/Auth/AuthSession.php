@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace Core\Auth;
 
@@ -12,32 +21,32 @@ use Core\Configure;
  */
 class AuthSession
 {
-	protected $connected = false;
+    protected $connected = false;
 
-	protected $auth_user;
+    protected $auth_user;
 
-	protected $expiration_date;
+    protected $expiration_date;
 
     protected $session_life_time;
 
     protected $connected_at;
 
-	protected $default_session_config = [
-		'timeout' => 60*60*6, // 6 hours
-	];	
+    protected $default_session_config = [
+        'timeout' => 60 * 60 * 6, // 6 hours
+    ];
 
-	function __construct()
-	{
-		if (!isset($_SESSION['__configure__'])) {
-			$config = new Configure();
-		} else {
-			$config = unserialize($_SESSION['__configure__']);
-		}
+    function __construct()
+    {
+        if (!isset($_SESSION['__configure__'])) {
+            $config = new Configure();
+        } else {
+            $config = unserialize($_SESSION['__configure__']);
+        }
 
-		$session_config = $config->read('Session', $this->default_session_config);
+        $session_config = $config->read('Session', $this->default_session_config);
 
-		$this->session_life_time = $session_config['timeout'];
-	}
+        $this->session_life_time = $session_config['timeout'];
+    }
 
     /**
      * @return self

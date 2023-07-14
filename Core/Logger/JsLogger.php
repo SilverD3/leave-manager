@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace Core\Logger;
 
@@ -8,7 +17,7 @@ namespace Core\Logger;
  */
 class JsLogger
 {
-	
+
 	static function __log($log)
 	{
 		$_SESSION['__logger__'][] = $log;
@@ -36,28 +45,28 @@ class JsLogger
 
 	public static function log(string $message): void
 	{
-		$log = "console.log('". $message ."')";
+		$log = "console.log('" . $message . "')";
 
 		self::__log($log);
 	}
 
 	public static function error(string $message): void
 	{
-		$log = "console.error('". $message ."')";
+		$log = "console.error('" . $message . "')";
 
 		self::__log($log);
 	}
 
 	public static function warn(string $message): void
 	{
-		$log = "console.warn('". $message ."')";
+		$log = "console.warn('" . $message . "')";
 
 		self::__log($log);
 	}
 
 	public static function info(string $message): void
 	{
-		$log = "console.info('". $message ."')";
+		$log = "console.info('" . $message . "')";
 
 		self::__log($log);
 	}

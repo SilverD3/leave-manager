@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\LeavesController;
@@ -82,7 +91,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
             },
             eventClick: function(info) {
                 info.jsEvent.preventDefault();
-                
+
                 if (info.event.url) {
                     window.open(info.event.url, "_blank");
                     return false;
@@ -105,8 +114,8 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
         var url = "<?= VIEWS . 'Leaves/getbusinesshours.php?' ?>";
 
         xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4){
-                if(xmlhttp.status == 200) {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
                     var response = JSON.parse(xmlhttp.responseText);
                     calendar.setOption('businessHours', {
                         daysOfWeek: response.businessDays,
@@ -114,12 +123,12 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                         startTime: response.workBeginAt,
                         endTime: response.workEndAt,
                     });
-                }else {
+                } else {
                     alert("Une erreur est survenue lors du chargement des heures de travail");
                 }
-            } 
+            }
         };
-        
+
         xmlhttp.open("GET", url, true);
         xmlhttp.send();
     });

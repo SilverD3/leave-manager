@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\ContractsController;
@@ -12,19 +21,19 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 ?>
 
 <main id="main" class="main">
-	<div class="pagetitle">
-		<h1>Les contrats expirés</h1>
-		<nav>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
-				<li class="breadcrumb-item active">Contrats expirés</li>
-			</ol>
-		</nav>
-	</div><!-- End Page Title -->
+    <div class="pagetitle">
+        <h1>Les contrats expirés</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
+                <li class="breadcrumb-item active">Contrats expirés</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
-	<section class="section dashboard">
-		<div class="row mt-1">
-			<div class="col-12">
+    <section class="section dashboard">
+        <div class="row mt-1">
+            <div class="col-12">
 
                 <div class="card recent-sales overflow-auto">
 
@@ -33,7 +42,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
                         <?= Flash::render() ?>
 
-                        <?php if (!empty($expiredContracts)): ?>
+                        <?php if (!empty($expiredContracts)) : ?>
                             <table class="table table-border datatable">
                                 <thead>
                                     <tr>
@@ -47,9 +56,10 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($expiredContracts as $contract): ?>
+                                    <?php foreach ($expiredContracts as $contract) : ?>
                                         <tr>
-                                            <th scope="row"><a href="<?= VIEWS . 'Contracts' . DS . 'view.php?id=' . $contract->getId() ?>"><?= $contract->getId() ?></a></th>
+                                            <th scope="row"><a href="<?= VIEWS . 'Contracts' . DS . 'view.php?id=' . $contract->getId() ?>"><?= $contract->getId() ?></a>
+                                            </th>
                                             <td>
                                                 <a class="link" href="<?= VIEWS . 'Employees/view.php?id=' . $contract->getEmployee()->getId() ?>">
                                                     <?= $contract->getEmployee()->getFirstName() . ' ' . $contract->getEmployee()->getLastName() ?>
@@ -71,7 +81,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     <?php endforeach ?>
                                 </tbody>
                             </table>
-                        <?php else: ?>
+                        <?php else : ?>
                             <div class="alert alert-primary d-flex align-items-center mt-2" role="alert">
                                 <span class="bi bi-info-circle flex-shrink-0 me-2" role="img" aria-label="Info:"></span>
                                 <div>
@@ -83,9 +93,9 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                 </div>
             </div>
 
-		</div>
+        </div>
 
-	</section>
+    </section>
 
 </main>
 

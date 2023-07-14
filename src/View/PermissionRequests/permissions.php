@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\PermissionRequestsController;
@@ -13,25 +22,26 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 ?>
 
 <main id="main" class="main">
-	<div class="pagetitle">
-		<h1>Les permissions accordées</h1>
-		<nav>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
-				<li class="breadcrumb-item"><a href="<?= VIEWS . 'PermissionRequests' ?>">Demandes de permission</a></li>
-				<li class="breadcrumb-item active">Accordées</li>
-			</ol>
-		</nav>
-	</div><!-- End Page Title -->
+    <div class="pagetitle">
+        <h1>Les permissions accordées</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="<?= VIEWS . 'PermissionRequests' ?>">Demandes de permission</a></li>
+                <li class="breadcrumb-item active">Accordées</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
-	<section class="section dashboard">
-		<div class="row mt-1">
-			<div class="col-12">
+    <section class="section dashboard">
+        <div class="row mt-1">
+            <div class="col-12">
 
                 <div class="card recent-sales overflow-auto">
 
                     <div class="card-body">
-                        <h5 class="card-title">Toutes les permissions accordées <?= $current_year == 'all' ? 'toute année confondue' : 'en ' . $current_year ?></h5>
+                        <h5 class="card-title">Toutes les permissions accordées
+                            <?= $current_year == 'all' ? 'toute année confondue' : 'en ' . $current_year ?></h5>
 
                         <button class="btn btn-secondary ms-sm-2 mb-sm-2 float-sm-end" type="button" data-bs-toggle="modal" data-bs-target="#selectYearModal">
                             <i class="bi bi-calendar"></i> Choisir une autre année
@@ -41,7 +51,8 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="selectYearModalLabel"><i class="bi bi-calendar"></i> Choisir une autre année</h5>
+                                        <h5 class="modal-title" id="selectYearModalLabel"><i class="bi bi-calendar"></i> Choisir une autre
+                                            année</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <form action="" method="get" class="g-3 needs-validation" novalidate>
@@ -51,17 +62,17 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                 <select id="pryear" class="form-select" name="year" required>
                                                     <option value="">Choisir une année</option>
                                                     <option value="all">Toutes</option>
-                                                    <?php if(empty($years)):?>
+                                                    <?php if (empty($years)) : ?>
                                                         <div class="alert alert-danger">
                                                             Aucune année disponible.
                                                         </div>
-                                                    <?php else:?>
-                                                        <?php foreach($years as $year): ?>
+                                                    <?php else : ?>
+                                                        <?php foreach ($years as $year) : ?>
                                                             <option value="<?= $year['year'] ?>">
                                                                 <?= $year['year'] ?>
                                                             </option>
                                                         <?php endforeach; ?>
-                                                    <?php endif;?>
+                                                    <?php endif; ?>
                                                 </select>
                                                 <div class="invalid-feedback">Veuillez choisir une année.</div>
                                             </div>
@@ -74,10 +85,10 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                 </div>
                             </div>
                         </div>
-                       
+
                         <?= Flash::render() ?>
 
-                        <?php if (!empty($permissions)): ?>
+                        <?php if (!empty($permissions)) : ?>
                             <table class="table table-border datatable">
                                 <thead>
                                     <tr>
@@ -90,9 +101,10 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($permissions as $permission): ?>
+                                    <?php foreach ($permissions as $permission) : ?>
                                         <tr>
-                                            <th scope="row"><a href="<?= VIEWS . 'PermissionRequests' . DS . 'view.php?id=' . $permission->getId() ?>"><?= $permission->getId() ?></a></th>
+                                            <th scope="row"><a href="<?= VIEWS . 'PermissionRequests' . DS . 'view.php?id=' . $permission->getId() ?>"><?= $permission->getId() ?></a>
+                                            </th>
                                             <td>
                                                 <a class="link" href="<?= VIEWS . 'Employees/view.php?id=' . $permission->getEmployee()->getId() ?>">
                                                     <?= $permission->getEmployee()->getFirstName() . ' ' . $permission->getEmployee()->getLastName() ?>
@@ -110,7 +122,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     <?php endforeach ?>
                                 </tbody>
                             </table>
-                        <?php else: ?>
+                        <?php else : ?>
                             <div class="alert alert-primary d-flex align-items-center" role="alert">
                                 <span class="bi bi-info-circle flex-shrink-0 me-2" role="img" aria-label="Info:"></span>
                                 <div>
@@ -123,9 +135,9 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                 </div>
             </div>
 
-		</div>
+        </div>
 
-	</section>
+    </section>
 
 </main>
 

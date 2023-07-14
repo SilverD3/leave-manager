@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Service;
 
@@ -14,27 +23,27 @@ use App\Entity\Role;
 class RolesServices
 {
     /**
-	 * @var ConnectionManager $connectionManager
-	 */
-	private $connectionManager;
+     * @var ConnectionManager $connectionManager
+     */
+    private $connectionManager;
 
     /**
      * Initializes the Roles Services by setting the connection manager
      */
     function __construct()
-	{
-		$this->connectionManager = new ConnectionManager();
-	}
+    {
+        $this->connectionManager = new ConnectionManager();
+    }
 
     /**
-	 * Get All Roles
-	 * @return array<Role>  Array of Roles or empty array
-	 * @throw \Exception When error occurs
-	 */
-	public function getAll()
-	{
-		$result = [];
-		$roles = [];
+     * Get All Roles
+     * @return array<Role>  Array of Roles or empty array
+     * @throw \Exception When error occurs
+     */
+    public function getAll()
+    {
+        $result = [];
+        $roles = [];
 
         $sql = "SELECT * FROM roles";
 
@@ -43,12 +52,12 @@ class RolesServices
             $query->execute();
             $result = $query->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-			throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
-		}
+            throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
+        }
 
         if (empty($result)) {
-			return [];
-		}
+            return [];
+        }
 
         foreach ($result as $row) {
             $role = new Role();

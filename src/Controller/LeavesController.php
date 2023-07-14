@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Controller;
 
@@ -27,17 +36,17 @@ class LeavesController
     private $configsServices;
 
     function __construct()
-	{
-		$this->service = new LeavesServices();
+    {
+        $this->service = new LeavesServices();
         $this->configsServices = new ConfigsServices();
-	}
+    }
 
     /**
      * Index method
      * @return void
      */
     public function index()
-	{
+    {
         $_SESSION['page_title'] = 'Congés';
         unset($_SESSION['subpage_title']);
 
@@ -69,7 +78,6 @@ class LeavesController
     {
         $_SESSION['page_title'] = 'Congés';
         $_SESSION['subpage_title'] = 'Calendrier';
-
     }
 
     /**
@@ -91,7 +99,7 @@ class LeavesController
         $json_leaves = [];
 
         if (!empty($leaves)) {
-            foreach($leaves as $leave) {
+            foreach ($leaves as $leave) {
                 $leave_infos = [
                     'id' => $leave->getId(),
                     'title' => 'Congés de ' . $leave->getEmployee()->getFirstName() . ' ' . $leave->getEmployee()->getLastName(),
@@ -110,27 +118,27 @@ class LeavesController
     public function view()
     {
         if (!isset($_GET['id'])) {
-			Flash::error("Mauvaise requête");
-			header('Location: '.VIEWS . 'Employees');
-			exit;
-		}
+            Flash::error("Mauvaise requête");
+            header('Location: ' . VIEWS . 'Employees');
+            exit;
+        }
 
         // check if the employee exists
-		$checkLeave = $this->service->get($_GET['id']);
-		if(!$checkLeave) {
-			Flash::error("Aucun congé trouvé avec l'id ". $_GET['id']);
-			header('Location: '.VIEWS . 'Leaves');
-			exit;
-		}
+        $checkLeave = $this->service->get($_GET['id']);
+        if (!$checkLeave) {
+            Flash::error("Aucun congé trouvé avec l'id " . $_GET['id']);
+            header('Location: ' . VIEWS . 'Leaves');
+            exit;
+        }
 
         $_SESSION['page_title'] = 'Congés';
         $_SESSION['subpage_title'] = 'Détails';
 
-        
+
         $leave_nb_days = (int)$this->configsServices->getByCode('LM_LEAVE_NB_DAYS')->getValue();
         $nb_spent_days = $this->service->getSpentDays($checkLeave->getEmployeeId(), $checkLeave->getYear());
         $otherLeaves = $this->service->getByEmployeeId($checkLeave->getEmployeeId(), $checkLeave->getYear(), false, false, [$checkLeave->getId()]);
-        
+
         $reduce = $this->configsServices->getByCode('LM_PERMISSION_REDUCE_LEAVE')->getValue();
         if ($reduce == 'OUI') {
             $permissionsServices = new PermissionRequestsServices();
@@ -164,7 +172,7 @@ class LeavesController
         $_SESSION['subpage_title'] = 'Planifier';
 
         $employeesServices = new EmployeesServices();
-        
+
         $employees = $employeesServices->getAll();
         $leaveNbDaysConfig = $this->configsServices->getByCode('LM_LEAVE_NB_DAYS');
         $leave_nb_days = (int)$leaveNbDaysConfig->getValue();
@@ -173,11 +181,11 @@ class LeavesController
         $GLOBALS['leave_nb_days'] = $leave_nb_days;
 
         // Check if form data is cached
-		$formdata = Session::consume('__formdata__');
-        
-		if(!empty($formdata)) {
-			$GLOBALS['form_data'] = json_decode($formdata, true);
-		}
+        $formdata = Session::consume('__formdata__');
+
+        if (!empty($formdata)) {
+            $GLOBALS['form_data'] = json_decode($formdata, true);
+        }
     }
 
     /**
@@ -187,26 +195,25 @@ class LeavesController
      */
     public function generate()
     {
-        
     }
 
     public function update()
     {
         AuthController::require_admin_priv();
 
-		if (!isset($_GET['id'])) {
-			Flash::error("Mauvaise requête");
-			header('Location: '.VIEWS . 'Employees');
-			exit;
-		}
+        if (!isset($_GET['id'])) {
+            Flash::error("Mauvaise requête");
+            header('Location: ' . VIEWS . 'Employees');
+            exit;
+        }
 
         // check if the employee exists
-		$checkLeave = $this->service->get($_GET['id']);
-		if(!$checkLeave) {
-			Flash::error("Aucun congé trouvé avec l'id ". $_GET['id']);
-			header('Location: '.VIEWS . 'Leaves');
-			exit;
-		}
+        $checkLeave = $this->service->get($_GET['id']);
+        if (!$checkLeave) {
+            Flash::error("Aucun congé trouvé avec l'id " . $_GET['id']);
+            header('Location: ' . VIEWS . 'Leaves');
+            exit;
+        }
 
         if (isset($_POST['update_leave'])) {
             $data = $_POST;
@@ -232,11 +239,11 @@ class LeavesController
         $GLOBALS['leave'] = $checkLeave;
 
         // Check if form data is cached
-		$formdata = Session::consume('__formdata__');
-        
-		if(!empty($formdata)) {
-			$GLOBALS['form_data'] = json_decode($formdata, true);
-		}
+        $formdata = Session::consume('__formdata__');
+
+        if (!empty($formdata)) {
+            $GLOBALS['form_data'] = json_decode($formdata, true);
+        }
     }
 
     /**
@@ -248,50 +255,50 @@ class LeavesController
     {
         AuthController::require_admin_priv();
 
-		if(!isset($_GET['id']) || empty($_GET['id'])) {
+        if (!isset($_GET['id']) || empty($_GET['id'])) {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 header('Content-Type: application/json');
                 echo json_encode(['status' => 'success', 'message' => 'Mauvaise requête']);
-    
+
                 exit;
             }
 
-			header('Location: ' . VIEWS . 'Leaves');
-			exit;
-		}
+            header('Location: ' . VIEWS . 'Leaves');
+            exit;
+        }
 
-		// check if the leave exists
-		$checkLeave = $this->service->get($_GET['id'], false);
-		if(!$checkLeave) {
-			if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
-				header('Content-Type: application/json');
-				echo json_encode(['status' => 'success', 'message' => "Aucun congé trouvé avec l'id ". $_GET['id']]);
-	
-				exit;
-			}
+        // check if the leave exists
+        $checkLeave = $this->service->get($_GET['id'], false);
+        if (!$checkLeave) {
+            if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'success', 'message' => "Aucun congé trouvé avec l'id " . $_GET['id']]);
 
-			Flash::error("Aucun congé trouvé avec l'id ". $_GET['id']);
+                exit;
+            }
 
-			header('Location: '.VIEWS . 'Leaves');
-			exit;
-		}
+            Flash::error("Aucun congé trouvé avec l'id " . $_GET['id']);
 
-		$deleted = $this->service->delete((int)$_GET['id']);
+            header('Location: ' . VIEWS . 'Leaves');
+            exit;
+        }
 
-		if ($deleted) {
-			Flash::success("Le congé a été supprimé avec succès.");
-		} else {
-			Flash::error("Le congé n'a pas été supprimé. Veuillez réessayer !");
-		}
+        $deleted = $this->service->delete((int)$_GET['id']);
 
-		if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
-			header('Content-Type: application/json');
-			echo json_encode(['status' => 'success', 'message' => 'Congé supprimé avec succès.']);
+        if ($deleted) {
+            Flash::success("Le congé a été supprimé avec succès.");
+        } else {
+            Flash::error("Le congé n'a pas été supprimé. Veuillez réessayer !");
+        }
 
-			exit;
-		}
+        if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'success', 'message' => 'Congé supprimé avec succès.']);
 
-		header('Location: ' . VIEWS . 'Leaves');
+            exit;
+        }
+
+        header('Location: ' . VIEWS . 'Leaves');
     }
 
     /**

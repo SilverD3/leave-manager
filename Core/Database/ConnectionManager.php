@@ -1,5 +1,15 @@
 <?php
+
 declare(strict_types=1);
+
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace Core\Database;
 
@@ -7,12 +17,12 @@ require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use \PDO;
 use Core\Configure;
-use \Exception;
 
 /**
  * This class is used to create and manage connection with DBMS
  */
-class ConnectionManager {
+class ConnectionManager
+{
     private string $host;
     private string $username;
     private string $password;
@@ -45,10 +55,11 @@ class ConnectionManager {
     /**
      * Get the connection object
      */
-    public function getConnection(){
+    public function getConnection()
+    {
         return $this->_connection;
     }
-    
+
     /**
      * Set connection properties
      *
@@ -57,19 +68,19 @@ class ConnectionManager {
      */
     public function setConfig(array $config)
     {
-        if(isset($config['host'])){
+        if (isset($config['host'])) {
             $this->host = $config['host'];
         }
 
-        if(isset($config['username'])){
+        if (isset($config['username'])) {
             $this->username = $config['username'];
         }
 
-        if(isset($config['password'])){
+        if (isset($config['password'])) {
             $this->password = $config['password'];
         }
 
-        if(isset($config['database'])){
+        if (isset($config['database'])) {
             $this->database = $config['database'];
         }
     }
@@ -88,5 +99,4 @@ class ConnectionManager {
     {
         $this->_connection = null;
     }
-
 }

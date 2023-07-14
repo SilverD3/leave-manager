@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Service;
 
@@ -85,15 +94,15 @@ class CompanyServices
 
         $errors = $company->validation();
 
-		if (!empty($errors)) {
-			foreach ($errors as $error) {
-				Flash::error($error);
-			}
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                Flash::error($error);
+            }
 
-			Session::write('__formdata__', json_encode($_POST));
+            Session::write('__formdata__', json_encode($_POST));
 
-			return false;
-		}
+            return false;
+        }
 
         if (empty($existedCompany->getId())) {
             $sql = "INSERT INTO company(name, director_name, address, tel1, tel2, email, logo, about, created, modified, modified_by) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
@@ -102,7 +111,7 @@ class CompanyServices
         }
 
         try {
-			$query = $this->connectionManager->getConnection()->prepare($sql);
+            $query = $this->connectionManager->getConnection()->prepare($sql);
 
             if (empty($existedCompany->getId())) {
                 $query->bindValue(1, $company->getName(), \PDO::PARAM_STR);
@@ -129,14 +138,14 @@ class CompanyServices
                 $query->bindValue(10, $company->getModifiedBy(), \PDO::PARAM_STR);
                 $query->bindValue(11, $existedCompany->getId(), \PDO::PARAM_INT);
             }
-            
+
 
             $executed = $query->execute();
 
             return $executed;
         } catch (\PDOException $e) {
-			throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
-		}
+            throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
+        }
     }
 
     /**
@@ -176,5 +185,4 @@ class CompanyServices
 
         return $company;
     }
-
 }

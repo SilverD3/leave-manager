@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\ContractTypesController;
@@ -13,38 +22,39 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 ?>
 
 <main id="main" class="main">
-	<div class="pagetitle">
-		<h1>Les type de contract</h1>
-		<nav>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
-				<li class="breadcrumb-item active">Types de contrat</li>
-			</ol>
-		</nav>
-	</div><!-- End Page Title -->
+    <div class="pagetitle">
+        <h1>Les type de contract</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
+                <li class="breadcrumb-item active">Types de contrat</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
-	<section class="section dashboard">
-		<div class="row mt-2 mb-1">
-			<div class="col-12">
-				<a href="<?= VIEWS . 'ContractTypes/add.php' ?>" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i> Nouveau type</a>
-			</div>
+    <section class="section dashboard">
+        <div class="row mt-2 mb-1">
+            <div class="col-12">
+                <a href="<?= VIEWS . 'ContractTypes/add.php' ?>" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i>
+                    Nouveau type</a>
+            </div>
 
             <div class="col-12 mt-2">
                 <?= Flash::render() ?>
             </div>
-		</div>
+        </div>
 
-		<hr>
+        <hr>
 
-		<div class="row mt-1">
-			<!-- Contract Types -->
+        <div class="row mt-1">
+            <!-- Contract Types -->
             <div class="col-12">
                 <div class="card recent-sales overflow-auto">
 
                     <div class="card-body">
                         <h5 class="card-title">Tous les types de contract</h5>
 
-                        <?php if (!empty($contract_types)): ?>
+                        <?php if (!empty($contract_types)) : ?>
                             <table class="table table-border datatable">
                                 <thead>
                                     <tr>
@@ -56,7 +66,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($contract_types as $contractType): ?>
+                                    <?php foreach ($contract_types as $contractType) : ?>
                                         <tr>
                                             <th scope="row"><?= $contractType->getId() ?></th>
                                             <td><?= $contractType->getName() ?></td>
@@ -74,7 +84,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     <?php endforeach ?>
                                 </tbody>
                             </table>
-                        <?php else: ?>
+                        <?php else : ?>
                             <div class="alert alert-primary d-flex align-items-center" role="alert">
                                 <span class="bi bi-info-circle flex-shrink-0 me-2" role="img" aria-label="Info:"></span>
                                 <div>
@@ -88,35 +98,32 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                 </div>
             </div><!-- End Contract Types -->
 
-		</div>
+        </div>
 
-	</section>
+    </section>
 
 </main>
 
 <?php require_once dirname(__DIR__) . DS . 'Elements' . DS . 'footer.php'; ?>
 
 <script type="text/javascript">
-	
-	function deleteContractType(id)
-	{
-		if (confirm("Voulez-vous vraiment supprimer ce type ?")) {
-			var xmlhttp = new XMLHttpRequest();
-			var url = "<?= VIEWS . 'ContractTypes/delete.php?ajax=1&id=' ?>" + id;
+    function deleteContractType(id) {
+        if (confirm("Voulez-vous vraiment supprimer ce type ?")) {
+            var xmlhttp = new XMLHttpRequest();
+            var url = "<?= VIEWS . 'ContractTypes/delete.php?ajax=1&id=' ?>" + id;
 
-			xmlhttp.onreadystatechange = function() {
-				if (xmlhttp.readyState == 4){
-                    if(xmlhttp.status == 200) {
-					    location.reload();
-                    }else {
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4) {
+                    if (xmlhttp.status == 200) {
+                        location.reload();
+                    } else {
                         alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
                     }
-				} 
-			};
-            
-			xmlhttp.open("DELETE", url, true);
-			xmlhttp.send();
-		}
-	}
-	
+                }
+            };
+
+            xmlhttp.open("DELETE", url, true);
+            xmlhttp.send();
+        }
+    }
 </script>

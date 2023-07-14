@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\ContractsController;
@@ -11,16 +20,16 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 ?>
 
 <main id="main" class="main">
-	<div class="pagetitle">
-		<h1>Mettre à jour le contrat</h1>
-		<nav>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
-				<li class="breadcrumb-item"><a href="<?= VIEWS . 'Contracts' ?>">Contrats</a></li>
-				<li class="breadcrumb-item active">Mise à jour</li>
-			</ol>
-		</nav>
-	</div><!-- End Page Title -->
+    <div class="pagetitle">
+        <h1>Mettre à jour le contrat</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="<?= VIEWS . 'Contracts' ?>">Contrats</a></li>
+                <li class="breadcrumb-item active">Mise à jour</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
     <section class="section dashboard">
         <div class="row">
@@ -31,9 +40,11 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                         <?= Flash::render() ?>
 
                         <form class="row g-3 needs-validation" action="" method="post" novalidate>
-                            
-                            <div class="py-1"><h4 class="card-title py-0">Généralités</h4></div>
-                        
+
+                            <div class="py-1">
+                                <h4 class="card-title py-0">Généralités</h4>
+                            </div>
+
                             <div class=" col-md-7">
                                 <label for="ctitle" class="form-label"> Intitulé du contrat </label>
                                 <input type="text" maxlength="500" placeholder="E.g: CDD de l'employé Jean" class="form-control" name="title" id="ctitle" value="<?= isset($form_data['title']) ? $form_data['title'] : $contract->getTitle() ?>">
@@ -41,13 +52,13 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
                             <div class="col-sm-6 col-md-5">
                                 <label for="ceid" class="form-label">Employé <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" disabled value="<?= $contract->getEmployee()->getFirstName() . ' ' . $contract->getEmployee()->getLastName() ?>" >
-                                       
+                                <input type="text" class="form-control" disabled value="<?= $contract->getEmployee()->getFirstName() . ' ' . $contract->getEmployee()->getLastName() ?>">
+
                             </div>
 
                             <div class="col-sm-6 col-md-4">
                                 <label for="cctid" class="form-label">Type de contrat <span class="text-danger">*</span></label>
-                                <input type="text" disabled class="form-control" value="<?= $contract->getContractType()->getName() ?>">  
+                                <input type="text" disabled class="form-control" value="<?= $contract->getContractType()->getName() ?>">
                             </div>
 
                             <div class="col-sm-6 col-md-4">
@@ -61,7 +72,9 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                 <input type="date" class="form-control" name="end_date" id="cenddate" value="<?= isset($form_data['end_date']) ? $form_data['end_date'] : date('Y-m-d', strtotime($contract->getEndDate())) ?>">
                             </div>
 
-                            <div class="mt-4"><h4 class="card-title py-0">Responsabilités et conditions de travail</h4></div>
+                            <div class="mt-4">
+                                <h4 class="card-title py-0">Responsabilités et conditions de travail</h4>
+                            </div>
 
                             <div class="col-sm-6 col-md-4">
                                 <label for="cjobobject" class="form-label">Poste occupé </label>

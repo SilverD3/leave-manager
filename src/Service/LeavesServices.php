@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Service;
 
@@ -17,8 +26,8 @@ use Core\Utils\Session;
  */
 class LeavesServices
 {
-	private $connectionManager;
-	private $configsServices;
+    private $connectionManager;
+    private $configsServices;
 
     function __construct()
     {
@@ -40,8 +49,8 @@ class LeavesServices
         $leaves = [];
 
         $select = "SELECT lv.id AS Leave_id, lv.employee_id AS Leave_employee_id, lv.year AS Leave_year, lv.days AS Leave_days, "
-                    ."lv.start_date AS Leave_start_date, lv.end_date AS Leave_end_date, lv.created AS Leave_created, lv.modified AS Leave_modified, "
-                    ."lv.note AS Leave_note, lv.etat AS Leave_etat ";
+            . "lv.start_date AS Leave_start_date, lv.end_date AS Leave_end_date, lv.created AS Leave_created, lv.modified AS Leave_modified, "
+            . "lv.note AS Leave_note, lv.etat AS Leave_etat ";
         $from = ' FROM leaves lv ';
         $join = '';
         $where = ' WHERE lv.etat = :etat';
@@ -78,8 +87,8 @@ class LeavesServices
         }
 
         if (empty($results)) {
-			return [];
-		}
+            return [];
+        }
 
         foreach ($results as $row) {
             $leave = new Leave();
@@ -99,9 +108,9 @@ class LeavesServices
                 $employee->setId($row['Employee_id']);
                 $employee->setFirstName($row['Employee_first_name']);
                 $employee->setLastName($row['Employee_last_name']);
-                $employee->setEmail($row['Employee_email']);   
+                $employee->setEmail($row['Employee_email']);
 
-                $leave->setEmployee($employee);        
+                $leave->setEmployee($employee);
             }
 
             $leaves[] = $leave;
@@ -122,8 +131,8 @@ class LeavesServices
         $leaves = [];
 
         $select = "SELECT lv.id AS Leave_id, lv.employee_id AS Leave_employee_id, lv.year AS Leave_year, lv.days AS Leave_days, "
-                    ."lv.start_date AS Leave_start_date, lv.end_date AS Leave_end_date, lv.created AS Leave_created, lv.modified AS Leave_modified, "
-                    ."lv.note AS Leave_note, lv.etat AS Leave_etat ";
+            . "lv.start_date AS Leave_start_date, lv.end_date AS Leave_end_date, lv.created AS Leave_created, lv.modified AS Leave_modified, "
+            . "lv.note AS Leave_note, lv.etat AS Leave_etat ";
         $from = ' FROM leaves lv ';
         $join = '';
         $where = ' WHERE lv.etat = :etat AND (DATE(lv.start_date) <= :date AND DATE(lv.end_date) >= :date)';
@@ -149,8 +158,8 @@ class LeavesServices
         }
 
         if (empty($results)) {
-			return [];
-		}
+            return [];
+        }
 
         foreach ($results as $row) {
             $leave = new Leave();
@@ -170,9 +179,9 @@ class LeavesServices
                 $employee->setId($row['Employee_id']);
                 $employee->setFirstName($row['Employee_first_name']);
                 $employee->setLastName($row['Employee_last_name']);
-                $employee->setEmail($row['Employee_email']);   
+                $employee->setEmail($row['Employee_email']);
 
-                $leave->setEmployee($employee);        
+                $leave->setEmployee($employee);
             }
 
             $leaves[] = $leave;
@@ -198,14 +207,14 @@ class LeavesServices
         $end = DateHelper::toTimestamp($end);
 
         $select = "SELECT lv.id AS Leave_id, lv.employee_id AS Leave_employee_id, lv.year AS Leave_year, lv.days AS Leave_days, "
-                    ."lv.start_date AS Leave_start_date, lv.end_date AS Leave_end_date, lv.created AS Leave_created, lv.modified AS Leave_modified, "
-                    ."lv.note AS Leave_note, lv.etat AS Leave_etat ";
+            . "lv.start_date AS Leave_start_date, lv.end_date AS Leave_end_date, lv.created AS Leave_created, lv.modified AS Leave_modified, "
+            . "lv.note AS Leave_note, lv.etat AS Leave_etat ";
         $from = ' FROM leaves lv ';
         $join = '';
         $where = ' WHERE lv.etat = :etat AND ((DATE(lv.start_date) BETWEEN :start_date AND :end_date) OR (DATE(lv.end_date) BETWEEN :start_date AND :end_date))';
 
-        if(!empty($skip)) {
-            $where .= " AND lv.id NOT IN (". implode(',', $skip) .") ";
+        if (!empty($skip)) {
+            $where .= " AND lv.id NOT IN (" . implode(',', $skip) . ") ";
         }
 
         $order = " ORDER BY lv.start_date ASC, lv.end_date DESC ";
@@ -241,8 +250,8 @@ class LeavesServices
         }
 
         if (empty($results)) {
-			return [];
-		}
+            return [];
+        }
 
         foreach ($results as $row) {
             $leave = new Leave();
@@ -262,9 +271,9 @@ class LeavesServices
                 $employee->setId($row['Employee_id']);
                 $employee->setFirstName($row['Employee_first_name']);
                 $employee->setLastName($row['Employee_last_name']);
-                $employee->setEmail($row['Employee_email']);   
+                $employee->setEmail($row['Employee_email']);
 
-                $leave->setEmployee($employee);        
+                $leave->setEmployee($employee);
             }
 
             $leaves[] = $leave;
@@ -287,8 +296,8 @@ class LeavesServices
         $leaves = [];
 
         $select = "SELECT lv.id AS Leave_id, lv.employee_id AS Leave_employee_id, lv.year AS Leave_year, lv.days AS Leave_days, "
-                    ."lv.start_date AS Leave_start_date, lv.end_date AS Leave_end_date, lv.created AS Leave_created, lv.modified AS Leave_modified, "
-                    ."lv.note AS Leave_note, lv.etat AS Leave_etat ";
+            . "lv.start_date AS Leave_start_date, lv.end_date AS Leave_end_date, lv.created AS Leave_created, lv.modified AS Leave_modified, "
+            . "lv.note AS Leave_note, lv.etat AS Leave_etat ";
         $from = ' FROM leaves lv ';
         $join = '';
         $where = ' WHERE lv.etat = :etat AND (DATE(lv.start_date) <= :dateFrom AND DATE(lv.end_date) >= :dateTo)';
@@ -328,8 +337,8 @@ class LeavesServices
         }
 
         if (empty($results)) {
-			return [];
-		}
+            return [];
+        }
 
         foreach ($results as $row) {
             $leave = new Leave();
@@ -349,9 +358,9 @@ class LeavesServices
                 $employee->setId($row['Employee_id']);
                 $employee->setFirstName($row['Employee_first_name']);
                 $employee->setLastName($row['Employee_last_name']);
-                $employee->setEmail($row['Employee_email']);   
+                $employee->setEmail($row['Employee_email']);
 
-                $leave->setEmployee($employee);        
+                $leave->setEmployee($employee);
             }
 
             $leaves[] = $leave;
@@ -370,8 +379,8 @@ class LeavesServices
     public function get($leave_id, bool $joinEmployee = true): ?Leave
     {
         $select = "SELECT lv.id AS Leave_id, lv.employee_id AS Leave_employee_id, lv.year AS Leave_year, lv.days AS Leave_days, "
-                    ."lv.start_date AS Leave_start_date, lv.end_date AS Leave_end_date, lv.created AS Leave_created, lv.modified AS Leave_modified, "
-                    ."lv.note AS Leave_note, lv.etat AS Leave_etat ";
+            . "lv.start_date AS Leave_start_date, lv.end_date AS Leave_end_date, lv.created AS Leave_created, lv.modified AS Leave_modified, "
+            . "lv.note AS Leave_note, lv.etat AS Leave_etat ";
         $from = ' FROM leaves lv ';
         $join = '';
         $where = ' WHERE lv.etat = :etat AND lv.id = :id';
@@ -396,8 +405,8 @@ class LeavesServices
         }
 
         if (empty($results)) {
-			return null;
-		}
+            return null;
+        }
 
         $leave = new Leave();
         $leave->setId($results['Leave_id']);
@@ -416,9 +425,9 @@ class LeavesServices
             $employee->setId($results['Employee_id']);
             $employee->setFirstName($results['Employee_first_name']);
             $employee->setLastName($results['Employee_last_name']);
-            $employee->setEmail($results['Employee_email']);   
+            $employee->setEmail($results['Employee_email']);
 
-            $leave->setEmployee($employee);        
+            $leave->setEmployee($employee);
         }
 
         return $leave;
@@ -467,7 +476,7 @@ class LeavesServices
         if (!empty($results)) {
             foreach ($results as $row) {
                 $leaveWorkingDays = $this->getWorkingDays($row['start_date'], $row['end_date'], $year);
-                
+
                 if ($leaveWorkingDays > 0) {
                     $nb_spent_days += $leaveWorkingDays;
                 }
@@ -526,14 +535,14 @@ class LeavesServices
         $leaves = [];
 
         $select = "SELECT lv.id AS Leave_id, lv.employee_id AS Leave_employee_id, lv.year AS Leave_year, lv.days AS Leave_days, "
-                    ."lv.start_date AS Leave_start_date, lv.end_date AS Leave_end_date, lv.created AS Leave_created, lv.modified AS Leave_modified, "
-                    ."lv.note AS Leave_note, lv.etat AS Leave_etat ";
+            . "lv.start_date AS Leave_start_date, lv.end_date AS Leave_end_date, lv.created AS Leave_created, lv.modified AS Leave_modified, "
+            . "lv.note AS Leave_note, lv.etat AS Leave_etat ";
         $from = ' FROM leaves lv ';
         $join = '';
         $where = ' WHERE lv.etat = :etat AND lv.year = :year AND lv.employee_id = :employee_id';
 
-        if(!empty($skip)) {
-            $where .= " AND lv.id NOT IN (". implode(',', $skip) .") ";
+        if (!empty($skip)) {
+            $where .= " AND lv.id NOT IN (" . implode(',', $skip) . ") ";
         }
 
         $order = " ORDER BY lv.start_date ASC, lv.end_date DESC ";
@@ -574,8 +583,8 @@ class LeavesServices
         }
 
         if (empty($results)) {
-			return [];
-		}
+            return [];
+        }
 
         foreach ($results as $row) {
             $leave = new Leave();
@@ -595,9 +604,9 @@ class LeavesServices
                 $employee->setId($row['Employee_id']);
                 $employee->setFirstName($row['Employee_first_name']);
                 $employee->setLastName($row['Employee_last_name']);
-                $employee->setEmail($row['Employee_email']);   
+                $employee->setEmail($row['Employee_email']);
 
-                $leave->setEmployee($employee);        
+                $leave->setEmployee($employee);
             }
 
             $leaves[] = $leave;
@@ -615,7 +624,7 @@ class LeavesServices
     public function isEmployeeInLeave($employeeId)
     {
         $sql = "SELECT * FROM leaves lv WHERE lv.etat = :etat AND lv.year = :year AND lv.employee_id = :employee_id "
-                ." AND (DATE(lv.start_date) <= :date AND DATE(lv.end_date) >= :date)";
+            . " AND (DATE(lv.start_date) <= :date AND DATE(lv.end_date) >= :date)";
 
         try {
 
@@ -657,15 +666,15 @@ class LeavesServices
 
         // Validation
         $errors = $leave->validation();
-		if (!empty($errors)) {
-			foreach ($errors as $error) {
-				Flash::error($error);
-			}
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                Flash::error($error);
+            }
 
-			Session::write('__formdata__', json_encode($_POST));
+            Session::write('__formdata__', json_encode($_POST));
 
-			return false;
-		}
+            return false;
+        }
 
         // Check if another leave period coincides with the leave period
         if ($this->checkLeave($leave)) {
@@ -683,12 +692,12 @@ class LeavesServices
         // Check if allowed leave days is reached
         if ($overrideLeaveNbDays == 'NON') {
             $nb_spent_days = $this->getSpentDays($leave->getEmployeeId(), (int)$leave->getYear());
-            
+
             if ($days + $nb_spent_days > $leave_nb_days) {
                 Flash::error("Le nombre de jours de congé alloué a été dépassé de " . ($nb_spent_days + $days - $leave_nb_days) . " jour(s)");
-    
+
                 Session::write('__formdata__', json_encode($_POST));
-    
+
                 return false;
             }
         }
@@ -699,9 +708,9 @@ class LeavesServices
 
             if ($nb_leaves >= $sameTimeLeaves) {
                 Flash::error("Le nombre maximun d'employé en congé est atteint pour la période choisie.");
-    
+
                 Session::write('__formdata__', json_encode($_POST));
-    
+
                 return false;
             }
         }
@@ -736,8 +745,8 @@ class LeavesServices
         } catch (\PDOException $e) {
             $this->connectionManager->getConnection()->rollBack();
 
-			throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
-		}
+            throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
+        }
     }
 
     /**
@@ -756,9 +765,9 @@ class LeavesServices
         $existedLeave = $this->get($leave->getId());
         if (empty($existedLeave)) {
             Flash::error("Aucun contrat trouvé avec l'id " . $leave->getId());
-            
-			return false;
-		}
+
+            return false;
+        }
 
         // Check if another leave period coincides with the leave period
         if ($this->checkLeave($leave)) {
@@ -769,38 +778,39 @@ class LeavesServices
             return false;
         }
 
-        if (!empty($leave->getStartDate()) && $leave->getStartDate() != $existedLeave->getStartDate()
+        if (
+            !empty($leave->getStartDate()) && $leave->getStartDate() != $existedLeave->getStartDate()
             || !empty($leave->getEndDate()) && $leave->getEndDate() != $existedLeave->getEndDate()
         ) {
             $days = $this->getWorkingDays($leave->getStartDate(), $leave->getEndDate(), $leave->getYear());
             $existedLeave->setDays($days);
-    
+
             $leave_nb_days = (int)$this->configsServices->getByCode('LM_LEAVE_NB_DAYS')->getValue();
             $overrideLeaveNbDays = $this->configsServices->getByCode('LM_OVERRIDE_LEAVE_NB_DAYS')->getValue();
             $sameTimeLeaves = (int)$this->configsServices->getByCode('LM_SAME_TIME_NB_LEAVE')->getValue();
-    
+
             // Check if allowed leave days is reached
             if ($overrideLeaveNbDays == 'NON') {
                 $nb_spent_days = $this->getSpentDays($existedLeave->getEmployeeId(), (int)$existedLeave->getYear(), [$existedLeave->getId()]);
-                
+
                 if ($days + $nb_spent_days > $leave_nb_days) {
                     Flash::error("Le nombre de jours de congé alloué a été dépassé de " . ($nb_spent_days + $days - $leave_nb_days) . " jour(s)");
-        
+
                     Session::write('__formdata__', json_encode($_POST));
-        
+
                     return false;
                 }
             }
-    
+
             // Check if max employee in leave at the same time is reached
             if ($sameTimeLeaves > 0) {
                 $nb_leaves = $this->getByPeriod($leave->getStartDate(), $leave->getEndDate(), true, false, [$existedLeave->getId()]);
-    
+
                 if ($nb_leaves >= $sameTimeLeaves) {
                     Flash::error("Le nombre maximun d'employé en congé est atteint pour la période choisie.");
-        
+
                     Session::write('__formdata__', json_encode($_POST));
-        
+
                     return false;
                 }
             }
@@ -820,15 +830,15 @@ class LeavesServices
 
         // Validation
         $errors = $existedLeave->validation();
-		if (!empty($errors)) {
-			foreach ($errors as $error) {
-				Flash::error($error);
-			}
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                Flash::error($error);
+            }
 
-			Session::write('__formdata__', json_encode($_POST));
+            Session::write('__formdata__', json_encode($_POST));
 
-			return false;
-		}
+            return false;
+        }
 
         $sql = "UPDATE leaves SET days = :days, start_date = :start_date, end_date = :end_date, note = :note, modified = :modified WHERE id = :id";
 
@@ -862,9 +872,9 @@ class LeavesServices
         $existedLeave = $this->get($id, false);
         if (empty($existedLeave)) {
             Flash::error("Aucun congé trouvé avec l'id " . $id);
-            
-			return false;
-		}
+
+            return false;
+        }
 
         $sql = "UPDATE leaves SET etat = :etat WHERE id = :id";
 
@@ -900,7 +910,7 @@ class LeavesServices
             return $result;
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
-        }   
+        }
     }
 
     /**
@@ -913,8 +923,8 @@ class LeavesServices
     {
         $existed = true;
         $sql = "SELECT * FROM leaves lv WHERE lv.etat = :etat AND lv.employee_id = :employee_id AND lv.year = :year "
-                ."AND ((DATE(lv.start_date) <= :start_date AND DATE(lv.end_date) >= :start_date) OR (DATE(lv.start_date) <= :end_date AND DATE(lv.end_date) >= :start_date))";
-        
+            . "AND ((DATE(lv.start_date) <= :start_date AND DATE(lv.end_date) >= :start_date) OR (DATE(lv.start_date) <= :end_date AND DATE(lv.end_date) >= :start_date))";
+
         if (!empty($leave->getId())) {
             $sql .= ' AND lv.id != :leave_id';
         }
@@ -977,5 +987,4 @@ class LeavesServices
 
         return $leave;
     }
-
 }

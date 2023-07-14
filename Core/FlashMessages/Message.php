@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace Core\FlashMessages;
 
@@ -8,18 +17,18 @@ namespace Core\FlashMessages;
  */
 class Message
 {
-	private string $message;
-	private string $type;
+    private string $message;
+    private string $type;
 
     const ALERT = 'default';
     const ERROR = 'error';
     const SUCCESS = 'success';
 
-	function __construct(string $message, string $type)
-	{
-		$this->message = $message;
-		$this->type = $type;
-	}
+    function __construct(string $message, string $type)
+    {
+        $this->message = $message;
+        $this->type = $type;
+    }
 
     /**
      * @return string

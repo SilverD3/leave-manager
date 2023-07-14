@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\ContractTypesController;
@@ -27,29 +36,29 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 			<div class="col-md-8 col-xl-8 col-xxl-6">
 				<div class="card">
 					<div class="card-body">
-			  			<h5 class="card-title">Remplissez les champs ci-après pour ajouter un type de contrat</h5>
-                        <?= Flash::render() ?>
-			  			<form class="row g-3 needs-validation" action="" method="post" novalidate>
-                            <div class="mb-1">
-                                <label for="ctname" class="form-label">Nom du type</label>
-                                <input type="text" class="form-control" name="name" id="ctname" value="<?= isset($form_data['name']) ? $form_data['name'] : '' ?>" required>
-                                <div class="invalid-feedback">Veuillez renseigner le nom du type de contrat.</div>
-                            </div>
+						<h5 class="card-title">Remplissez les champs ci-après pour ajouter un type de contrat</h5>
+						<?= Flash::render() ?>
+						<form class="row g-3 needs-validation" action="" method="post" novalidate>
+							<div class="mb-1">
+								<label for="ctname" class="form-label">Nom du type</label>
+								<input type="text" class="form-control" name="name" id="ctname" value="<?= isset($form_data['name']) ? $form_data['name'] : '' ?>" required>
+								<div class="invalid-feedback">Veuillez renseigner le nom du type de contrat.</div>
+							</div>
 
-                            <div class="mb-3">
-                                <label for="ctdesc" class="form-label">Description</label>
-                                <textarea class="form-control" name="description" id="ctdesc" rows="3"><?= isset($form_data['description']) ? $form_data['description'] : ''; ?></textarea>
-                            </div>
+							<div class="mb-3">
+								<label for="ctdesc" class="form-label">Description</label>
+								<textarea class="form-control" name="description" id="ctdesc" rows="3"><?= isset($form_data['description']) ? $form_data['description'] : ''; ?></textarea>
+							</div>
 
-                            <div class="text-center">
-                                <input type="submit" class="btn btn-primary" name="add_contract_type" value="Ajouter">
-                                <button type="reset" class="btn btn-secondary">Réinitiliser</button>
-                            </div>
+							<div class="text-center">
+								<input type="submit" class="btn btn-primary" name="add_contract_type" value="Ajouter">
+								<button type="reset" class="btn btn-secondary">Réinitiliser</button>
+							</div>
 
 						</form>
 
 					</div>
-		  		</div>
+				</div>
 			</div>
 
 		</div>

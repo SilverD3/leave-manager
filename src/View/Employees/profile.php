@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\EmployeesController;
@@ -12,18 +21,18 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 ?>
 
 <main id="main" class="main">
-	<div class="pagetitle">
-		<h1><?= $employee->getFirstName() . ' ' . $employee->getLastName() ?></h1>
-		<nav>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
-				<li class="breadcrumb-item"><a href="<?= VIEWS . 'Employees' ?>">Employés</a></li>
-				<li class="breadcrumb-item active"><?= $employee->getFirstName() . ' ' . $employee->getLastName() ?></li>
-			</ol>
-		</nav>
-	</div><!-- End Page Title -->
+    <div class="pagetitle">
+        <h1><?= $employee->getFirstName() . ' ' . $employee->getLastName() ?></h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="<?= VIEWS . 'Employees' ?>">Employés</a></li>
+                <li class="breadcrumb-item active"><?= $employee->getFirstName() . ' ' . $employee->getLastName() ?></li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
-	<section class="section profile">
+    <section class="section profile">
         <div class="row">
 
             <?= Flash::render() ?>
@@ -92,7 +101,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     </table>
                                 </div>
                             </div>
-                        
+
                             <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
                                 <h5 class="card-title">Editer le profil</h5>
 
@@ -162,48 +171,46 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 <?php require_once dirname(__DIR__) . DS . 'Elements' . DS . 'footer.php'; ?>
 
 <script type="text/javascript">
+    var $form = document.getElementById('profile-edit-form');
 
-var $form = document.getElementById('profile-edit-form');
+    $form.addEventListener('submit', function($e) {
+        var $pwd = document.forms.profile_edit_form.elements.password;
+        var $cfmpwd = document.forms.profile_edit_form.elements.cfmpwd;
 
-$form.addEventListener('submit', function($e) {
-    var $pwd = document.forms.profile_edit_form.elements.password;
-    var $cfmpwd = document.forms.profile_edit_form.elements.cfmpwd;
+        console.log($pwd.value);
+        console.log($cfmpwd.value);
 
-    console.log($pwd.value);
-    console.log($cfmpwd.value);
+        $form.classList.remove('was-validated');
 
-    $form.classList.remove('was-validated');
+        if ($pwd.value.length > 0) {
+            $cfmpwd.setAttribute('required', 'required');
 
-    if ($pwd.value.length > 0) {
-        $cfmpwd.setAttribute('required', 'required');
+            if ($pwd.value != $cfmpwd.value) {
 
-        if ($pwd.value != $cfmpwd.value) {
-            
-            document.getElementById('cfmpwd-error').innerHTML = 'Les mots de passe ne correspondent pas';
-            $cfmpwd.classList.remove('is-valid');
-            $cfmpwd.classList.add('is-invalid');
-            $cfmpwd.setCustomValidity("Invalid field.");
+                document.getElementById('cfmpwd-error').innerHTML = 'Les mots de passe ne correspondent pas';
+                $cfmpwd.classList.remove('is-valid');
+                $cfmpwd.classList.add('is-invalid');
+                $cfmpwd.setCustomValidity("Invalid field.");
 
-            $form.classList.add('was-validated');
-            $e.preventDefault();
-            return;
+                $form.classList.add('was-validated');
+                $e.preventDefault();
+                return;
+            } else {
+                document.getElementById('cfmpwd-error').innerHTML = '';
+                $cfmpwd.classList.remove('is-invalid');
+                $cfmpwd.classList.add('is-valid');
+                $cfmpwd.setCustomValidity("");
+
+                $form.classList.add('was-validated');
+            }
         } else {
             document.getElementById('cfmpwd-error').innerHTML = '';
+            $cfmpwd.removeAttribute('required');
             $cfmpwd.classList.remove('is-invalid');
             $cfmpwd.classList.add('is-valid');
             $cfmpwd.setCustomValidity("");
 
             $form.classList.add('was-validated');
         }
-    } else {
-        document.getElementById('cfmpwd-error').innerHTML = '';
-        $cfmpwd.removeAttribute('required');
-        $cfmpwd.classList.remove('is-invalid');
-        $cfmpwd.classList.add('is-valid');
-        $cfmpwd.setCustomValidity("");
-
-        $form.classList.add('was-validated');
-    }
-});
-
+    });
 </script>

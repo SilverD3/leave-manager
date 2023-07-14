@@ -1,12 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Controller;
 
 use App\Service\ConfigsServices;
 use Core\Auth\Auth;
 use Core\FlashMessages\Flash;
-use Core\Utils\Session;
 
 require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'autoload.php';
 
@@ -18,16 +26,16 @@ class ConfigsController
     private $service;
 
     function __construct()
-	{
-		$this->service = new ConfigsServices();
-	}
+    {
+        $this->service = new ConfigsServices();
+    }
 
     /**
      * Index method
      * @return void
      */
     public function index()
-	{
+    {
         AuthController::require_admin_priv();
 
         if (isset($_POST['update_config'])) {
@@ -36,7 +44,7 @@ class ConfigsController
             $data['modified_by'] = $auth_user->getId();
 
             unset($data['update_config']);
-            
+
             $updated = $this->service->update($data);
 
             if ($updated) {
@@ -56,11 +64,11 @@ class ConfigsController
             }
         }
 
-		$_SESSION['page_title'] = 'Paramètres';
+        $_SESSION['page_title'] = 'Paramètres';
         unset($_SESSION['subpage_title']);
 
         $configs = $this->service->getAll();
 
         $GLOBALS['configs'] = $configs;
-	}
+    }
 }

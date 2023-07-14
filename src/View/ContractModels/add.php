@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\ContractModelsController;
@@ -77,7 +86,8 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                     <td> Lieu de naissance de l'employé </td>
                                                 </tr>
                                                 <tr>
-                                                    <td> $_candidate_nationality <a href="#" title="Copier" class="link float-end me-3" onclick="copyToClipboard('$_candidate_nationality')"><i class="bi bi-clipboard"></i></a></td>
+                                                    <td> $_candidate_nationality <a href="#" title="Copier" class="link float-end me-3" onclick="copyToClipboard('$_candidate_nationality')"><i class="bi bi-clipboard"></i></a>
+                                                    </td>
                                                     <td> Nationalité de l'employé </td>
                                                 </tr>
                                                 <tr>
@@ -135,7 +145,9 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                L'editeur vous permet de saisir le contenu de votre modèle et d'y appliquer des mises en forme. Pour les informations devant être complétées lors de la génération des contrats, utilisez des "placeholders" qui sont documentés dans la légende.
+                                                L'editeur vous permet de saisir le contenu de votre modèle et d'y appliquer des mises en forme.
+                                                Pour les informations devant être complétées lors de la génération des contrats, utilisez des
+                                                "placeholders" qui sont documentés dans la légende.
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bi bi-check"></i> Compris</button>

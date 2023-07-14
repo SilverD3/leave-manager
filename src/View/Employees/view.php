@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\EmployeesController;
@@ -12,18 +21,18 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 ?>
 
 <main id="main" class="main">
-	<div class="pagetitle">
-		<h1><?= $employee->getFirstName() . ' ' . $employee->getLastName() ?></h1>
-		<nav>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
-				<li class="breadcrumb-item"><a href="<?= VIEWS . 'Employees' ?>">Employés</a></li>
-				<li class="breadcrumb-item active"><?= $employee->getFirstName() . ' ' . $employee->getLastName() ?></li>
-			</ol>
-		</nav>
-	</div><!-- End Page Title -->
+    <div class="pagetitle">
+        <h1><?= $employee->getFirstName() . ' ' . $employee->getLastName() ?></h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="<?= VIEWS . 'Employees' ?>">Employés</a></li>
+                <li class="breadcrumb-item active"><?= $employee->getFirstName() . ' ' . $employee->getLastName() ?></li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
-	<section class="section profile">
+    <section class="section profile">
         <div class="row">
 
             <?= Flash::render() ?>
@@ -37,8 +46,9 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                         <h2><?= $employee->getFirstName() . ' ' . $employee->getLastName() ?></h2>
                         <h6><?= $employee->getRole()->getName() ?> </h6>
 
-                        <?php if($isInVaccations): ?>
-                            <p class="text-center"><span class="badge bg-primary p-2"><i class="bi bi-person-dash me-2"></i> En congé</span></p>
+                        <?php if ($isInVaccations) : ?>
+                            <p class="text-center"><span class="badge bg-primary p-2"><i class="bi bi-person-dash me-2"></i> En
+                                    congé</span></p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -81,7 +91,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                 </tbody>
                             </table>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>

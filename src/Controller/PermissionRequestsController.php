@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Controller;
 
@@ -7,7 +16,6 @@ use App\Service\ConfigsServices;
 use App\Service\PermissionRequestsServices;
 use App\View\Helpers\DateHelper;
 use Core\Auth\Auth;
-use Core\Auth\AuthSession;
 use Core\FlashMessages\Flash;
 use Core\Utils\Session;
 
@@ -26,17 +34,17 @@ class PermissionRequestsController
     private $configsServices;
 
     function __construct()
-	{
-		$this->service = new PermissionRequestsServices();
+    {
+        $this->service = new PermissionRequestsServices();
         $this->configsServices = new ConfigsServices();
-	}
+    }
 
     /**
      * Index method
      * @return void
      */
     public function index()
-	{
+    {
         $_SESSION['page_title'] = 'Demandes de permission';
         unset($_SESSION['subpage_title']);
 
@@ -130,14 +138,14 @@ class PermissionRequestsController
         }
 
         $_SESSION['page_title'] = 'Demandes de permission';
-		$_SESSION['subpage_title'] = 'Ajout';
+        $_SESSION['subpage_title'] = 'Ajout';
 
         // Check if form data is cached
-		$formdata = Session::consume('__formdata__');
-        
-		if(!empty($formdata)) {
-			$GLOBALS['form_data'] = json_decode($formdata, true);
-		}
+        $formdata = Session::consume('__formdata__');
+
+        if (!empty($formdata)) {
+            $GLOBALS['form_data'] = json_decode($formdata, true);
+        }
 
         $permission_reduce_leave_config = $this->configsServices->getByCode('LM_PERMISSION_REDUCE_LEAVE');
         $next_permission_delay_config = $this->configsServices->getByCode('LM_NEXT_PERMISSION_DELAY');
@@ -162,36 +170,36 @@ class PermissionRequestsController
     public function update()
     {
         if (!isset($_GET['id'])) {
-			Flash::error("Mauvaise requête");
-			header('Location: '.VIEWS . 'PermissionRequests');
-			exit;
-		}
+            Flash::error("Mauvaise requête");
+            header('Location: ' . VIEWS . 'PermissionRequests');
+            exit;
+        }
 
         $permissionRequest = $this->service->get((int)$_GET['id']);
-        
-        if(!$permissionRequest) {
-            Flash::error("Aucune demande de permission trouvée avec l'id ". $_GET['id']);
-			header('Location: '.VIEWS . 'PermissionRequests');
-			exit;
-		}
+
+        if (!$permissionRequest) {
+            Flash::error("Aucune demande de permission trouvée avec l'id " . $_GET['id']);
+            header('Location: ' . VIEWS . 'PermissionRequests');
+            exit;
+        }
 
         if ($permissionRequest->getStatus() != 'pending') {
             Flash::error("Cette demande de permission ne plus être modifiée car elle n'est plus en attente");
-			header('Location: '.VIEWS . 'PermissionRequests');
-			exit;
+            header('Location: ' . VIEWS . 'PermissionRequests');
+            exit;
         }
 
         $auth_user = (new Auth())->getAuthUser();
         if (empty($auth_user) || $auth_user->getId() != $permissionRequest->getEmployeeId()) {
             Flash::error("Défaut de privilège. Permission non accordée");
 
-			header('Location: ' . BASE_URL);
-			exit;
+            header('Location: ' . BASE_URL);
+            exit;
         }
 
         if (isset($_POST['update_permission_request'])) {
-			$data = $_POST;
-			$data['id'] = $_GET['id'];
+            $data = $_POST;
+            $data['id'] = $_GET['id'];
 
             if (!empty($data['start_date_time'])) {
                 $data['start_date'] = $data['start_date'] . ' ' . $data['start_date_time'];
@@ -205,25 +213,25 @@ class PermissionRequestsController
 
             $updated = $this->service->update($data);
 
-			if ($updated) {
-				Flash::success("La demande de permission a été mis à jour avec succès.");
+            if ($updated) {
+                Flash::success("La demande de permission a été mis à jour avec succès.");
 
                 header("Location: " . VIEWS . "PermissionRequests/view?id=" . $data['id']);
                 exit;
-			}
+            }
         }
 
         $GLOBALS['permissionRequest'] = $permissionRequest;
 
         $_SESSION['page_title'] = 'Demandes de permission';
-		$_SESSION['subpage_title'] = 'Editier';
+        $_SESSION['subpage_title'] = 'Editier';
 
         // Check if form data is cached
-		$formdata = Session::consume('__formdata__');
-        
-		if(!empty($formdata)) {
-			$GLOBALS['form_data'] = json_decode($formdata, true);
-		}
+        $formdata = Session::consume('__formdata__');
+
+        if (!empty($formdata)) {
+            $GLOBALS['form_data'] = json_decode($formdata, true);
+        }
     }
 
     /**
@@ -234,18 +242,18 @@ class PermissionRequestsController
     public function view()
     {
         if (!isset($_GET['id'])) {
-			Flash::error("Mauvaise requête");
-			header('Location: '.VIEWS . 'PermissionRequests');
-			exit;
-		}
+            Flash::error("Mauvaise requête");
+            header('Location: ' . VIEWS . 'PermissionRequests');
+            exit;
+        }
 
         $permissionRequest = $this->service->get((int)$_GET['id']);
 
-        if(!$permissionRequest) {
-			Flash::error("Aucune demande de permission trouvée avec l'id ". $_GET['id']);
-			header('Location: '.VIEWS . 'PermissionRequests');
-			exit;
-		}
+        if (!$permissionRequest) {
+            Flash::error("Aucune demande de permission trouvée avec l'id " . $_GET['id']);
+            header('Location: ' . VIEWS . 'PermissionRequests');
+            exit;
+        }
 
         if ($permissionRequest->getStatus() == 'pending') {
             $permission_reduce_leave_config = $this->configsServices->getByCode('LM_PERMISSION_REDUCE_LEAVE');
@@ -264,7 +272,7 @@ class PermissionRequestsController
         }
 
         $_SESSION['page_title'] = 'Demandes de permission';
-		$_SESSION['subpage_title'] = 'Détails';
+        $_SESSION['subpage_title'] = 'Détails';
 
         $GLOBALS['permissionRequest'] = $permissionRequest;
     }
@@ -278,36 +286,36 @@ class PermissionRequestsController
     {
         AuthController::require_admin_priv();
 
-        if(!isset($_GET['id']) || empty($_GET['id'])) {
+        if (!isset($_GET['id']) || empty($_GET['id'])) {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(403);
-				header('Content-Type: application/json');
-				echo json_encode(['status' => 'error', 'message' => "Mauvaise requête"]);
-	
-				exit;
-			}
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => "Mauvaise requête"]);
+
+                exit;
+            }
 
             Flash::error("Mauvaise requête");
-			header('Location: ' . VIEWS . 'PermissionRequests');
-			exit;
-		}
+            header('Location: ' . VIEWS . 'PermissionRequests');
+            exit;
+        }
 
-		// check if the contract model exists
-		$check_permission_request = $this->service->get((int)$_GET['id'], false);
-		if(!$check_permission_request) {
-			if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+        // check if the contract model exists
+        $check_permission_request = $this->service->get((int)$_GET['id'], false);
+        if (!$check_permission_request) {
+            if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(404);
-				header('Content-Type: application/json');
-				echo json_encode(['status' => 'error', 'message' => "Aucune demande de permission trouvée avec l'id ". $_GET['id']]);
-	
-				exit;
-			}
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => "Aucune demande de permission trouvée avec l'id " . $_GET['id']]);
 
-			Flash::error("Aucune demande de permission trouvé avec l'id ". $_GET['id']);
+                exit;
+            }
 
-			header('Location: '.VIEWS . 'PermissionRequests');
-			exit;
-		}
+            Flash::error("Aucune demande de permission trouvé avec l'id " . $_GET['id']);
+
+            header('Location: ' . VIEWS . 'PermissionRequests');
+            exit;
+        }
 
         if ($check_permission_request->getStatus() != 'pending') {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
@@ -319,8 +327,8 @@ class PermissionRequestsController
             }
 
             Flash::error("Cette demande de permission ne plus être approuvée car elle n'est plus en attente");
-			header('Location: ' . VIEWS . 'PermissionRequests/view.php?id=' . $_GET['id']);
-			exit;
+            header('Location: ' . VIEWS . 'PermissionRequests/view.php?id=' . $_GET['id']);
+            exit;
         }
 
         if (isset($_GET['reduce']) && $_GET['reduce'] == 1) {
@@ -329,11 +337,11 @@ class PermissionRequestsController
             $reduce = false;
         }
 
-		$approved = $this->service->approve((int)$_GET['id'], $reduce);
+        $approved = $this->service->approve((int)$_GET['id'], $reduce);
 
-		if ($approved) {
-			Flash::success("La demande de permission a été approuvé avec succès.");
-		} else {
+        if ($approved) {
+            Flash::success("La demande de permission a été approuvé avec succès.");
+        } else {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(500);
                 header('Content-Type: application/json');
@@ -342,52 +350,52 @@ class PermissionRequestsController
                 exit;
             }
 
-			Flash::error("La demande de permission n'a pas été approuvé. Veuillez réessayer !");
-		}
+            Flash::error("La demande de permission n'a pas été approuvé. Veuillez réessayer !");
+        }
 
-		if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
-			header('Content-Type: application/json');
-			echo json_encode(['status' => 'success', 'message' => 'Demande de permission approuvée avec succès.']);
+        if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'success', 'message' => 'Demande de permission approuvée avec succès.']);
 
-			exit;
-		}
+            exit;
+        }
 
-		header('Location: ' . VIEWS . 'PermissionRequests/view.php?id=' . $_GET['id']);
+        header('Location: ' . VIEWS . 'PermissionRequests/view.php?id=' . $_GET['id']);
     }
 
     public function disapprove()
     {
         AuthController::require_admin_priv();
 
-        if(!isset($_GET['id']) || empty($_GET['id'])) {
+        if (!isset($_GET['id']) || empty($_GET['id'])) {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(403);
-				header('Content-Type: application/json');
-				echo json_encode(['status' => 'error', 'message' => "Mauvaise requête"]);
-	
-				exit;
-			}
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => "Mauvaise requête"]);
 
-			header('Location: ' . VIEWS . 'PermissionRequests');
-			exit;
-		}
+                exit;
+            }
 
-		// check if the contract model exists
-		$check_permission_request = $this->service->get((int)$_GET['id'], false);
-		if(!$check_permission_request) {
-			if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+            header('Location: ' . VIEWS . 'PermissionRequests');
+            exit;
+        }
+
+        // check if the contract model exists
+        $check_permission_request = $this->service->get((int)$_GET['id'], false);
+        if (!$check_permission_request) {
+            if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(404);
-				header('Content-Type: application/json');
-				echo json_encode(['status' => 'error', 'message' => "Aucune demande de permission trouvée avec l'id ". $_GET['id']]);
-	
-				exit;
-			}
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => "Aucune demande de permission trouvée avec l'id " . $_GET['id']]);
 
-			Flash::error("Aucune demande de permission trouvé avec l'id ". $_GET['id']);
+                exit;
+            }
 
-			header('Location: '.VIEWS . 'PermissionRequests');
-			exit;
-		}
+            Flash::error("Aucune demande de permission trouvé avec l'id " . $_GET['id']);
+
+            header('Location: ' . VIEWS . 'PermissionRequests');
+            exit;
+        }
 
         if ($check_permission_request->getStatus() != 'pending') {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
@@ -399,15 +407,15 @@ class PermissionRequestsController
             }
 
             Flash::error("Cette demande de permission ne plus être rejetée car elle n'est plus en attente");
-			header('Location: ' . VIEWS . 'PermissionRequests/view.php?id=' . $_GET['id']);
-			exit;
+            header('Location: ' . VIEWS . 'PermissionRequests/view.php?id=' . $_GET['id']);
+            exit;
         }
 
-		$approved = $this->service->disapprove((int)$_GET['id']);
+        $approved = $this->service->disapprove((int)$_GET['id']);
 
-		if ($approved) {
-			Flash::success("La demande de permission a été rejeté avec succès.");
-		} else {
+        if ($approved) {
+            Flash::success("La demande de permission a été rejeté avec succès.");
+        } else {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(500);
                 header('Content-Type: application/json');
@@ -416,58 +424,58 @@ class PermissionRequestsController
                 exit;
             }
 
-			Flash::error("La demande de permission n'a pas été rejeté. Veuillez réessayer !");
-		}
+            Flash::error("La demande de permission n'a pas été rejeté. Veuillez réessayer !");
+        }
 
-		if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
-			header('Content-Type: application/json');
-			echo json_encode(['status' => 'success', 'message' => 'Demande de permission rejetée avec succès.']);
+        if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'success', 'message' => 'Demande de permission rejetée avec succès.']);
 
-			exit;
-		}
+            exit;
+        }
 
-		header('Location: ' . VIEWS . 'PermissionRequests');
+        header('Location: ' . VIEWS . 'PermissionRequests');
     }
 
     public function delete()
     {
         AuthController::require_admin_priv();
 
-        if(!isset($_GET['id']) || empty($_GET['id'])) {
+        if (!isset($_GET['id']) || empty($_GET['id'])) {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(403);
-				header('Content-Type: application/json');
-				echo json_encode(['status' => 'error', 'message' => "Mauvaise requête"]);
-	
-				exit;
-			}
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => "Mauvaise requête"]);
 
-			header('Location: ' . VIEWS . 'PermissionRequests');
-			exit;
-		}
+                exit;
+            }
 
-		// check if the contract model exists
-		$check_permission_request = $this->service->get((int)$_GET['id']);
-		if(!$check_permission_request) {
-			if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+            header('Location: ' . VIEWS . 'PermissionRequests');
+            exit;
+        }
+
+        // check if the contract model exists
+        $check_permission_request = $this->service->get((int)$_GET['id']);
+        if (!$check_permission_request) {
+            if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(404);
-				header('Content-Type: application/json');
-				echo json_encode(['status' => 'error', 'message' => "Aucune demande de permission trouvée avec l'id ". $_GET['id']]);
-	
-				exit;
-			}
+                header('Content-Type: application/json');
+                echo json_encode(['status' => 'error', 'message' => "Aucune demande de permission trouvée avec l'id " . $_GET['id']]);
 
-			Flash::error("Aucune demande de permission trouvé avec l'id ". $_GET['id']);
+                exit;
+            }
 
-			header('Location: '.VIEWS . 'PermissionRequests');
-			exit;
-		}
+            Flash::error("Aucune demande de permission trouvé avec l'id " . $_GET['id']);
 
-		$deleted = $this->service->delete((int)$_GET['id']);
+            header('Location: ' . VIEWS . 'PermissionRequests');
+            exit;
+        }
 
-		if ($deleted) {
-			Flash::success("La demande de permission a été supprimé avec succès.");
-		} else {
+        $deleted = $this->service->delete((int)$_GET['id']);
+
+        if ($deleted) {
+            Flash::success("La demande de permission a été supprimé avec succès.");
+        } else {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
                 http_response_code(500);
                 header('Content-Type: application/json');
@@ -476,17 +484,16 @@ class PermissionRequestsController
                 exit;
             }
 
-			Flash::error("La demande de permission n'a pas été supprimé. Veuillez réessayer !");
-		}
+            Flash::error("La demande de permission n'a pas été supprimé. Veuillez réessayer !");
+        }
 
-		if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
-			header('Content-Type: application/json');
-			echo json_encode(['status' => 'success', 'message' => 'Demande de permission supprimée avec succès.']);
+        if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'success', 'message' => 'Demande de permission supprimée avec succès.']);
 
-			exit;
-		}
+            exit;
+        }
 
-		header('Location: ' . VIEWS . 'PermissionRequests');
+        header('Location: ' . VIEWS . 'PermissionRequests');
     }
-
 }

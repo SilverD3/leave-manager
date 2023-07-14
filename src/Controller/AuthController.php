@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Controller;
 
@@ -16,7 +25,7 @@ class AuthController
 {
 	const UNAUTHORIZED_REDIRECT = VIEWS . 'Auth/login.php';
 	const AUTHORIZED_REDIRECT = BASE_URL;
-	
+
 	public function login()
 	{
 		if (Auth::isConnected()) {
@@ -42,7 +51,7 @@ class AuthController
 					header("Location: " . $_GET['redirect']);
 					exit;
 				}
-				
+
 				header("Location: " . self::AUTHORIZED_REDIRECT);
 			}
 		}
@@ -84,7 +93,7 @@ class AuthController
 				http_response_code(403);
 				header('Content-Type: application/json');
 				echo json_encode(['status' => 'error', 'message' => "Veuillez vous connecter avant de continuer"]);
-	
+
 				exit;
 			}
 
@@ -92,13 +101,13 @@ class AuthController
 			header('Location: ' . self::UNAUTHORIZED_REDIRECT . '?redirect=' . $_SERVER['REQUEST_URI']);
 			exit;
 		}
-		
-		if($auth_user->getRole()->getCode() != 'ADM') {
+
+		if ($auth_user->getRole()->getCode() != 'ADM') {
 			if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
 				http_response_code(403);
 				header('Content-Type: application/json');
 				echo json_encode(['status' => 'error', 'message' => "Défaut de privilège. Permission non accordée"]);
-	
+
 				exit;
 			}
 

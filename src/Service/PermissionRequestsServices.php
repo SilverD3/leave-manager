@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Service;
 
@@ -39,8 +48,8 @@ class PermissionRequestsServices
         $join = '';
 
         $select = "SELECT pr.id AS PermissionRequest_id, pr.employee_id AS PermissionRequest_employee_id, pr.reason AS PermissionRequest_reason, "
-                    ."pr.description AS PermissionRequest_description, pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, "
-                    ."pr.status AS PermissionRequest_status, pr.reduce AS PermissionRequest_reduce, pr.created AS PermissionRequest_created, pr.etat AS PermissionRequest_etat ";
+            . "pr.description AS PermissionRequest_description, pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, "
+            . "pr.status AS PermissionRequest_status, pr.reduce AS PermissionRequest_reduce, pr.created AS PermissionRequest_created, pr.etat AS PermissionRequest_etat ";
 
         if ($joinEmployee) {
             $select .= " , e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, e.email AS Employee_email ";
@@ -55,7 +64,7 @@ class PermissionRequestsServices
 
         $year_clause = " AND YEAR(pr.end_date) = :year ";
         if (is_null($year)) {
-            $year_val= date('Y');
+            $year_val = date('Y');
         } elseif ($year == 'all') {
             $year_clause = '';
             $year_val = '';
@@ -67,7 +76,7 @@ class PermissionRequestsServices
 
         try {
             $query = $this->connectionManager->getConnection()->prepare($sql);
-            
+
             $query->bindValue(':etat', true, \PDO::PARAM_BOOL);
 
             if (!empty($year_val)) {
@@ -75,7 +84,7 @@ class PermissionRequestsServices
             }
 
             if (!is_null($employee_id)) {
-                $query->bindValue(':employee_id', $employee_id, \PDO::PARAM_INT);            
+                $query->bindValue(':employee_id', $employee_id, \PDO::PARAM_INT);
             }
 
             $query->execute();
@@ -84,7 +93,7 @@ class PermissionRequestsServices
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
         }
-        
+
         if (empty($result)) {
             return [];
         }
@@ -109,9 +118,9 @@ class PermissionRequestsServices
                 $employee->setId($row['Employee_id']);
                 $employee->setFirstName($row['Employee_first_name']);
                 $employee->setLastName($row['Employee_last_name']);
-                $employee->setEmail($row['Employee_email']);   
+                $employee->setEmail($row['Employee_email']);
 
-                $permissionRequest->setEmployee($employee);        
+                $permissionRequest->setEmployee($employee);
             }
 
             $permission_requests[] = $permissionRequest;
@@ -120,7 +129,7 @@ class PermissionRequestsServices
         return $permission_requests;
     }
 
-	/**
+    /**
      * Count all permission requests
      * 
      * @param string $status Status to consider
@@ -143,7 +152,7 @@ class PermissionRequestsServices
 
         $year_clause = " AND YEAR(pr.end_date) = :year ";
         if (is_null($year)) {
-            $year_val= date('Y');
+            $year_val = date('Y');
         } elseif ($year == 'all') {
             $year_clause = '';
             $year_val = '';
@@ -178,7 +187,7 @@ class PermissionRequestsServices
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
         }
-        
+
         return $count;
     }
 
@@ -202,7 +211,7 @@ class PermissionRequestsServices
 
         $year_clause = " AND YEAR(pr.end_date) = :year ";
         if (is_null($year)) {
-            $year_val= date('Y');
+            $year_val = date('Y');
         } elseif ($year == 'all') {
             $year_clause = '';
             $year_val = '';
@@ -213,10 +222,10 @@ class PermissionRequestsServices
         $where .= $year_clause;
 
         $sql = "SELECT pr.id AS PermissionRequest_id, pr.employee_id AS PermissionRequest_employee_id, pr.reason AS PermissionRequest_reason, pr.description AS PermissionRequest_description, "
-                ."pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, pr.status AS PermissionRequest_status, pr.created AS PermissionRequest_created, "
-                ."pr.etat AS PermissionRequest_etat, pr.reduce AS PermissionRequest_reduce, e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, e.email AS Employee_email "
-                ."FROM permission_requests pr JOIN employees e ON e.id = pr.employee_id ". $where ." ORDER BY pr.created DESC LIMIT 0, :size";
-        
+            . "pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, pr.status AS PermissionRequest_status, pr.created AS PermissionRequest_created, "
+            . "pr.etat AS PermissionRequest_etat, pr.reduce AS PermissionRequest_reduce, e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, e.email AS Employee_email "
+            . "FROM permission_requests pr JOIN employees e ON e.id = pr.employee_id " . $where . " ORDER BY pr.created DESC LIMIT 0, :size";
+
         try {
             $query = $this->connectionManager->getConnection()->prepare($sql);
 
@@ -237,7 +246,7 @@ class PermissionRequestsServices
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
         }
-        
+
         if (empty($result)) {
             return [];
         }
@@ -256,15 +265,15 @@ class PermissionRequestsServices
             $permissionRequest->setReduce($row['PermissionRequest_reduce']);
             $permissionRequest->setCreated($row['PermissionRequest_created']);
             $permissionRequest->setEtat($row['PermissionRequest_etat']);
-            
+
             $employee = new Employee();
             $employee->setId($row['Employee_id']);
             $employee->setFirstName($row['Employee_first_name']);
             $employee->setLastName($row['Employee_last_name']);
-            $employee->setEmail($row['Employee_email']);   
+            $employee->setEmail($row['Employee_email']);
 
-            $permissionRequest->setEmployee($employee);        
-         
+            $permissionRequest->setEmployee($employee);
+
             $permission_requests[] = $permissionRequest;
         }
 
@@ -281,9 +290,9 @@ class PermissionRequestsServices
     public function get($id, $joinEmployee = true): ?PermissionRequest
     {
         $select = "SELECT pr.id AS PermissionRequest_id, pr.employee_id AS PermissionRequest_employee_id, pr.reason AS PermissionRequest_reason, pr.description AS PermissionRequest_description, "
-                ."pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, pr.status AS PermissionRequest_status, pr.created AS PermissionRequest_created, "
-                ."pr.etat AS PermissionRequest_etat, pr.reduce AS PermissionRequest_reduce ";
-            
+            . "pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, pr.status AS PermissionRequest_status, pr.created AS PermissionRequest_created, "
+            . "pr.etat AS PermissionRequest_etat, pr.reduce AS PermissionRequest_reduce ";
+
         $join = "";
         $from = "FROM permission_requests pr ";
         $where = "WHERE pr.id = :id AND pr.etat = :etat";
@@ -306,7 +315,7 @@ class PermissionRequestsServices
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
         }
-        
+
         if (empty($result)) {
             return null;
         }
@@ -323,15 +332,15 @@ class PermissionRequestsServices
         $permissionRequest->setReduce($result['PermissionRequest_reduce']);
         $permissionRequest->setCreated($result['PermissionRequest_created']);
         $permissionRequest->setEtat($result['PermissionRequest_etat']);
-        
+
         if ($joinEmployee) {
             $employee = new Employee();
             $employee->setId($result['Employee_id']);
             $employee->setFirstName($result['Employee_first_name']);
             $employee->setLastName($result['Employee_last_name']);
-            $employee->setEmail($result['Employee_email']);   
-    
-            $permissionRequest->setEmployee($employee);  
+            $employee->setEmail($result['Employee_email']);
+
+            $permissionRequest->setEmployee($employee);
         }
 
         return $permissionRequest;
@@ -347,8 +356,8 @@ class PermissionRequestsServices
     public function getLastPermission($employee_id, $permission_id = null): ?PermissionRequest
     {
         $sql = "SELECT pr.id AS PermissionRequest_id, pr.employee_id AS PermissionRequest_employee_id, pr.reason AS PermissionRequest_reason, pr.description AS PermissionRequest_description, "
-                ."pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, pr.status AS PermissionRequest_status, pr.created AS PermissionRequest_created, "
-                ."pr.etat AS PermissionRequest_etat, pr.reduce AS PermissionRequest_reduce FROM permission_requests pr WHERE pr.employee_id = :employee_id AND pr.etat = :etat AND pr.status = :status";
+            . "pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, pr.status AS PermissionRequest_status, pr.created AS PermissionRequest_created, "
+            . "pr.etat AS PermissionRequest_etat, pr.reduce AS PermissionRequest_reduce FROM permission_requests pr WHERE pr.employee_id = :employee_id AND pr.etat = :etat AND pr.status = :status";
 
         if (!is_null($permission_id)) {
             $sql .= ' AND pr.id != :id';
@@ -371,7 +380,7 @@ class PermissionRequestsServices
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
         }
-        
+
         if (empty($result)) {
             return null;
         }
@@ -409,24 +418,24 @@ class PermissionRequestsServices
         $permissionRequest->setEtat(true);
 
         $errors = $permissionRequest->validation();
-		if (!empty($errors)) {
-			foreach ($errors as $error) {
-				Flash::error($error);
-			}
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                Flash::error($error);
+            }
 
-			Session::write('__formdata__', json_encode($_POST));
+            Session::write('__formdata__', json_encode($_POST));
 
-			return false;
-		}
+            return false;
+        }
 
         $sql = "INSERT INTO permission_requests(employee_id, reason, description, start_date, end_date, status, reduce, created, modified, etat) "
-                ." VALUES(?,?,?,?,?,?,?,?,?,?)";
+            . " VALUES(?,?,?,?,?,?,?,?,?,?)";
 
         try {
 
-			$this->connectionManager->getConnection()->beginTransaction();
+            $this->connectionManager->getConnection()->beginTransaction();
 
-			$query = $this->connectionManager->getConnection()->prepare($sql);
+            $query = $this->connectionManager->getConnection()->prepare($sql);
 
             $query->bindValue(1, $permissionRequest->getEmployeeId(), \PDO::PARAM_INT);
             $query->bindValue(2, $permissionRequest->getReason(), \PDO::PARAM_STR);
@@ -449,8 +458,8 @@ class PermissionRequestsServices
         } catch (\PDOException $e) {
             $this->connectionManager->getConnection()->rollBack();
 
-			throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
-		}
+            throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
+        }
     }
 
     /**
@@ -468,8 +477,8 @@ class PermissionRequestsServices
         $existedRequest = $this->get($permissionRequest->getId(), false);
         if (empty($existedRequest)) {
             Flash::error("Aucune demande de permission trouvée avec l'id " . $permissionRequest->getId());
-            
-			return false;
+
+            return false;
         }
 
         $existedRequest->setReason($permissionRequest->getReason());
@@ -479,20 +488,20 @@ class PermissionRequestsServices
         $existedRequest->setModified(date('Y-m-d H:i:s'));
 
         $errors = $existedRequest->validation();
-		if (!empty($errors)) {
-			foreach ($errors as $error) {
-				Flash::error($error);
-			}
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                Flash::error($error);
+            }
 
-			Session::write('__formdata__', json_encode($_POST));
+            Session::write('__formdata__', json_encode($_POST));
 
-			return false;
-		}
+            return false;
+        }
 
         $sql = "UPDATE permission_requests SET reason = :reason, description = :description, start_date = :start_date, end_date = :end_date, modified = :modified WHERE id = :id";
-    
+
         try {
-			$query = $this->connectionManager->getConnection()->prepare($sql);
+            $query = $this->connectionManager->getConnection()->prepare($sql);
 
             $query->bindValue(':reason', $existedRequest->getReason(), \PDO::PARAM_STR);
             $query->bindValue(':description', $existedRequest->getDescription(), \PDO::PARAM_STR);
@@ -505,9 +514,8 @@ class PermissionRequestsServices
 
             return $updated;
         } catch (\PDOException $e) {
-			throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
-		}
-    
+            throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
+        }
     }
 
     /**
@@ -522,15 +530,15 @@ class PermissionRequestsServices
         $permissionRequest = $this->get($id, false);
         if (empty($permissionRequest)) {
             Flash::error("Aucune demande de permission trouvée avec l'id " . $id);
-            
-			return false;
+
+            return false;
         }
 
         $sql = "UPDATE permission_requests SET status = :status, reduce = :reduce WHERE id = :id";
 
         try {
-			$query = $this->connectionManager->getConnection()->prepare($sql);
-            
+            $query = $this->connectionManager->getConnection()->prepare($sql);
+
             $query->bindValue(':status', 'approved', \PDO::PARAM_STR);
             $query->bindValue(':reduce', $reduce, \PDO::PARAM_BOOL);
             $query->bindValue(':id', $id, \PDO::PARAM_INT);
@@ -553,15 +561,15 @@ class PermissionRequestsServices
         $permissionRequest = $this->get($id, false);
         if (empty($permissionRequest)) {
             Flash::error("Aucune demande de permission trouvée avec l'id " . $id);
-            
-			return false;
+
+            return false;
         }
 
         $sql = "UPDATE permission_requests SET status = :status WHERE id = :id";
 
         try {
-			$query = $this->connectionManager->getConnection()->prepare($sql);
-            
+            $query = $this->connectionManager->getConnection()->prepare($sql);
+
             $query->bindValue(':status', 'disapproved', \PDO::PARAM_STR);
             $query->bindValue(':id', $id, \PDO::PARAM_INT);
 
@@ -583,15 +591,15 @@ class PermissionRequestsServices
         $permissionRequest = $this->get($id, false);
         if (empty($permissionRequest)) {
             Flash::error("Aucune demande de permission trouvée avec l'id " . $id);
-            
-			return false;
+
+            return false;
         }
 
         $sql = "UPDATE permission_requests SET status = :status, etat = :etat WHERE id = :id";
 
         try {
-			$query = $this->connectionManager->getConnection()->prepare($sql);
-            
+            $query = $this->connectionManager->getConnection()->prepare($sql);
+
             $query->bindValue(':status', 'deleted', \PDO::PARAM_STR);
             $query->bindValue(':etat', false, \PDO::PARAM_BOOL);
             $query->bindValue(':id', $id, \PDO::PARAM_INT);
@@ -648,8 +656,8 @@ class PermissionRequestsServices
         $join = '';
 
         $select = "SELECT pr.id AS PermissionRequest_id, pr.employee_id AS PermissionRequest_employee_id, pr.reason AS PermissionRequest_reason, "
-                    ." pr.description AS PermissionRequest_description, pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, "
-                    ." pr.reduce AS PermissionRequest_reduce, pr.created AS PermissionRequest_created, pr.etat AS PermissionRequest_etat ";
+            . " pr.description AS PermissionRequest_description, pr.start_date AS PermissionRequest_start_date, pr.end_date AS PermissionRequest_end_date, "
+            . " pr.reduce AS PermissionRequest_reduce, pr.created AS PermissionRequest_created, pr.etat AS PermissionRequest_etat ";
 
         if ($joinEmployee) {
             $select .= " , e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, e.email AS Employee_email ";
@@ -664,7 +672,7 @@ class PermissionRequestsServices
 
         $year_clause = " AND YEAR(pr.end_date) = :year ";
         if (is_null($year)) {
-            $year_val= date('Y');
+            $year_val = date('Y');
         } elseif ($year == 'all') {
             $year_clause = '';
             $year_val = '';
@@ -676,11 +684,11 @@ class PermissionRequestsServices
 
         try {
             $query = $this->connectionManager->getConnection()->prepare($sql);
-            
+
             $query->bindValue(':etat', true, \PDO::PARAM_BOOL);
             $query->bindValue(':status', 'approved', \PDO::PARAM_STR);
             if (!is_null($employee_id)) {
-                $query->bindValue(':employee_id', $employee_id, \PDO::PARAM_INT);            
+                $query->bindValue(':employee_id', $employee_id, \PDO::PARAM_INT);
             }
 
             if (!empty($year_val)) {
@@ -693,7 +701,7 @@ class PermissionRequestsServices
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
         }
-        
+
         if (empty($result)) {
             return [];
         }
@@ -717,9 +725,9 @@ class PermissionRequestsServices
                 $employee->setId($row['Employee_id']);
                 $employee->setFirstName($row['Employee_first_name']);
                 $employee->setLastName($row['Employee_last_name']);
-                $employee->setEmail($row['Employee_email']);   
+                $employee->setEmail($row['Employee_email']);
 
-                $permission->setEmployee($employee);        
+                $permission->setEmployee($employee);
             }
 
             $permissions[] = $permission;
@@ -759,7 +767,7 @@ class PermissionRequestsServices
         }
 
         $nb_hours = $nb_spent_minutes / 60;
-        
+
         $nb_spent_days = round($nb_hours / ($hourlyRate / $nbWorkingDays), 0, PHP_ROUND_HALF_DOWN);
 
         return (int)$nb_spent_days;
@@ -824,6 +832,6 @@ class PermissionRequestsServices
             return $result;
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
-        }   
+        }
     }
 }

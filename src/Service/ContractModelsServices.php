@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Service;
 
@@ -22,8 +31,8 @@ class ContractModelsServices
     {
         $this->connectionManager = new ConnectionManager();
     }
-    
-	/**
+
+    /**
      * Count all contract models
      * 
      * @return int Number of contract models
@@ -46,7 +55,7 @@ class ContractModelsServices
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
         }
-        
+
         return $count;
     }
 
@@ -62,15 +71,15 @@ class ContractModelsServices
         $contract_models = [];
 
         $select = "SELECT cm.id AS ContractModel_id, cm.name AS ContractModel_name, cm.contract_type_id AS ContractModel_contract_type_id, cm.content AS ContractModel_content, "
-                ."cm.is_current AS ContractModel_is_current, cm.status AS ContractModel_status, cm.created AS ContractModel_created, cm.modified AS ContractModel_modified, cm.etat AS ContractModel_etat ";
-        
+            . "cm.is_current AS ContractModel_is_current, cm.status AS ContractModel_status, cm.created AS ContractModel_created, cm.modified AS ContractModel_modified, cm.etat AS ContractModel_etat ";
+
         if ($joinTypes) {
             $select .= ", ct.id AS ContractType_id, ct.name AS ContractType_name, ct.description AS ContractType_description, ct.created AS ContractType_created, "
-                    ."ct.etat AS ContractType_etat ";
+                . "ct.etat AS ContractType_etat ";
         }
-        
+
         $from = "FROM contract_models cm ";
-        
+
         if ($joinTypes) {
             $join = "INNER JOIN contract_types ct ON ct.id = cm.contract_type_id ";
         } else {
@@ -90,8 +99,8 @@ class ContractModelsServices
         }
 
         if (empty($result)) {
-			return [];
-		}
+            return [];
+        }
 
         foreach ($result as $row) {
             $model = new ContractModel();
@@ -131,12 +140,12 @@ class ContractModelsServices
     public function get(int $id): ?ContractModel
     {
         $sql = "SELECT cm.id AS ContractModel_id, cm.name AS ContractModel_name, cm.contract_type_id AS ContractModel_contract_type_id, cm.content AS ContractModel_content, "
-                ."cm.is_current AS ContractModel_is_current, cm.status AS ContractModel_status, cm.created AS ContractModel_created, cm.modified AS ContractModel_modified, cm.etat AS ContractModel_etat, "
-                ."ct.id AS ContractType_id, ct.name AS ContractType_name, ct.description AS ContractType_description, ct.created AS ContractType_created, "
-                ."ct.etat AS ContractType_etat "
-                ."FROM contract_models cm "
-                ."INNER JOIN contract_types ct ON ct.id = cm.contract_type_id "
-                ."WHERE cm.etat = :etat AND cm.id = :id ";
+            . "cm.is_current AS ContractModel_is_current, cm.status AS ContractModel_status, cm.created AS ContractModel_created, cm.modified AS ContractModel_modified, cm.etat AS ContractModel_etat, "
+            . "ct.id AS ContractType_id, ct.name AS ContractType_name, ct.description AS ContractType_description, ct.created AS ContractType_created, "
+            . "ct.etat AS ContractType_etat "
+            . "FROM contract_models cm "
+            . "INNER JOIN contract_types ct ON ct.id = cm.contract_type_id "
+            . "WHERE cm.etat = :etat AND cm.id = :id ";
 
         try {
             $query = $this->connectionManager->getConnection()->prepare($sql);
@@ -186,12 +195,12 @@ class ContractModelsServices
     public function getCurrent(int $type_id): ?ContractModel
     {
         $sql = "SELECT cm.id AS ContractModel_id, cm.name AS ContractModel_name, cm.contract_type_id AS ContractModel_contract_type_id, cm.content AS ContractModel_content, "
-                ."cm.is_current AS ContractModel_is_current, cm.status AS ContractModel_status, cm.created AS ContractModel_created, cm.modified AS ContractModel_modified, cm.etat AS ContractModel_etat, "
-                ."ct.id AS ContractType_id, ct.name AS ContractType_name, ct.description AS ContractType_description, ct.created AS ContractType_created, "
-                ."ct.etat AS ContractType_etat "
-                ."FROM contract_models cm "
-                ."INNER JOIN contract_types ct ON ct.id = cm.contract_type_id "
-                ."WHERE cm.etat = :etat AND cm.is_current = :current AND cm.contract_type_id = :contract_type_id ";
+            . "cm.is_current AS ContractModel_is_current, cm.status AS ContractModel_status, cm.created AS ContractModel_created, cm.modified AS ContractModel_modified, cm.etat AS ContractModel_etat, "
+            . "ct.id AS ContractType_id, ct.name AS ContractType_name, ct.description AS ContractType_description, ct.created AS ContractType_created, "
+            . "ct.etat AS ContractType_etat "
+            . "FROM contract_models cm "
+            . "INNER JOIN contract_types ct ON ct.id = cm.contract_type_id "
+            . "WHERE cm.etat = :etat AND cm.is_current = :current AND cm.contract_type_id = :contract_type_id ";
 
         try {
             $query = $this->connectionManager->getConnection()->prepare($sql);
@@ -205,19 +214,19 @@ class ContractModelsServices
 
             if (empty($result)) {
                 $sql = "SELECT cm.id AS ContractModel_id, cm.name AS ContractModel_name, cm.contract_type_id AS ContractModel_contract_type_id, cm.content AS ContractModel_content, "
-                        ."cm.is_current AS ContractModel_is_current, cm.status AS ContractModel_status, cm.created AS ContractModel_created, cm.modified AS ContractModel_modified, cm.etat AS ContractModel_etat, "
-                        ."ct.id AS ContractType_id, ct.name AS ContractType_name, ct.description AS ContractType_description, ct.created AS ContractType_created, "
-                        ."ct.etat AS ContractType_etat "
-                        ."FROM contract_models cm "
-                        ."INNER JOIN contract_types ct ON ct.id = cm.contract_type_id "
-                        ."WHERE cm.etat = :etat AND cm.contract_type_id = :contract_type_id ";
-                
+                    . "cm.is_current AS ContractModel_is_current, cm.status AS ContractModel_status, cm.created AS ContractModel_created, cm.modified AS ContractModel_modified, cm.etat AS ContractModel_etat, "
+                    . "ct.id AS ContractType_id, ct.name AS ContractType_name, ct.description AS ContractType_description, ct.created AS ContractType_created, "
+                    . "ct.etat AS ContractType_etat "
+                    . "FROM contract_models cm "
+                    . "INNER JOIN contract_types ct ON ct.id = cm.contract_type_id "
+                    . "WHERE cm.etat = :etat AND cm.contract_type_id = :contract_type_id ";
+
                 $query = $this->connectionManager->getConnection()->prepare($sql);
                 $query->bindValue(':etat', 1, \PDO::PARAM_BOOL);
                 $query->bindParam(':contract_type_id', $type_id, \PDO::PARAM_INT);
-    
+
                 $query->execute();
-    
+
                 $result = $query->fetch(\PDO::FETCH_ASSOC);
 
                 if (empty($result)) {
@@ -277,23 +286,23 @@ class ContractModelsServices
         }
 
         $errors = $contractModel->validation();
-		if (!empty($errors)) {
-			foreach ($errors as $error) {
-				Flash::error($error);
-			}
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                Flash::error($error);
+            }
 
-			Session::write('__formdata__', json_encode($_POST));
+            Session::write('__formdata__', json_encode($_POST));
 
-			return false;
-		}
+            return false;
+        }
 
         $sql = "INSERT INTO contract_models(contract_type_id, name, content, status, created, modified, etat) VALUES(?,?,?,?,?,?,?)";
 
         try {
 
-			$this->connectionManager->getConnection()->beginTransaction();
+            $this->connectionManager->getConnection()->beginTransaction();
 
-			$query = $this->connectionManager->getConnection()->prepare($sql);
+            $query = $this->connectionManager->getConnection()->prepare($sql);
 
             $query->bindValue(1, $contractModel->getContractTypeId(), \PDO::PARAM_INT);
             $query->bindValue(2, $contractModel->getName(), \PDO::PARAM_STR);
@@ -317,8 +326,8 @@ class ContractModelsServices
         } catch (\PDOException $e) {
             $this->connectionManager->getConnection()->rollBack();
 
-			throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
-		}
+            throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
+        }
     }
 
     /**
@@ -333,18 +342,18 @@ class ContractModelsServices
             $contractModel = $this->toEntity($contractModel);
         }
 
-        
+
         $existedModel = $this->get($contractModel->getId());
-        
-		if (empty($existedModel)) {
+
+        if (empty($existedModel)) {
             Flash::error("Aucun modèle de contrat trouvé avec l'id " . $contractModel->getId());
-            
-			return false;
-		}
-        
+
+            return false;
+        }
+
         $contractModel->setModified(date('Y-m-d H:i:s'));
         $contractModel->setContractTypeId($existedModel->getContractTypeId());
-        
+
         if ($this->checkContractModel($contractModel)) {
             Flash::error("Un modèle de contrat avec le même nom existe déjà.");
 
@@ -354,23 +363,23 @@ class ContractModelsServices
         }
 
         $errors = $contractModel->validation();
-		if (!empty($errors)) {
-			foreach ($errors as $error) {
-				Flash::error($error);
-			}
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                Flash::error($error);
+            }
 
-			Session::write('__formdata__', json_encode($_POST));
+            Session::write('__formdata__', json_encode($_POST));
 
-			return false;
-		}
+            return false;
+        }
 
         $sql = "UPDATE contract_models SET name = :name, content = :content, modified = :modified WHERE id = :id";
 
         try {
 
-			$this->connectionManager->getConnection()->beginTransaction();
+            $this->connectionManager->getConnection()->beginTransaction();
 
-			$query = $this->connectionManager->getConnection()->prepare($sql);
+            $query = $this->connectionManager->getConnection()->prepare($sql);
 
             $query->bindValue(':name', $contractModel->getName(), \PDO::PARAM_STR);
             $query->bindValue(':content', $contractModel->getContent(), \PDO::PARAM_STR);
@@ -389,8 +398,8 @@ class ContractModelsServices
         } catch (\PDOException $e) {
             $this->connectionManager->getConnection()->rollBack();
 
-			throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
-		}
+            throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
+        }
     }
 
     /**
@@ -412,7 +421,7 @@ class ContractModelsServices
             $query1->bindValue(1, false, \PDO::PARAM_BOOL);
             $query1->bindValue(2, $contract_type_id, \PDO::PARAM_INT);
             $query1->bindValue(3, true, \PDO::PARAM_BOOL);
-            
+
             $query2->bindValue(1, true, \PDO::PARAM_BOOL);
             $query2->bindValue(2, $contract_type_id, \PDO::PARAM_INT);
             $query2->bindValue(3, $model_id, \PDO::PARAM_INT);
@@ -422,8 +431,8 @@ class ContractModelsServices
 
             return $updated1 && $updated2;
         } catch (\PDOException $e) {
-			throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
-		}
+            throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
+        }
     }
 
     /**
@@ -441,12 +450,12 @@ class ContractModelsServices
         }
 
         $sql = "UPDATE contract_models SET etat = :etat, status = :status WHERE id = :id";
-        
-        try{
+
+        try {
             $query = $this->connectionManager->getConnection()->prepare($sql);
-            $query->bindValue(':etat',0, \PDO::PARAM_BOOL);
-            $query->bindValue(':status','deleted', \PDO::PARAM_STR);
-            $query->bindValue(':id',$id, \PDO::PARAM_INT);
+            $query->bindValue(':etat', 0, \PDO::PARAM_BOOL);
+            $query->bindValue(':status', 'deleted', \PDO::PARAM_STR);
+            $query->bindValue(':id', $id, \PDO::PARAM_INT);
 
             $deleted = $query->execute();
 
@@ -462,7 +471,7 @@ class ContractModelsServices
      * @param ContractModel $contractModel Contract model to check
      * @return bool Returns true if contract model already exists, false otherwise.
      */
-    public function checkContractModel(ContractModel $contractModel): bool 
+    public function checkContractModel(ContractModel $contractModel): bool
     {
         if (is_null($contractModel->getId())) {
             $sql = "SELECT * FROM contract_models WHERE etat = :etat AND contract_type_id = :contract_type_id AND name = :name limit 0,1";
@@ -481,7 +490,7 @@ class ContractModelsServices
             $query->execute();
 
             $result = $query->fetchAll(\PDO::FETCH_ASSOC);
-            
+
             return !empty($result);
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), (int)$e->getCode());

@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
 
 namespace App\Service;
 
@@ -21,8 +30,8 @@ class ContractTypesServices
     {
         $this->connectionManager = new ConnectionManager();
     }
-    
-	/**
+
+    /**
      * Count all contract types
      * 
      * @return int Number of contract types
@@ -45,7 +54,7 @@ class ContractTypesServices
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
         }
-        
+
         return $count;
     }
 
@@ -72,10 +81,10 @@ class ContractTypesServices
         }
 
         if (empty($result)) {
-			return [];
-		}
+            return [];
+        }
 
-		foreach ($result as $row) {
+        foreach ($result as $row) {
             $contractType = new ContractType();
             $contractType->setId($row['id']);
             $contractType->setName($row['name']);
@@ -188,7 +197,7 @@ class ContractTypesServices
             $this->connectionManager->getConnection()->commit();
 
             return $contractType;
-        } catch(\PDOException $e) {
+        } catch (\PDOException $e) {
             $this->connectionManager->getConnection()->rollBack();
 
             throw new \Exception("SQL Exception: " . $e->getMessage(), $e->getCode());
@@ -243,7 +252,7 @@ class ContractTypesServices
             foreach ($errors as $error) {
                 Flash::error($error);
             }
-            
+
             Session::write('__formdata__', json_encode($_POST));
 
             return false;
@@ -263,7 +272,7 @@ class ContractTypesServices
             $this->connectionManager->getConnection()->commit();
 
             return $updated;
-        } catch(\PDOException $e) {
+        } catch (\PDOException $e) {
             $this->connectionManager->getConnection()->rollBack();
 
             throw new \Exception("SQL Exception: " . $e->getMessage(), (int)$e->getCode());
@@ -285,11 +294,11 @@ class ContractTypesServices
         }
 
         $sql = "UPDATE contract_types SET etat = :etat WHERE id = :id";
-        
-        try{
+
+        try {
             $query = $this->connectionManager->getConnection()->prepare($sql);
-            $query->bindValue(':etat',0, \PDO::PARAM_BOOL);
-            $query->bindValue(':id',$id, \PDO::PARAM_INT);
+            $query->bindValue(':etat', 0, \PDO::PARAM_BOOL);
+            $query->bindValue(':id', $id, \PDO::PARAM_INT);
 
             $deleted = $query->execute();
 
@@ -305,7 +314,7 @@ class ContractTypesServices
      * @param ContractType $contractType Contract type to check
      * @return bool Returns true if contract type already exists, false otherwise.
      */
-    public function checkContractType(ContractType $contractType): bool 
+    public function checkContractType(ContractType $contractType): bool
     {
         if (is_null($contractType->getId())) {
             $sql = "SELECT * FROM contract_types WHERE etat = :etat AND name = :name limit 0,1";
@@ -323,7 +332,7 @@ class ContractTypesServices
             $query->execute();
 
             $result = $query->fetchAll(\PDO::FETCH_ASSOC);
-            if(empty($result)) {
+            if (empty($result)) {
                 return false;
             }
 

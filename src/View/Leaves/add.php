@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Leave manager : Simple app for contract and leave management.
+ *
+ * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
+ * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
+ * @since     1.0 (2022)
+ */
+
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use App\Controller\LeavesController;
@@ -11,16 +20,16 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 ?>
 
 <main id="main" class="main">
-	<div class="pagetitle">
-		<h1>Planifier un congé</h1>
-		<nav>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
-				<li class="breadcrumb-item"><a href="<?= VIEWS . 'Leaves' ?>">Congés</a></li>
-				<li class="breadcrumb-item active">Planifier</li>
-			</ol>
-		</nav>
-	</div><!-- End Page Title -->
+    <div class="pagetitle">
+        <h1>Planifier un congé</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="<?= VIEWS . 'Leaves' ?>">Congés</a></li>
+                <li class="breadcrumb-item active">Planifier</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
     <section class="section dashboard">
         <div class="row">
@@ -31,22 +40,24 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                         <?= Flash::render() ?>
 
                         <form class="row g-3 needs-validation" name="addLeaveForm" action="" method="post" novalidate>
-                            
-                            <div class="py-1"><h4 class="card-title py-0">Remplissez les champs ci-après pour planifier un congé</h4></div>
+
+                            <div class="py-1">
+                                <h4 class="card-title py-0">Remplissez les champs ci-après pour planifier un congé</h4>
+                            </div>
 
                             <div class="col-sm-8 col-md-9">
                                 <label for="lvid" class="form-label">Employé <span class="text-danger">*</span></label>
-                                <?php if (!empty($employees)): ?>
+                                <?php if (!empty($employees)) : ?>
                                     <select name="employee_id" class="form-control" id="lvid" required>
                                         <option value="">Choisir un employé</option>
-                                        <?php foreach($employees as $employee): ?>
-                                            <option <?= isset($form_data['employee_id']) && $form_data['employee_id'] == $employee->getId() ? 'selected' : '' ?> value="<?= $employee->getId() ?>"> 
+                                        <?php foreach ($employees as $employee) : ?>
+                                            <option <?= isset($form_data['employee_id']) && $form_data['employee_id'] == $employee->getId() ? 'selected' : '' ?> value="<?= $employee->getId() ?>">
                                                 <?= $employee->getFirstName() . ' ' . $employee->getLastName() ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
                                     <div class="invalid-feedback">Veuillez choisir un employé.</div>
-                                <?php else: ?>
+                                <?php else : ?>
                                     <div class="alert alert-danger" role="alert">Aucun employé trouvé</div>
                                 <?php endif; ?>
                             </div>
@@ -67,7 +78,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                 <input type="date" class="form-control leavePeriod" name="start_date" id="lvstartdate" value="<?= isset($form_data['start_date']) ? $form_data['start_date'] : '' ?>" required>
                                 <div class="invalid-feedback">Veuillez renseigner la date de départ en congé.</div>
                             </div>
-                            
+
                             <div class="col-sm-6">
                                 <label for="lvenddate" class="form-label"> Date de retour <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control leavePeriod" name="end_date" id="lvenddate" value="<?= isset($form_data['end_date']) ? $form_data['end_date'] : '' ?>" required>
@@ -75,7 +86,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                             </div>
 
                             <div class="alert alert-info d-none" id="workingDaysInfo" role="alert">
-                                La période choisie compte <span class="fw-bold" id="nbWorkingDays"></span> 
+                                La période choisie compte <span class="fw-bold" id="nbWorkingDays"></span>
                             </div>
 
                             <!-- Leave Period Feedback -->
@@ -110,139 +121,131 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 <?php require_once dirname(__DIR__) . DS . 'Elements' . DS . 'footer.php'; ?>
 
 <script type="text/javascript">
+    var leaveNbDays = parseInt('<?= $leave_nb_days ?>');
 
-var leaveNbDays = parseInt('<?= $leave_nb_days ?>');
 
+    document.querySelector('#lvstartdate').addEventListener('change', handlePeriodChange);
+    document.querySelector('#lvenddate').addEventListener('change', handlePeriodChange);
+    document.querySelector('#lvid').addEventListener('change', handleEmployeeChange);
 
-document.querySelector('#lvstartdate').addEventListener('change', handlePeriodChange);
-document.querySelector('#lvenddate').addEventListener('change', handlePeriodChange);
-document.querySelector('#lvid').addEventListener('change', handleEmployeeChange);
+    function handlePeriodChange(event) {
+        var start_date = document.forms.addLeaveForm.elements.start_date.value;
+        var end_date = document.forms.addLeaveForm.elements.end_date.value;
+        var year = document.forms.addLeaveForm.elements.year.value;
 
-function handlePeriodChange(event)
-{
-    var start_date = document.forms.addLeaveForm.elements.start_date.value;
-    var end_date = document.forms.addLeaveForm.elements.end_date.value;
-    var year = document.forms.addLeaveForm.elements.year.value;
+        var workingDaysInfo = document.getElementById('workingDaysInfo');
+        var leavePeriodFeedback = document.getElementById('leavePeriodFeedback');
 
-    var workingDaysInfo = document.getElementById('workingDaysInfo');
-    var leavePeriodFeedback = document.getElementById('leavePeriodFeedback');
+        if (start_date.length > 0 && end_date.length > 0) {
 
-    if (start_date.length > 0 && end_date.length > 0) {
-        
-        var startDate = Date.parse(start_date);
-        var endDate = Date.parse(end_date);
+            var startDate = Date.parse(start_date);
+            var endDate = Date.parse(end_date);
 
-        if (startDate > endDate) {
-            workingDaysInfo.classList.add('d-none');
-            leavePeriodFeedback.innerText = "La date de retour du congé ne peut être supérieure à la date de départ";
-            leavePeriodFeedback.classList.remove('d-none');
+            if (startDate > endDate) {
+                workingDaysInfo.classList.add('d-none');
+                leavePeriodFeedback.innerText = "La date de retour du congé ne peut être supérieure à la date de départ";
+                leavePeriodFeedback.classList.remove('d-none');
 
-            return;
+                return;
+            } else {
+                leavePeriodFeedback.classList.add('d-none');
+            }
+
+            getNbWorkingDays(start_date, end_date, year);
+        }
+    }
+
+    function handleEmployeeChange(event) {
+        var employeeId = document.forms.addLeaveForm.elements.employee_id.value;
+        var year = document.forms.addLeaveForm.elements.year.value;
+
+        if (employeeId != '') {
+            getNbSpentDays(employeeId, year);
         } else {
-            leavePeriodFeedback.classList.add('d-none');
+            document.getElementById('spentDaysInfo').classList.add('d-none');
+        }
+    }
+
+    function fillNbWorkingDays(nb_working_days) {
+        var workingDaysInfoEl = document.getElementById('workingDaysInfo');
+        var nbWorkingDaysEl = document.getElementById('nbWorkingDays');
+
+        var workingDaysText = '';
+        if (nb_working_days > 1) {
+            workingDaysText = nb_working_days + ' jours ouvrables';
+        } else {
+            workingDaysText = nb_working_days + ' jour ouvrable';
         }
 
-        getNbWorkingDays(start_date, end_date, year);
-    }
-}
+        nbWorkingDaysEl.innerText = workingDaysText;
 
-function handleEmployeeChange(event)
-{
-    var employeeId = document.forms.addLeaveForm.elements.employee_id.value;
-    var year = document.forms.addLeaveForm.elements.year.value;
-
-    if (employeeId != '') {
-        getNbSpentDays(employeeId, year);
-    } else {
-        document.getElementById('spentDaysInfo').classList.add('d-none');
-    }
-}
-
-function fillNbWorkingDays(nb_working_days)
-{
-    var workingDaysInfoEl = document.getElementById('workingDaysInfo');
-    var nbWorkingDaysEl = document.getElementById('nbWorkingDays');
-
-    var workingDaysText = '';
-    if (nb_working_days > 1) {
-        workingDaysText = nb_working_days + ' jours ouvrables';
-    } else {
-        workingDaysText = nb_working_days + ' jour ouvrable';
+        workingDaysInfoEl.classList.remove('d-none');
     }
 
-    nbWorkingDaysEl.innerText = workingDaysText;
+    function fillNbSpentDays(nb_spent_days) {
+        var spentDaysInfoEl = document.getElementById('spentDaysInfo');
+        var nbSpentDaysEl = document.getElementById('nbSpentDays');
 
-    workingDaysInfoEl.classList.remove('d-none');
-}
+        if (nb_spent_days < leaveNbDays) {
+            nbSpentDaysEl.innerText = leaveNbDays - nb_spent_days;
+        } else {
+            nbSpentDaysEl.innerText = 0;
+        }
 
-function fillNbSpentDays(nb_spent_days)
-{
-    var spentDaysInfoEl = document.getElementById('spentDaysInfo');
-    var nbSpentDaysEl = document.getElementById('nbSpentDays');
-
-    if (nb_spent_days < leaveNbDays) {
-        nbSpentDaysEl.innerText = leaveNbDays - nb_spent_days;
-    } else {
-        nbSpentDaysEl.innerText = 0;
+        spentDaysInfoEl.classList.remove('d-none');
     }
 
-    spentDaysInfoEl.classList.remove('d-none');
-}
+    /**
+     * Get working day in select period via Ajax request
+     */
+    function getNbWorkingDays(dateFrom, dateTo, year) {
+        var nb_working_days = 0;
+        var xmlhttp = new XMLHttpRequest();
+        var url = "<?= VIEWS . 'Leaves/getworkingdays.php?' ?>from=" + dateFrom + "&to=" + dateTo + "&year=" + year;
 
-/**
- * Get working day in select period via Ajax request
- */
-function getNbWorkingDays(dateFrom, dateTo, year)
-{
-    var nb_working_days = 0;
-    var xmlhttp = new XMLHttpRequest();
-    var url = "<?= VIEWS . 'Leaves/getworkingdays.php?' ?>from=" + dateFrom + "&to=" + dateTo + "&year=" + year;
-
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4){
-            if(xmlhttp.status == 200) {
-                var response = JSON.parse(xmlhttp.responseText);
-                if (response.status == 'success') {
-                    fillNbWorkingDays(response.nb_working_days);
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    var response = JSON.parse(xmlhttp.responseText);
+                    if (response.status == 'success') {
+                        fillNbWorkingDays(response.nb_working_days);
+                    } else {
+                        alert("Erreur: " + response.message);
+                    }
                 } else {
-                    alert("Erreur: " + response.message);
+                    alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
                 }
-            }else {
-                alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
             }
-        } 
-    };
-    
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
-}
+        };
 
-/**
- * Get spent day in select period via Ajax request
- */
-function getNbSpentDays(employeeId, year)
-{
-    var nb_spent_days = 0;
-    var xmlhttp = new XMLHttpRequest();
-    var url = "<?= VIEWS . 'Leaves/getspentdays.php?' ?>eid=" + employeeId + "&year=" + year;
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
 
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4){
-            if(xmlhttp.status == 200) {
-                var response = JSON.parse(xmlhttp.responseText);
-                if (response.status == 'success') {
-                    fillNbSpentDays(response.nb_spent_days);
+    /**
+     * Get spent day in select period via Ajax request
+     */
+    function getNbSpentDays(employeeId, year) {
+        var nb_spent_days = 0;
+        var xmlhttp = new XMLHttpRequest();
+        var url = "<?= VIEWS . 'Leaves/getspentdays.php?' ?>eid=" + employeeId + "&year=" + year;
+
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    var response = JSON.parse(xmlhttp.responseText);
+                    if (response.status == 'success') {
+                        fillNbSpentDays(response.nb_spent_days);
+                    } else {
+                        alert("Erreur: " + response.message);
+                    }
                 } else {
-                    alert("Erreur: " + response.message);
+                    alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
                 }
-            }else {
-                alert("Erreur: " + (JSON.parse(xmlhttp.response)).message);
             }
-        } 
-    };
-    
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
-}
+        };
 
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
 </script>
