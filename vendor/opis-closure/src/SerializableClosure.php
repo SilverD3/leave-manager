@@ -278,7 +278,7 @@ class SerializableClosure implements Serializable
 
     public function __unserialize(array $data): void
     {
-        $this->unserialize($data);
+        $this->unserialize((string) $data);
     }
 
     /**
