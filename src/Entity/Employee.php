@@ -17,6 +17,9 @@ namespace App\Entity;
  */
 class Employee
 {
+    /**
+     * @var int $id
+     */
     private $id;
     private $first_name;
     private $last_name;
