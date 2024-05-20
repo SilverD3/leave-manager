@@ -44,6 +44,17 @@ class Session
 	}
 
 	/**
+	 * Check if a key is stored in $_SESSION
+	 *
+	 * @param string $name Key name
+	 * @return bool True if the key exists, false otherwise 
+	 */
+	static function check(string $name)
+	{
+		return isset($_SESSION[sha1($name)]);
+	}
+
+	/**
 	 * Read the value of a variable store in $_SESSION
 	 *
 	 * @param string $name Variable name
@@ -62,7 +73,7 @@ class Session
 	 */
 	static function consume(string $name)
 	{
-		$var = isset($_SESSION[sha1($name)]) ? $_SESSION[sha1($name)] : null;
+		$var = self::read($name);
 
 		if ($var) {
 			self::delete($name);

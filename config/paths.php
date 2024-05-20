@@ -8,6 +8,8 @@
  * @since     1.0 (2022)
  */
 
+require_once __DIR__ . DIRECTORY_SEPARATOR . "functions.php";
+
 if (!defined('DS')) {
     define('DS', DIRECTORY_SEPARATOR);
 }
@@ -17,7 +19,7 @@ if (!defined('ROOT')) {
 }
 
 if (!defined('BASE_URL')) {
-    define('BASE_URL', 'http://localhost:8090/');
+    define('BASE_URL', getFullDomainUrl());
 }
 
 if (!defined('APP_DIR')) {
@@ -79,4 +81,8 @@ if (!defined('IMAGES')) {
 
 if (!defined('VENDOR')) {
     define('VENDOR', BASE_URL . 'vendor' . DS);
+}
+
+if (!defined('PAGINATOR_KEY')) {
+    define('PAGINATOR_KEY', "__paginator__");
 }
