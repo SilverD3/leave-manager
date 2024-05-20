@@ -11,7 +11,7 @@ Pagination methods inside [Paginator](Paginator.php) use [Session](../../Utils/S
 
 To display paination controls, use `show` method of [Paginator Helper](../../View/Helper/PaginatorHelper.php). That helper relies on se [Session](../../Utils/Session.php) to load memoized page infos.
 
-### Example
+## Example
 
 In a service:
 
@@ -88,6 +88,6 @@ use Core\View\Helper\PaginatorHelper;
 PaginatorHelper::show();
 ```
 
-### Customization
+## Customization
 
 Templates used to render controls are located in [Views](../../View/Elements/Paginator). Feel free to edit them.
