@@ -22,6 +22,7 @@ use App\Service\LeavesServices;
 use App\Service\RolesServices;
 use Core\Auth\Auth;
 use Core\Auth\PasswordHasher;
+use Core\Database\Paginator\Paginator;
 use Core\FlashMessages\Flash;
 use Core\Utils\Session;
 
@@ -106,7 +107,30 @@ class EmployeesController
 		$_SESSION['page_title'] = 'Employés';
 		unset($_SESSION['subpage_title']);
 
-		$employees = $this->service->getAll(true);
+		if (isset($_GET['page_action']) && Session::check(PAGINATOR_KEY)) {
+			switch ($_GET['page_action']) {
+				case 'first':
+					$employees = Paginator::first();
+					break;
+				case 'next':
+					$employees = Paginator::next();
+					break;
+				case 'previous':
+					$employees = Paginator::previous();
+					break;
+				case 'last':
+					$employees = Paginator::last();
+					break;
+
+				default:
+					$employees = $this->service->getPagedAll(true);
+					break;
+			}
+		} elseif (isset($_GET['page']) && is_numeric($_GET['page']) && Session::check(PAGINATOR_KEY)) {
+			$employees = Paginator::getPage(intval($_GET['page']));
+		} else {
+			$employees = $this->service->getPagedAll(true);
+		}
 
 		$GLOBALS['employees'] = $employees;
 	}

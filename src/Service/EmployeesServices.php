@@ -18,6 +18,9 @@ use Core\Database\ConnectionManager;
 use App\Entity\Employee;
 use App\Entity\Role;
 use Core\Auth\PasswordHasher;
+use Core\Database\Paginator\PagedResult;
+use Core\Database\Paginator\Paginator;
+use Core\Database\Paginator\Query;
 use Core\FlashMessages\Flash;
 use Core\Utils\Session;
 
@@ -37,8 +40,9 @@ class EmployeesServices
 	 */
 	private $query_default_config = [
 		'joinRole' => false,
-		'limit' => 50,
-		'offset' => 0,
+		'select' => '*',
+		'limit' => 25,
+		'page' => 1,
 		'conditions' => [],
 		'order' => 'first_name',
 		'order_dir' => 'DESC',
@@ -53,12 +57,11 @@ class EmployeesServices
 	 * Get All employee
 	 * @param  bool|boolean $joinRole Determines if roles should be joined
 	 * @return array                  Array of Employee or empty array
-	 * @throw \Exception When error occurs
+	 * @throws \Exception When error occurs
 	 */
 	public function getAll(bool $joinRole = false)
 	{
 		$result = [];
-		$employees = [];
 		$join = '';
 
 		$select = "SELECT e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, e.email AS Employee_email, e.username AS Employee_username, e.pwd AS Employee_pwd, e.role_id AS Employee_role_id, e.created AS Employee_created, e.modified AS Employee_modified, e.token AS Employee_token, e.token_exp_date, e.status AS Employee_status, e.etat AS Employee_etat ";
@@ -84,33 +87,38 @@ class EmployeesServices
 			return [];
 		}
 
-		foreach ($result as $row) {
-			$employee = new Employee();
-			$employee->setId($row['Employee_id']);
-			$employee->setFirstName($row['Employee_first_name']);
-			$employee->setLastName($row['Employee_last_name']);
-			$employee->setEmail($row['Employee_email']);
-			$employee->setUsername($row['Employee_username']);
-			$employee->setPwd($row['Employee_pwd']);
-			$employee->setRoleId($row['Employee_role_id']);
-			$employee->setCreated($row['Employee_created']);
-			$employee->setModified($row['Employee_modified']);
-			$employee->setToken($row['Employee_token']);
-			$employee->setStatus($row['Employee_status']);
-			$employee->setEtat($row['Employee_etat']);
+		return call_user_func_array($this->getMapper(), [$result, $joinRole]);
+	}
 
-			if ($joinRole) {
-				$role = new Role();
-				$role->setId($row['Role_id']);
-				$role->setCode($row['Role_code']);
-				$role->setName($row['Role_name']);
-				$employee->setRole($role);
-			}
+	/**
+	 * Get All employee
+	 * @param  bool|boolean $joinRole Determines if roles should be joined
+	 * @return PagedResult  Object containing employees and page infos
+	 * @throws \Exception When error occurs
+	 */
+	public function getPagedAll(bool $joinRole = true): PagedResult
+	{
+		$join = [];
+		$conditions = "e.etat = :etat";
+		$select = "e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, 
+			e.email AS Employee_email, e.username AS Employee_username, e.pwd AS Employee_pwd, e.role_id AS Employee_role_id,
+			e.created AS Employee_created, e.modified AS Employee_modified, e.token AS Employee_token, e.token_exp_date, 
+			e.status AS Employee_status, e.etat AS Employee_etat ";
 
-			$employees[] = $employee;
+		if ($joinRole) {
+			$select .= " , r.id AS Role_id, r.code AS Role_code, r.name AS Role_name ";
+			$join[] = "roles r ON r.id = e.role_id";
 		}
 
-		return $employees;
+		$query = new Query;
+		$query->setTable("employees e");
+		$query->setSelect($select);
+		$query->setJoin($join);
+		$query->setConditions($conditions);
+		$query->setOrder($this->query_default_config['order'] . " " . $this->query_default_config['order_dir']);
+		$query->setParams([[":etat", 1, \PDO::PARAM_BOOL]]);
+
+		return Paginator::paginate($query, $this->query_default_config['limit'], 1, $this->getMapper());
 	}
 
 	/**
@@ -449,5 +457,40 @@ class EmployeesServices
 		$employee->setPwd($password);
 
 		return $employee;
+	}
+
+	public function getMapper(): \Closure
+	{
+		return function (array $result, bool $joinRole = true) {
+			$employees = [];
+
+			foreach ($result as $row) {
+				$employee = new Employee();
+				$employee->setId($row['Employee_id']);
+				$employee->setFirstName($row['Employee_first_name']);
+				$employee->setLastName($row['Employee_last_name']);
+				$employee->setEmail($row['Employee_email']);
+				$employee->setUsername($row['Employee_username']);
+				$employee->setPwd($row['Employee_pwd']);
+				$employee->setRoleId($row['Employee_role_id']);
+				$employee->setCreated($row['Employee_created']);
+				$employee->setModified($row['Employee_modified']);
+				$employee->setToken($row['Employee_token']);
+				$employee->setStatus($row['Employee_status']);
+				$employee->setEtat($row['Employee_etat']);
+
+				if ($joinRole && isset($row['Role_code'])) {
+					$role = new Role();
+					$role->setId($row['Role_id']);
+					$role->setCode($row['Role_code']);
+					$role->setName($row['Role_name']);
+					$employee->setRole($role);
+				}
+
+				$employees[] = $employee;
+			}
+
+			return $employees;
+		};
 	}
 }
