@@ -672,8 +672,6 @@ class ContractsServices
      */
     public function checkContract(Contract $contract): bool
     {
-        $existed = false;
-
         $sql = "SELECT * FROM contracts c WHERE c.etat = :etat AND c.employee_id = :employee_id AND c.contract_type_id = :contract_type_id "
             . " AND c.start_date = :start_date AND c.end_date = :end_date";
 
@@ -700,8 +698,6 @@ class ContractsServices
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), (int)$e->getCode());
         }
-
-        return $existed;
     }
 
     /**
