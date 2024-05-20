@@ -17,6 +17,11 @@ return [
     ],
 
     'Session' => [
-        'timeout' => 60*60*24*2 // 2 days
+        'timeout' => 60 * 60 * 24 * 2 // 2 days
+    ],
+
+    // Debug config
+    "Debug" => [
+        'enable' => true
     ]
 ];

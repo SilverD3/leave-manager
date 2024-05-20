@@ -13,7 +13,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'paths.php';
-
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'functions.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'opis-closure' . DIRECTORY_SEPARATOR . 'autoload.php';
 /**
  * Classes autoloader
  */
@@ -171,10 +172,14 @@ if (session_status() === PHP_SESSION_NONE) {
     $configure = new Configure();
 
     $default_session_config = [
-        'timeout' => 60 * 60 * 24 * 2 // 2 days
+        'timeout' => 60 * 60 * 24 * 2, // 2 days
+        '/',
+        getFullDomainUrl(),
+        true,
+        true
     ];
 
-    $session_config = $configure->read('Session', $default_session_config);
+    $session_config = array_merge($configure->read('Session', $default_session_config), $default_session_config);
 
     ini_set('session.gc_maxlifetime', $session_config['timeout']);
     session_set_cookie_params($session_config['timeout']);
@@ -182,4 +187,11 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 
     $_SESSION['__configure__'] = serialize($configure);
+
+    $debugOptions = $configure->read('Debug', ['enable' => true]);
+    if ($debugOptions['enable'] === true) {
+        ini_set('xdebug.remote_enable', true);
+        ini_set('xdebug.idebug.remote_host', 'localhost');
+        ini_set('xdebug.idebug.remote_port', 9003);
+    }
 }
