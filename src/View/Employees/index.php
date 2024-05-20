@@ -12,13 +12,14 @@ require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoloa
 
 use App\Controller\EmployeesController;
 use Core\FlashMessages\Flash;
+use Core\View\Helper\PaginatorHelper;
 
 (new EmployeesController())->index();
 
 require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
 /**
- * @var \Core\Database\Paginator\PagedResult $employees
+ * @var array<\App\Entity\Employee> $employees
  */
 ?>
 
@@ -48,7 +49,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
                 <?= Flash::render() ?>
 
-                <?php if (empty($employees->getItems())) : ?>
+                <?php if (empty($employees)) : ?>
 
                     <div class="alert alert-primary d-flex align-items-center" role="alert">
                         <span class="bi bi-info-circle flex-shrink-0 me-2" role="img" aria-label="Info:"></span>
@@ -59,7 +60,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
                 <?php else : ?>
                     <div class="row">
-                        <?php foreach ($employees->getItems() as $employee) : ?>
+                        <?php foreach ($employees as $employee) : ?>
 
                             <div class="col-sm-6 col-md-4 col-xxl-3">
                                 <div class="card">
@@ -88,6 +89,10 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                             </div>
 
                         <?php endforeach; ?>
+                    </div>
+
+                    <div class="row">
+                        <?php PaginatorHelper::show() ?>
                     </div>
                 <?php endif; ?>
             </div>

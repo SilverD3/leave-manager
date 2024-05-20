@@ -110,26 +110,26 @@ class EmployeesController
 		if (isset($_GET['page_action']) && Session::check(PAGINATOR_KEY)) {
 			switch ($_GET['page_action']) {
 				case 'first':
-					$employees = Paginator::first();
+					$employees = Paginator::first()->getItems();
 					break;
 				case 'next':
-					$employees = Paginator::next();
+					$employees = Paginator::next()->getItems();
 					break;
 				case 'previous':
-					$employees = Paginator::previous();
+					$employees = Paginator::previous()->getItems();
 					break;
 				case 'last':
-					$employees = Paginator::last();
+					$employees = Paginator::last()->getItems();
 					break;
 
 				default:
-					$employees = $this->service->getPagedAll(true);
+					$employees = $this->service->getPagedAll(true)->getItems();
 					break;
 			}
 		} elseif (isset($_GET['page']) && is_numeric($_GET['page']) && Session::check(PAGINATOR_KEY)) {
-			$employees = Paginator::getPage(intval($_GET['page']));
+			$employees = Paginator::getPage(intval($_GET['page']))->getItems();
 		} else {
-			$employees = $this->service->getPagedAll(true);
+			$employees = $this->service->getPagedAll(true)->getItems();
 		}
 
 		$GLOBALS['employees'] = $employees;
