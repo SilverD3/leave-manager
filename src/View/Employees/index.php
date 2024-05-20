@@ -17,6 +17,9 @@ use Core\FlashMessages\Flash;
 
 require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
+/**
+ * @var \Core\Database\Paginator\PagedResult $employees
+ */
 ?>
 
 <main id="main" class="main">
@@ -45,7 +48,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
                 <?= Flash::render() ?>
 
-                <?php if (empty($employees)) : ?>
+                <?php if (empty($employees->getItems())) : ?>
 
                     <div class="alert alert-primary d-flex align-items-center" role="alert">
                         <span class="bi bi-info-circle flex-shrink-0 me-2" role="img" aria-label="Info:"></span>
@@ -56,7 +59,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
                 <?php else : ?>
                     <div class="row">
-                        <?php foreach ($employees as $employee) : ?>
+                        <?php foreach ($employees->getItems() as $employee) : ?>
 
                             <div class="col-sm-6 col-md-4 col-xxl-3">
                                 <div class="card">
