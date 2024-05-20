@@ -19,7 +19,7 @@ use Core\FlashMessages\Message;
  */
 class Flash
 {
-	const MSG_TEMPLATE_PATH = VIEW_PATH . 'Elements' . DS . 'Flash' . DS;
+	const MSG_TEMPLATE_PATH = CORE_PATH . 'View' . DS . 'Elements' . DS . 'Flash' . DS;
 
 	/**
 	 * Get Flash Messages
