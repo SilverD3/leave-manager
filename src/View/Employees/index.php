@@ -25,11 +25,11 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Les employés</h1>
+        <h1>Les utilisateurs</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
-                <li class="breadcrumb-item active">Employés</li>
+                <li class="breadcrumb-item active">Utilisateurs</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -38,7 +38,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
         <div class="row mt-2 mb-1">
             <div class="col-12">
                 <a href="<?= VIEWS . 'Employees/add.php' ?>" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i>
-                    Nouvel employé</a>
+                    Nouvel utilisateur</a>
             </div>
         </div>
 
@@ -54,7 +54,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                     <div class="alert alert-primary d-flex align-items-center" role="alert">
                         <span class="bi bi-info-circle flex-shrink-0 me-2" role="img" aria-label="Info:"></span>
                         <div>
-                            Aucun employé trouvé.
+                            Aucun utilisateur trouvé.
                         </div>
                     </div>
 

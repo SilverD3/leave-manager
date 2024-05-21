@@ -134,34 +134,56 @@ AuthController::require_auth();
 
             <?php if ($auth_user->getRole()->getCode() == 'ADM') : ?>
                 <li class="nav-item">
-                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Employés') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Employees' ?>">
+                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Utilisateurs') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Employees' ?>">
                         <i class="bi bi-people"></i>
-                        <span>Employés</span>
+                        <span>Utilisateurs</span>
+                    </a>
+                </li>
+            <?php endif; ?>
+
+            <?php if ($auth_user->getRole()->getCode() == 'ADM' || $auth_user->getRole()->getCode() == 'EMP') : ?>
+                <li class="nav-item">
+                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Contrats') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Contracts' ?>">
+                        <i class="bi bi-files-alt"></i>
+                        <span>Contrats</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Demandes de permission') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'PermissionRequests' ?>">
+                        <i class="bi bi-person-dash"></i>
+                        <span>Demandes de permission</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Congés') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Leaves' ?>">
+                        <i class="bi bi-emoji-sunglasses"></i>
+                        <span>Congés</span>
                     </a>
                 </li>
 
             <?php endif; ?>
 
-            <li class="nav-item">
-                <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Contrats') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Contracts' ?>">
-                    <i class="bi bi-files-alt"></i>
-                    <span>Contrats</span>
-                </a>
-            </li>
+            <li class="nav-heading">Stages</li>
 
-            <li class="nav-item">
-                <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Demandes de permission') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'PermissionRequests' ?>">
-                    <i class="bi bi-person-dash"></i>
-                    <span>Demandes de permission</span>
-                </a>
-            </li>
+            <?php if ($auth_user->getRole()->getCode() == 'ADM' || $auth_user->getRole()->getCode() == 'EMP') : ?>
+                <li class="nav-item">
+                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Congés') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Interships' ?>">
+                        <i class="bi bi-person-bounding-box"></i>
+                        <span>Stages</span>
+                    </a>
+                </li>
+            <?php endif; ?>
 
-            <li class="nav-item">
-                <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Congés') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Leaves' ?>">
-                    <i class="bi bi-emoji-sunglasses"></i>
-                    <span>Congés</span>
-                </a>
-            </li>
+            <?php if ($auth_user->getRole()->getCode() == 'INT') : ?>
+                <li class="nav-item">
+                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Mon stage') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Interships/my.php' ?>">
+                        <i class="bi bi-person-bounding-box"></i>
+                        <span>Mon stage</span>
+                    </a>
+                </li>
+            <?php endif; ?>
 
             <li class="nav-heading">Configurations</li>
 
@@ -191,6 +213,19 @@ AuthController::require_auth();
                     <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Modèles de contrat') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'ContractModels' ?>">
                         <i class="bi bi-code-square"></i>
                         <span>Modèles de contrat</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Documents de stage') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'InternshipDocuments' ?>">
+                        <i class="bi bi-file-earmark-person"></i>
+                        <span>Documents de stage</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Types de stage') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'IntershipTypes' ?>">
+                        <i class="bi bi-tags"></i>
+                        <span>Types de stage</span>
                     </a>
                 </li>
             <?php endif; ?>
