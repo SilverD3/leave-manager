@@ -254,7 +254,8 @@ CREATE TABLE `roles` (
 
 INSERT INTO `roles` (`id`, `code`, `name`) VALUES
 (1, 'ADM', 'Admin'),
-(2, 'EMP', 'Employee');
+(2, 'EMP', 'Employee'),
+(3, 'INT', 'Intern');
 
 --
 -- Index pour les tables déchargées
