@@ -23,9 +23,9 @@ class UtilsHelper
      * @param  int    $length Max length
      * @return string         Troncated string
      */
-    public static function troncate(string $string, int $length): string
+    public static function troncate(?string $string, int $length): string
     {
-        if (strlen($string) >= $length) {
+        if (!empty($string) && strlen($string) >= $length) {
             $string = substr($string, 0, $length);
             $espace = strrpos($string, " ");
 
@@ -35,7 +35,7 @@ class UtilsHelper
             }
         }
 
-        return $string;
+        return $string ?? '';
     }
 
     /**

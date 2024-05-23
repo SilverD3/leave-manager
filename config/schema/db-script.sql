@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : jeu. 29 sep. 2022 à 10:24
--- Version du serveur : 8.0.29
--- Version de PHP : 8.1.2
+-- Généré le : jeu. 23 mai 2024 à 04:43
+-- Version du serveur : 8.0.35
+-- Version de PHP : 8.1.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,14 +29,14 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `company` (
   `id` int NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `director_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `address` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `tel1` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `tel2` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `email` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `logo` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `about` text COLLATE utf8mb4_general_ci,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `director_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `tel1` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tel2` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `about` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime DEFAULT NULL,
   `modified_by` int DEFAULT NULL
@@ -51,12 +51,12 @@ CREATE TABLE `company` (
 CREATE TABLE `configs` (
   `id` int NOT NULL,
   `code` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `default_value` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `value` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `default_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `modified` datetime DEFAULT NULL,
   `modified_by` int DEFAULT NULL,
-  `value_type` enum('bool','string') COLLATE utf8mb4_general_ci NOT NULL
+  `value_type` enum('bool','string') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -86,20 +86,27 @@ INSERT INTO `configs` (`id`, `code`, `description`, `default_value`, `value`, `m
 CREATE TABLE `contracts` (
   `id` int NOT NULL,
   `employee_id` int NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `contract_type_id` int NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL,
-  `job_object` varchar(300) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `job_object` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `job_description` varchar(1500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `job_salary` decimal(13,4) DEFAULT NULL,
-  `hourly_rate` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `pdf` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `hourly_rate` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `pdf` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime DEFAULT NULL,
-  `status` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `status` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `etat` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `contracts`
+--
+
+INSERT INTO `contracts` (`id`, `employee_id`, `title`, `contract_type_id`, `start_date`, `end_date`, `job_object`, `job_description`, `job_salary`, `hourly_rate`, `pdf`, `created`, `modified`, `status`, `etat`) VALUES
+(1, 3, 'CDI de Yollo', 4, '2024-06-01', '2024-11-30', 'Designer UI/UX', NULL, '250000.0000', '40 heures/semaine', NULL, '2024-05-21 05:18:56', NULL, 'pending', 1);
 
 -- --------------------------------------------------------
 
@@ -110,10 +117,10 @@ CREATE TABLE `contracts` (
 CREATE TABLE `contract_models` (
   `id` int NOT NULL,
   `contract_type_id` int NOT NULL,
-  `name` varchar(300) COLLATE utf8mb4_general_ci NOT NULL,
-  `content` text COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `is_current` tinyint(1) NOT NULL DEFAULT '0',
-  `status` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `status` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime DEFAULT NULL,
   `etat` tinyint(1) NOT NULL DEFAULT '1'
@@ -137,8 +144,8 @@ INSERT INTO `contract_models` (`id`, `contract_type_id`, `name`, `content`, `is_
 
 CREATE TABLE `contract_types` (
   `id` int NOT NULL,
-  `name` varchar(300) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` varchar(1000) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `name` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `description` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `etat` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -178,7 +185,78 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`id`, `first_name`, `last_name`, `email`, `username`, `pwd`, `role_id`, `created`, `modified`, `token`, `token_exp_date`, `status`, `etat`) VALUES
-(1,'Admin','admin','admin@gmail.com','admin','4ceb415ca0376305106660973f6f9cf550126cb0fc2a9fdcff1b30b4e6e27383 ',1,'2022-08-05 16:19:18',NULL,NULL,NULL,'pending',1);
+(1, 'Admin', 'admin', 'admin@gmail.com', 'admin', '4ceb415ca0376305106660973f6f9cf550126cb0fc2a9fdcff1b30b4e6e27383 ', 1, '2022-08-05 16:19:18', NULL, NULL, NULL, 'pending', 1),
+(3, 'Adesanya', 'Yollo', 'adesanya.yollo@gmail.com', 'adesanya', '4ceb415ca0376305106660973f6f9cf550126cb0fc2a9fdcff1b30b4e6e27383', 2, '2024-05-07 12:54:59', NULL, NULL, NULL, 'active', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `internships`
+--
+
+CREATE TABLE `internships` (
+  `id` int NOT NULL,
+  `internship_type_id` int NOT NULL,
+  `supervisor` int DEFAULT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `sex` enum('M','F') NOT NULL,
+  `birthdate` date NOT NULL,
+  `school_name` varchar(255) DEFAULT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `report` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `status` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `user_id` int DEFAULT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime DEFAULT NULL,
+  `etat` tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `internship_documents`
+--
+
+CREATE TABLE `internship_documents` (
+  `id` int NOT NULL,
+  `internship_id` int NOT NULL,
+  `internship_document_type_id` int NOT NULL,
+  `document` varchar(255) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `etat` tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `internship_document_types`
+--
+
+CREATE TABLE `internship_document_types` (
+  `id` int NOT NULL,
+  `code` varchar(100) NOT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  `is_multiple` tinyint(1) NOT NULL,
+  `is_required` tinyint(1) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `etat` tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `internship_types`
+--
+
+CREATE TABLE `internship_types` (
+  `id` int NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `etat` tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -195,7 +273,7 @@ CREATE TABLE `leaves` (
   `end_date` date NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime DEFAULT NULL,
-  `note` varchar(1000) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `note` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `etat` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -208,8 +286,8 @@ CREATE TABLE `leaves` (
 CREATE TABLE `permissions` (
   `id` int NOT NULL,
   `employee_id` int NOT NULL,
-  `reason` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` varchar(1000) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `reason` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `description` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -225,7 +303,7 @@ CREATE TABLE `permissions` (
 CREATE TABLE `permission_requests` (
   `id` int NOT NULL,
   `employee_id` int NOT NULL,
-  `reason` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
+  `reason` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `start_date` datetime NOT NULL,
   `end_date` datetime NOT NULL,
@@ -236,6 +314,13 @@ CREATE TABLE `permission_requests` (
   `etat` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Déchargement des données de la table `permission_requests`
+--
+
+INSERT INTO `permission_requests` (`id`, `employee_id`, `reason`, `description`, `start_date`, `end_date`, `reduce`, `status`, `created`, `modified`, `etat`) VALUES
+(1, 3, 'Celebrating my weddings', '<p>Monsieur le directeur,</p>\r\n<p>Je vous prie par la pr&eacute;sente de solliciter un cong&eacute; pour raison m&eacute;dicale du [date de d&eacute;but du cong&eacute;] au [date de fin du cong&eacute;], soit [nombre] jours ouvrables. J\'ai joint &agrave; ce courriel un justificatif m&eacute;dical attestant de mon incapacit&eacute; de travail. J\'ai inform&eacute; [nom du coll&egrave;gue] de mon absence et lui ai transmis les t&acirc;ches urgentes &agrave; effectuer pendant mon absence. Je serai joignable par [t&eacute;l&eacute;phone/email] en cas d\'urgence absolue. Je vous remercie de votre compr&eacute;hension et vous prie d\'agr&eacute;er, Madame/Monsieur [Nom du sup&eacute;rieur hi&eacute;rarchique], l\'expression de mes salutations distingu&eacute;es.</p>\r\n<p>Cordialement,</p>\r\n<p>Adesanya Yollo</p>', '2024-06-21 08:00:00', '2024-06-24 18:00:00', 0, 'pending', '2024-05-07 14:00:07', NULL, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -244,8 +329,8 @@ CREATE TABLE `permission_requests` (
 
 CREATE TABLE `roles` (
   `id` int NOT NULL,
-  `code` varchar(3) COLLATE utf8mb4_general_ci NOT NULL,
-  `name` varchar(15) COLLATE utf8mb4_general_ci NOT NULL
+  `code` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -302,6 +387,35 @@ ALTER TABLE `employees`
   ADD KEY `fk_role_id_employees` (`role_id`);
 
 --
+-- Index pour la table `internships`
+--
+ALTER TABLE `internships`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_user_id_internships` (`user_id`),
+  ADD KEY `fk_user_id_supervisor_internships` (`supervisor`),
+  ADD KEY `fk_internship_type_id_internships` (`internship_type_id`);
+
+--
+-- Index pour la table `internship_documents`
+--
+ALTER TABLE `internship_documents`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_internship_id_internship_documents` (`internship_id`),
+  ADD KEY `fk_internship_document_type_id_internship_documents` (`internship_document_type_id`);
+
+--
+-- Index pour la table `internship_document_types`
+--
+ALTER TABLE `internship_document_types`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `internship_types`
+--
+ALTER TABLE `internship_types`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Index pour la table `leaves`
 --
 ALTER TABLE `leaves`
@@ -348,7 +462,7 @@ ALTER TABLE `configs`
 -- AUTO_INCREMENT pour la table `contracts`
 --
 ALTER TABLE `contracts`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `contract_models`
@@ -366,7 +480,31 @@ ALTER TABLE `contract_types`
 -- AUTO_INCREMENT pour la table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT pour la table `internships`
+--
+ALTER TABLE `internships`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `internship_documents`
+--
+ALTER TABLE `internship_documents`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `internship_document_types`
+--
+ALTER TABLE `internship_document_types`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `internship_types`
+--
+ALTER TABLE `internship_types`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `leaves`
@@ -384,13 +522,13 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT pour la table `permission_requests`
 --
 ALTER TABLE `permission_requests`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Contraintes pour les tables déchargées
@@ -414,6 +552,21 @@ ALTER TABLE `contract_models`
 --
 ALTER TABLE `employees`
   ADD CONSTRAINT `fk_role_id_employees` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
+
+--
+-- Contraintes pour la table `internships`
+--
+ALTER TABLE `internships`
+  ADD CONSTRAINT `fk_internship_type_id_internships` FOREIGN KEY (`internship_type_id`) REFERENCES `internship_types` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `fk_user_id_internships` FOREIGN KEY (`user_id`) REFERENCES `employees` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `fk_user_id_supervisor_internships` FOREIGN KEY (`supervisor`) REFERENCES `employees` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Contraintes pour la table `internship_documents`
+--
+ALTER TABLE `internship_documents`
+  ADD CONSTRAINT `fk_internship_document_type_id_internship_documents` FOREIGN KEY (`internship_document_type_id`) REFERENCES `internship_document_types` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `fk_internship_id_internship_documents` FOREIGN KEY (`internship_id`) REFERENCES `internships` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Contraintes pour la table `leaves`

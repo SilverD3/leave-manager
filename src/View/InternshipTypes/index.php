@@ -5,29 +5,33 @@
  *
  * @copyright Copyright (c) Silevester D. (https://github.com/SilverD3)
  * @link      https://github.com/SilverD3/leave-manager Leave Manager Project
- * @since     1.0 (2022)
+ * @since     2.0 (2024)
  */
 
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
-use App\Controller\ContractTypesController;
+use App\Controller\InternshipTypesController;
 use App\View\Helpers\DateHelper;
 use App\View\Helpers\UtilsHelper;
 use Core\FlashMessages\Flash;
 
-(new ContractTypesController())->index();
+(new InternshipTypesController())->index();
 
 require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
+
+/**
+ * @var array<\App\Entity\InternshipType> $internship_types
+ */
 
 ?>
 
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Les type de contract</h1>
+        <h1>Les type de stage</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
-                <li class="breadcrumb-item active">Types de contrat</li>
+                <li class="breadcrumb-item active">Types de stage</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -35,7 +39,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
     <section class="section dashboard">
         <div class="row mt-2 mb-1">
             <div class="col-12">
-                <a href="<?= VIEWS . 'ContractTypes/add.php' ?>" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i>
+                <a href="<?= VIEWS . 'InternshipTypes/add.php' ?>" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i>
                     Nouveau type</a>
             </div>
 
@@ -47,14 +51,14 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
         <hr>
 
         <div class="row mt-1">
-            <!-- Contract Types -->
+            <!-- Internship Types -->
             <div class="col-12">
                 <div class="card recent-sales overflow-auto">
 
                     <div class="card-body">
-                        <h5 class="card-title">Tous les types de contrat</h5>
+                        <h5 class="card-title">Tous les types de stage</h5>
 
-                        <?php if (!empty($contract_types)) : ?>
+                        <?php if (!empty($internship_types)) : ?>
                             <table class="table table-border datatable">
                                 <thead>
                                     <tr>
@@ -66,17 +70,17 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($contract_types as $contractType) : ?>
+                                    <?php foreach ($internship_types as $internshipType) : ?>
                                         <tr>
-                                            <th scope="row"><?= $contractType->getId() ?></th>
-                                            <td><?= $contractType->getName() ?></td>
-                                            <td><?= UtilsHelper::troncate($contractType->getDescription(), 150) ?></td>
-                                            <td><?= DateHelper::shortDate($contractType->getCreated()) ?></td>
+                                            <th scope="row"><?= $internshipType->getId() ?></th>
+                                            <td><?= $internshipType->getTitle() ?></td>
+                                            <td><?= UtilsHelper::troncate($internshipType->getDescription(), 150) ?></td>
+                                            <td><?= DateHelper::shortDate($internshipType->getCreated()) ?></td>
                                             <td>
-                                                <a href="<?= VIEWS . 'ContractTypes/update.php?id=' . $contractType->getId() ?>" class="btn btn-small btn-primary">
+                                                <a href="<?= VIEWS . 'InternshipTypes/update.php?id=' . $internshipType->getId() ?>" class="btn btn-small btn-primary">
                                                     <i class="bi bi-pencil-square"></i>
                                                 </a>
-                                                <button class="btn btn-danger" onclick="deleteContractType(<?= $contractType->getId() ?>)">
+                                                <button class="btn btn-danger" onclick="deleteInternshipType(<?= $internshipType->getId() ?>)">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </td>
@@ -88,7 +92,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                             <div class="alert alert-primary d-flex align-items-center" role="alert">
                                 <span class="bi bi-info-circle flex-shrink-0 me-2" role="img" aria-label="Info:"></span>
                                 <div>
-                                    Aucun type de contrat trouvé
+                                    Aucun type de stage trouvé
                                 </div>
                             </div>
 
@@ -96,7 +100,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                     </div>
 
                 </div>
-            </div><!-- End Contract Types -->
+            </div><!-- End Internship Types -->
 
         </div>
 
@@ -107,10 +111,10 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 <?php require_once dirname(__DIR__) . DS . 'Elements' . DS . 'footer.php'; ?>
 
 <script type="text/javascript">
-    function deleteContractType(id) {
+    function deleteInternshipType(id) {
         if (confirm("Voulez-vous vraiment supprimer ce type ?")) {
             var xmlhttp = new XMLHttpRequest();
-            var url = "<?= VIEWS . 'ContractTypes/delete.php?ajax=1&id=' ?>" + id;
+            var url = "<?= VIEWS . 'InternshipTypes/delete.php?ajax=1&id=' ?>" + id;
 
             xmlhttp.onreadystatechange = function() {
                 if (xmlhttp.readyState == 4) {
