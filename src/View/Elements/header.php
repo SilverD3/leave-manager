@@ -223,7 +223,7 @@ AuthController::require_auth();
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Types de stage') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'IntershipTypes' ?>">
+                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Types de stage') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'InternshipTypes' ?>">
                         <i class="bi bi-tags"></i>
                         <span>Types de stage</span>
                     </a>
