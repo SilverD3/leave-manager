@@ -143,8 +143,8 @@ class InternshipTypesServices
     public function add(array|InternshipType $internshipType): InternshipType|bool
     {
         if (is_array($internshipType)) {
-            $title = htmlentities($internshipType['title']);
-            $description = htmlentities($internshipType['description']);
+            $title = htmlspecialchars($internshipType['title']);
+            $description = htmlspecialchars($internshipType['description']);
             if (empty($description)) {
                 $description = null;
             }
@@ -213,9 +213,9 @@ class InternshipTypesServices
     public function update(array|InternshipType $internship_type): bool
     {
         if (is_array($internship_type)) {
-            $title = htmlentities($internship_type['title']);
+            $title = htmlspecialchars($internship_type['title']);
             $id = (int)$internship_type['id'];
-            $description = htmlentities($internship_type['description']);
+            $description = htmlspecialchars($internship_type['description']);
             if (empty($description)) {
                 $description = null;
             }
