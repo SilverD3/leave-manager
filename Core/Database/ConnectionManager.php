@@ -41,7 +41,7 @@ class ConnectionManager
         } else {
             $this->setConfig($config);
 
-            $dsn = "mysql:host=$this->host;dbname=$this->database;charset=UTF8";
+            $dsn = "mysql:host=$this->host;dbname=$this->database;charset=utf8mb4";
 
             try {
                 $this->_connection = new PDO($dsn, $this->username, $this->password);

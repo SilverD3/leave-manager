@@ -217,7 +217,7 @@ AuthController::require_auth();
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Documents de stage') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'InternshipDocuments' ?>">
+                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Types de document de stage') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'InternshipDocumentTypes' ?>">
                         <i class="bi bi-file-earmark-person"></i>
                         <span>Documents de stage</span>
                     </a>

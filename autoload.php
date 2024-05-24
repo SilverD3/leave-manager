@@ -171,18 +171,19 @@ use Core\Configure;
 if (session_status() === PHP_SESSION_NONE) {
     $configure = new Configure();
 
-    $default_session_config = [
+    $default_session_cookie_params = [
         'timeout' => 60 * 60 * 24 * 2, // 2 days
-        '/',
-        getFullDomainUrl(),
-        true,
-        true
+        'path' => '/',
+        'domain' => getFullDomainUrl(),
+        'secure' => true,
+        'httponly' => true
     ];
 
-    $session_config = array_merge($configure->read('Session', $default_session_config), $default_session_config);
+    $session_cookie_params = array_merge($configure->read('Session', $default_session_cookie_params), $default_session_cookie_params);
 
-    ini_set('session.gc_maxlifetime', $session_config['timeout']);
-    session_set_cookie_params($session_config['timeout']);
+    ini_set('session.gc_maxlifetime', $session_cookie_params['timeout']);
+    ini_set('session.cookie_lifetime', $session_cookie_params['timeout']);
+    session_set_cookie_params(...array_values($session_cookie_params));
 
     session_start();
 

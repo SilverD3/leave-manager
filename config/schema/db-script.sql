@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : jeu. 23 mai 2024 à 04:43
+-- Généré le : ven. 24 mai 2024 à 05:10
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.1.28
 
@@ -198,20 +198,20 @@ CREATE TABLE `internships` (
   `id` int NOT NULL,
   `internship_type_id` int NOT NULL,
   `supervisor` int DEFAULT NULL,
-  `first_name` varchar(50) NOT NULL,
-  `last_name` varchar(50) NOT NULL,
-  `sex` enum('M','F') NOT NULL,
+  `first_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `last_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `sex` enum('M','F') COLLATE utf8mb4_general_ci NOT NULL,
   `birthdate` date NOT NULL,
-  `school_name` varchar(255) DEFAULT NULL,
+  `school_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
-  `report` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `status` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `report` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `status` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `user_id` int DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime DEFAULT NULL,
   `etat` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -223,10 +223,10 @@ CREATE TABLE `internship_documents` (
   `id` int NOT NULL,
   `internship_id` int NOT NULL,
   `internship_document_type_id` int NOT NULL,
-  `document` varchar(255) NOT NULL,
+  `document` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `etat` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -236,13 +236,20 @@ CREATE TABLE `internship_documents` (
 
 CREATE TABLE `internship_document_types` (
   `id` int NOT NULL,
-  `code` varchar(100) NOT NULL,
-  `description` varchar(500) DEFAULT NULL,
+  `code` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `description` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `is_multiple` tinyint(1) NOT NULL,
   `is_required` tinyint(1) NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `etat` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `internship_document_types`
+--
+
+INSERT INTO `internship_document_types` (`id`, `code`, `description`, `is_multiple`, `is_required`, `created`, `etat`) VALUES
+(1, 'CV', 'Curriculum vitae', 0, 1, '2024-05-24 04:25:00', 1);
 
 -- --------------------------------------------------------
 
@@ -252,11 +259,20 @@ CREATE TABLE `internship_document_types` (
 
 CREATE TABLE `internship_types` (
   `id` int NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `description` varchar(500) DEFAULT NULL,
+  `title` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `description` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `etat` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `internship_types`
+--
+
+INSERT INTO `internship_types` (`id`, `title`, `description`, `created`, `etat`) VALUES
+(1, 'Stage académique', 'Stage initié et encadré par une école reconnue par l’État du Cameroun', '2024-05-23 05:21:01', 1),
+(2, 'Stage professionnel', NULL, '2024-05-23 05:24:25', 1),
+(3, 'Stage de vaccances', NULL, '2024-05-23 05:27:53', 1);
 
 -- --------------------------------------------------------
 
@@ -498,13 +514,13 @@ ALTER TABLE `internship_documents`
 -- AUTO_INCREMENT pour la table `internship_document_types`
 --
 ALTER TABLE `internship_document_types`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `internship_types`
 --
 ALTER TABLE `internship_types`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `leaves`
