@@ -205,7 +205,7 @@ CREATE TABLE `internships` (
   `school_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
-  `report` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `report` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `status` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `user_id` int DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,

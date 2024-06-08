@@ -148,28 +148,29 @@ AuthController::require_auth();
                         <span>Contrats</span>
                     </a>
                 </li>
+            <?php endif; ?>
 
-                <li class="nav-item">
-                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Demandes de permission') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'PermissionRequests' ?>">
-                        <i class="bi bi-person-dash"></i>
-                        <span>Demandes de permission</span>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Demandes de permission') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'PermissionRequests' ?>">
+                    <i class="bi bi-person-dash"></i>
+                    <span>Demandes de permission</span>
+                </a>
+            </li>
 
+            <?php if ($auth_user->getRole()->getCode() == 'ADM' || $auth_user->getRole()->getCode() == 'EMP') : ?>
                 <li class="nav-item">
                     <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Congés') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Leaves' ?>">
                         <i class="bi bi-emoji-sunglasses"></i>
                         <span>Congés</span>
                     </a>
                 </li>
-
             <?php endif; ?>
 
             <li class="nav-heading">Stages</li>
 
             <?php if ($auth_user->getRole()->getCode() == 'ADM' || $auth_user->getRole()->getCode() == 'EMP') : ?>
                 <li class="nav-item">
-                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Congés') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Interships' ?>">
+                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Stages') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Internships' ?>">
                         <i class="bi bi-person-bounding-box"></i>
                         <span>Stages</span>
                     </a>
@@ -178,7 +179,7 @@ AuthController::require_auth();
 
             <?php if ($auth_user->getRole()->getCode() == 'INT') : ?>
                 <li class="nav-item">
-                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Mon stage') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Interships/my.php' ?>">
+                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Mon stage') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Internships/my.php' ?>">
                         <i class="bi bi-person-bounding-box"></i>
                         <span>Mon stage</span>
                     </a>

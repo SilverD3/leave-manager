@@ -183,7 +183,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
     ini_set('session.gc_maxlifetime', $session_cookie_params['timeout']);
     ini_set('session.cookie_lifetime', $session_cookie_params['timeout']);
-    session_set_cookie_params(...array_values($session_cookie_params));
+    //session_set_cookie_params(...array_values($session_cookie_params));
 
     session_start();
 

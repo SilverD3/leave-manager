@@ -1,3 +1,4 @@
 # /vendor/*
 /.phpintel/*
 /assets/pdf/*
+/public/uploads/*
