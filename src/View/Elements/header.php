@@ -179,9 +179,9 @@ AuthController::require_auth();
 
             <?php if ($auth_user->getRole()->getCode() == 'INT') : ?>
                 <li class="nav-item">
-                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Mon stage') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Internships/my.php' ?>">
+                    <a class="nav-link <?= (isset($_SESSION['page_title']) && $_SESSION['page_title'] == 'Stages') ? '' : 'collapsed' ?>" href="<?= VIEWS . 'Internships/my.php' ?>">
                         <i class="bi bi-person-bounding-box"></i>
-                        <span>Mon stage</span>
+                        <span>Mes stages</span>
                     </a>
                 </li>
             <?php endif; ?>
