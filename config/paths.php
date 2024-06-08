@@ -72,7 +72,19 @@ if (!defined('VIEWS')) {
 }
 
 if (!defined('ASSETS')) {
-    define('ASSETS', BASE_URL . 'assets' . DS);
+    define('ASSETS', BASE_URL . 'assets/');
+}
+
+if (!defined('UPLOADS')) {
+    define('UPLOADS', BASE_URL . 'public/uploads/');
+}
+
+if (!defined('INTERNSHIP_REPORTS_DIR_NAME')) {
+    define('INTERNSHIP_REPORTS_DIR_NAME', 'internship-reports');
+}
+
+if (!defined('UPLOADS_PATH')) {
+    define('UPLOADS_PATH', ROOT . DS . 'public' . DS . 'uploads' . DS);
 }
 
 if (!defined('IMAGES')) {

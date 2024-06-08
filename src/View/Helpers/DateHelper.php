@@ -309,7 +309,7 @@ class DateHelper
         }
 
 
-        return $nb_minutes;
+        return intval($nb_minutes);
     }
 
     /**
@@ -471,6 +471,40 @@ class DateHelper
         }
 
         return 'unknown';
+    }
+
+    /**
+     * Check if a date is in future or not
+     *
+     * @param mixed   $date Date to check. Can be timestamp, date string or date object
+     * @return string Returns the date status
+     */
+    public static function isFuture($date): bool
+    {
+        $date = self::toTimestamp($date);
+
+        if ($date > time()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a date is in the past or not
+     *
+     * @param mixed   $date Date to check. Can be timestamp, date string or date object
+     * @return string Returns the date status
+     */
+    public static function isPast($date): bool
+    {
+        $date = self::toTimestamp($date);
+
+        if ($date < time()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
