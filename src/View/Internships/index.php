@@ -164,6 +164,9 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                 <a href="<?= VIEWS . 'Internships/view.php?id=' . $internship->getId() ?>" class="btn btn-info btn-sm" title="Voir le stage">
                                                     <i class="bi bi-eye"></i>
                                                 </a>
+                                                <a href="<?= VIEWS . 'Internships/documents.php?id=' . $internship->getId() ?>" class="btn btn-primary btn-sm" title="Dossier de stage">
+                                                    <i class="bi bi-stack"></i>
+                                                </a>
                                                 <?php if ($auth_user->getRole()->getCode() == 'ADM') : ?>
                                                     <a href="<?= VIEWS . 'Internships/edit.php?id=' . $internship->getId() ?>" class="btn btn-primary btn-sm" title="Modifier le stage">
                                                         <i class="bi bi-pencil-square"></i>

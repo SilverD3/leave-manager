@@ -199,6 +199,10 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                 <i class="bi bi-cloud-upload"></i> Téléverser le rapport
                             </button>
 
+                            <a href="<?= VIEWS . 'Internships/documents.php?id=' . $internship->getId() ?>" class="btn btn-primary mt-1">
+                                <i class="bi bi-stack"></i> Dossier de stage
+                            </a>
+
                             <!-- Delete action -->
                             <?php if ($auth_user->getRole()->getCode() == 'ADM' && $internship->getStatus() != 'active' && $internship->getStatus() != 'terminated') : ?>
                                 <button type="button" class="btn btn-danger mt-1" onclick="deleteInternship(<?= $internship->getId() ?>)">

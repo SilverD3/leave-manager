@@ -43,7 +43,7 @@ class InternshipDocumentType
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
     public function getId()
     {
@@ -51,7 +51,7 @@ class InternshipDocumentType
     }
 
     /**
-     * @param mixed $id
+     * @param int|null $id
      *
      * @return self
      */
@@ -63,7 +63,7 @@ class InternshipDocumentType
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getCode()
     {
@@ -71,7 +71,7 @@ class InternshipDocumentType
     }
 
     /**
-     * @param mixed $code
+     * @param string|null $code
      *
      * @return self
      */
@@ -83,15 +83,15 @@ class InternshipDocumentType
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
-     * @param mixed $description
+     * @param string|null $description
      *
      * @return self
      */
@@ -103,7 +103,7 @@ class InternshipDocumentType
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getCreated()
     {
@@ -111,7 +111,7 @@ class InternshipDocumentType
     }
 
     /**
-     * @param mixed $created
+     * @param string|null $created
      *
      * @return self
      */
@@ -123,7 +123,7 @@ class InternshipDocumentType
     }
 
     /**
-     * @return mixed
+     * @return bool|null
      */
     public function getEtat()
     {
@@ -131,7 +131,7 @@ class InternshipDocumentType
     }
 
     /**
-     * @param mixed $etat
+     * @param bool|null $etat
      *
      * @return self
      */
