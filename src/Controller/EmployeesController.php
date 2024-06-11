@@ -104,7 +104,7 @@ class EmployeesController
 	{
 		AuthController::require_admin_priv();
 
-		$_SESSION['page_title'] = 'Employés';
+		$_SESSION['page_title'] = 'Utilisateurs';
 		unset($_SESSION['subpage_title']);
 
 		if (isset($_GET['page_action']) && Session::check(PAGINATOR_KEY)) {
@@ -150,7 +150,7 @@ class EmployeesController
 			}
 		}
 
-		$_SESSION['page_title'] = 'Employés';
+		$_SESSION['page_title'] = 'Utilisateurs';
 		$_SESSION['subpage_title'] = 'Ajout';
 
 		$rolesServices = new RolesServices();
@@ -197,7 +197,7 @@ class EmployeesController
 			}
 		}
 
-		$_SESSION['page_title'] = 'Employés';
+		$_SESSION['page_title'] = 'Utilisateurs';
 		$_SESSION['subpage_title'] = 'Mise à jour';
 
 		$rolesServices = new RolesServices();
@@ -236,7 +236,7 @@ class EmployeesController
 			exit;
 		}
 
-		$_SESSION['page_title'] = 'Employés';
+		$_SESSION['page_title'] = 'Utilisateurs';
 		$_SESSION['subpage_title'] = 'Détails';
 
 		$employee = $this->service->getById($_GET['id']);
@@ -291,7 +291,7 @@ class EmployeesController
 			}
 		}
 
-		$_SESSION['page_title'] = 'Employés';
+		$_SESSION['page_title'] = 'Utilisateurs';
 		$_SESSION['subpage_title'] = 'Profil';
 
 		$GLOBALS['employee'] = $employee;
