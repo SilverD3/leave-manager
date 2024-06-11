@@ -82,7 +82,7 @@ class InternshipsServices
             }
 
             if (!empty($keywords)) {
-                $query->bindParam(':keywords', $keywords, \PDO::PARAM_INT);
+                $query->bindParam(':keywords', $keywords, \PDO::PARAM_STR);
             }
 
             $query->execute();
@@ -141,7 +141,7 @@ class InternshipsServices
             $query->bindValue(':end_date', date('Y-m-d'), \PDO::PARAM_STR);
 
             if (!empty($keywords)) {
-                $query->bindParam(':keywords', $keywords, \PDO::PARAM_INT);
+                $query->bindParam(':keywords', $keywords, \PDO::PARAM_STR);
             }
 
             $query->execute();
@@ -341,7 +341,7 @@ class InternshipsServices
             $internship = $rawInternship;
         }
 
-        if ($this->checkInternship($internship)) {
+        if ($this->checkInternshipDocument($internship)) {
             Flash::error("Un stage pour la même personne et pour la même période existe déjà.");
 
             Session::write('__formdata__', json_encode($_POST));
@@ -447,7 +447,7 @@ class InternshipsServices
         }
 
         // Check if another internship with same data already exists
-        if ($this->checkInternship($internship)) {
+        if ($this->checkInternshipDocument($internship)) {
             Flash::error("Un stage pour la même personne et pour la même période existe déjà.");
 
             Session::write('__formdata__', json_encode($_POST));
@@ -675,7 +675,7 @@ class InternshipsServices
      * @param Internship $internship Internship to check
      * @return boolean Returns true if Internship already exists, false otherwise.
      */
-    public function checkInternship(Internship $internship): bool
+    public function checkInternshipDocument(Internship $internship): bool
     {
         $sql = "SELECT * FROM internships i WHERE i.etat = :etat AND i.first_name = :first_name AND i.last_name = :last_name "
             . " AND i.birthdate = :birthdate "

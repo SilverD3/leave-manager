@@ -83,6 +83,10 @@ if (!defined('INTERNSHIP_REPORTS_DIR_NAME')) {
     define('INTERNSHIP_REPORTS_DIR_NAME', 'internship-reports');
 }
 
+if (!defined('INTERNSHIP_DOCUMENTS_DIR_NAME')) {
+    define('INTERNSHIP_DOCUMENTS_DIR_NAME', 'internship-documents');
+}
+
 if (!defined('UPLOADS_PATH')) {
     define('UPLOADS_PATH', ROOT . DS . 'public' . DS . 'uploads' . DS);
 }

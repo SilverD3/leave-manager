@@ -10,27 +10,27 @@
 
 require_once dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'autoload.php';
 
-use App\Controller\InternshipsController;
+use App\Controller\InternshipDocumentsController;
 use Core\FlashMessages\Flash;
 
-(new InternshipsController())->assignSupervisor();
+(new InternshipDocumentsController())->update();
 
 require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
 /**
- * @var array<\App\Entity\Employee> $employees
- * @var \App\Entity\Internship $internship
+ * @var array<\App\Entity\InternshipDocumentType> $document_types
+ * @var \App\Entity\InternshipDocument $document
  */
 ?>
 
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Assigner un superviseur au stagiaire</h1>
+        <h1>Modifier le document de stage</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= BASE_URL ?>">Accueil</a></li>
                 <li class="breadcrumb-item"><a href="<?= VIEWS . 'Internships' ?>">Stages</a></li>
-                <li class="breadcrumb-item active">Assigner le superviseur</li>
+                <li class="breadcrumb-item active">Modifier le document</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -43,24 +43,28 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
                         <?= Flash::render() ?>
 
-                        <form class="row g-3 needs-validation" action="" method="post" novalidate>
+                        <form class="row g-3 needs-validation" enctype="multipart/form-data" action="" method="post" novalidate>
                             <div class="col-12 mt-4">
-                                <label for="itnsup" class="form-label">Superviseur <span class="text-danger">*</span></label>
-                                <?php if (!empty($employees)) : ?>
-                                    <select name="supervisor_id" class="form-control" id="itnsup" required>
-                                        <option value="">Choisir un superviseur</option>
-                                        <?php foreach ($employees as $employee) : ?>
-                                            <option <?= !empty($internship->getSupervisorId()) && $internship->getSupervisorId() === $employee->getId() ? 'selected' : '' ?> value="<?= $employee->getId() ?>">
-                                                <?= $employee->getFirstName() . ' ' . $employee->getLastName() ?>
+                                <label for="itnsup" class="form-label">Type de document <span class="text-danger">*</span></label>
+                                <?php if (!empty($document_types)) : ?>
+                                    <select name="internship_document_type_id" class="form-control" id="itnsup" required>
+                                        <option value="">Choisir un type de document</option>
+                                        <?php foreach ($document_types as $type) : ?>
+                                            <option <?= $document->getInternshipDocumentTypeId() === $type->getId() ? 'selected' : '' ?> value="<?= $type->getId() ?>">
+                                                <?= $type->getDescription() ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
-                                    <div class="invalid-feedback">Veuillez choisir un superviseur.</div>
+                                    <div class="invalid-feedback">Veuillez choisir un type de document.</div>
                                 <?php else : ?>
-                                    <div class="alert alert-danger" role="alert">Aucun superviseur trouvé</div>
+                                    <div class="alert alert-danger" role="alert">Aucun type de document trouvé</div>
                                 <?php endif; ?>
+                            </div>
 
-                                <input type="hidden" name="internship_id" value="<?= $internship->getId() ?>">
+                            <div class="col-12 mt-4">
+                                <label for="itndoc" class="form-label">Document</label>
+                                <input type="file" name="internship_document" id="itndoc" class="form-control" required>
+                                <div class="invalid-feedback">Veuillez choisir un fichier.</div>
                             </div>
 
                             <!-- Legend -->
@@ -74,7 +78,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 
                             <div class="text-center">
                                 <button type="button" onclick="javascript:history.back()" class="btn btn-secondary">Annuler</button>
-                                <input type="submit" class="btn btn-primary" name="assign_supervisor" value="Enregistrer">
+                                <input type="submit" class="btn btn-primary" name="update_internship_document" value="Enregistrer">
                             </div>
                         </form>
                     </div>
