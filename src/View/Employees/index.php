@@ -61,10 +61,8 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                 <?php else : ?>
                     <div class="row">
                         <?php foreach ($employees as $employee) : ?>
-
                             <div class="col-sm-6 col-md-4 col-xxl-3">
-                                <div class="card">
-
+                                <div class="card h-100">
                                     <div class="filter">
                                         <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
                                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -82,7 +80,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                         <img src="<?= IMAGES ?>user_icon.png" alt="User icon" class="rounded-circle w-50">
                                         <h2><?= $employee->getFirstName() . ' ' . $employee->getLastName() ?></h2>
                                         <!-- <hr class="w-100 m-1"> -->
-                                        <h6><?= $employee->getRole()->getName() ?> </h6>
+                                        <h6 style="position: absolute; bottom: 20px;"><?= $employee->getRole()->getName() ?> </h6>
                                     </div>
                                 </div>
 

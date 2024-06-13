@@ -212,11 +212,14 @@ class InternshipsServices
      * 
      * @return int The number of passed internships
      */
-    public function countPassed(): int
+    public function countPassed(?int $userId = null): int
     {
         $count = 0;
 
         $sql = "SELECT COUNT(*) AS count FROM internships i WHERE i.etat = :etat AND i.status = :status AND i.end_date < :end_date";
+        if ($userId !== null) {
+            $sql .= " AND user_id = :user_id";
+        }
 
         try {
             $query = $this->connectionManager->getConnection()->prepare($sql);
@@ -224,6 +227,9 @@ class InternshipsServices
             $query->bindValue(':etat', 1, \PDO::PARAM_BOOL);
             $query->bindValue(':status', 'active', \PDO::PARAM_STR);
             $query->bindValue(':end_date', date('Y-m-d'), \PDO::PARAM_STR);
+            if ($userId !== null) {
+                $query->bindValue(":user_id", $userId, \PDO::PARAM_INT);
+            }
 
             $query->execute();
 
@@ -244,13 +250,16 @@ class InternshipsServices
      * 
      * @return int The number of internships
      */
-    public function countAll(string $status = 'all'): int
+    public function countAll(string $status = 'all', ?int $userId = null): int
     {
         $count = 0;
 
-        $sql = "SELECT COUNT(*) AS count FROM interhnships i WHERE i.etat = :etat";
+        $sql = "SELECT COUNT(*) AS count FROM internships i WHERE i.etat = :etat";
         if ($status != 'all') {
             $sql .= " AND i.status = :status";
+        }
+        if ($userId !== null) {
+            $sql .= " AND user_id = :user_id";
         }
 
         try {
@@ -259,6 +268,9 @@ class InternshipsServices
             $query->bindValue(':etat', 1, \PDO::PARAM_BOOL);
             if ($status != 'all') {
                 $query->bindValue(':status', $status, \PDO::PARAM_STR);
+            }
+            if ($userId !== null) {
+                $query->bindValue(":user_id", $userId, \PDO::PARAM_INT);
             }
 
             $query->execute();

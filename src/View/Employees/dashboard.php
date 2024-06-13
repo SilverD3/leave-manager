@@ -42,7 +42,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 					</div>
 
 					<!-- Employees Card -->
-					<div class="col-xxl-3 col-md-6">
+					<div class="col-xxl-4 col-md-6">
 						<div class="card info-card sales-card">
 							<div class="card-body">
 								<h5 class="card-title">Employés</h5>
@@ -62,7 +62,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 					</div><!-- End Employees Card -->
 
 					<!-- Permission Request Card -->
-					<div class="col-xxl-3 col-md-6">
+					<div class="col-xxl-4 col-md-6">
 						<div class="card info-card revenue-card">
 							<div class="card-body">
 								<h5 class="card-title">Demandes de permission</h5>
@@ -74,9 +74,11 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 									<div class="ps-3">
 										<h6><?= $stats['nb_permission_requests'] ?></h6>
 										<span class="text-success small pt-1 fw-bold"> <?= $stats['nb_approved_permission_requests'] ?>
-											approuvées</span> |
+											<i class="bi bi-check text-xs" title="approuvées"></i></span> |
 										<span class="text-danger small pt-1 fw-bold"> <?= $stats['nb_rejected_permission_requests'] ?>
-											rejétées</span>
+											<i class="bi bi-x text-xs" title="rejetées"></i></span> |
+										<span class="text-primary small pt-1 fw-bold"> <?= $stats['nb_pending_permission_requests'] ?>
+											<i class="bi bi-clock text-xs" title="en attente"></i></span>
 
 									</div>
 								</div>
@@ -86,8 +88,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 					</div><!-- End Permission Requests Card -->
 
 					<!-- Contracts Card -->
-					<div class="col-xxl-3 col-md-6">
-
+					<div class="col-xxl-4 col-md-6">
 						<div class="card info-card customers-card">
 							<div class="card-body">
 								<h5 class="card-title">Contrats</h5>
@@ -107,11 +108,39 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 							</div>
 						</div>
 
-					</div><!-- End Contracts Card -->
+					</div>
+					<!-- End Contracts Card -->
+
+					<!-- Contracts Card -->
+					<div class="col-xxl-4 col-md-6">
+						<div class="card info-card card-info customers-card">
+							<div class="card-body">
+								<h5 class="card-title">Stages</h5>
+
+								<div class="d-flex align-items-center">
+									<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+										<i class="bi bi-person-bounding-box"></i>
+									</div>
+									<div class="ps-3">
+										<h6><?= $stats['nb_internships'] ?></h6>
+										<span class="text-success small pt-1 fw-bold">
+											<?= $stats['nb_internships'] - ($stats['nb_passed_internships'] + $stats['nb_terminated_internships']) ?> actifs
+										</span> |
+										<span class="text-danger small pt-1 fw-bold">
+											<?= $stats['nb_passed_internships'] + $stats['nb_terminated_internships'] ?> passés
+										</span>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+					<!-- End Contracts Card -->
 
 					<?php if ($auth_user->getRole()->getCode() == 'ADM') : ?>
 						<!-- Contract Types Card -->
-						<div class="col-xxl-3 col-md-6">
+						<div class="col-xxl-4 col-md-6">
 							<div class="card info-card sales-card">
 								<div class="card-body">
 									<h5 class="card-title">Types de contrat</h5>

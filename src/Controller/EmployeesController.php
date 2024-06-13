@@ -18,6 +18,7 @@ use App\Service\EmployeesServices;
 use App\Service\PermissionRequestsServices;
 use App\Service\ContractTypesServices;
 use App\Service\ContractsServices;
+use App\Service\InternshipsServices;
 use App\Service\LeavesServices;
 use App\Service\RolesServices;
 use Core\Auth\Auth;
@@ -56,6 +57,7 @@ class EmployeesController
 
 		$permissionRequestsServices = new PermissionRequestsServices();
 		$contractsServices = new ContractsServices();
+		$internshipsServices = new InternshipsServices();
 		$leavesServices = new LeavesServices();
 
 		if ($auth_user->getRole()->getCode() == 'ADM') {
@@ -66,20 +68,30 @@ class EmployeesController
 			$nb_active_contracts = $contractsServices->countAll('active');
 			$nb_terminated_contracts = $contractsServices->countAll('terminated');
 
+			$nb_internships = $internshipsServices->countAll('all');
+			$nb_terminated_internships = $internshipsServices->countAll('terminated');
+			$nb_passed_internships = $internshipsServices->countPassed();
+
 			$stats['nb_contract_types'] = $nb_contract_types;
 
 			$nb_permission_requests = $permissionRequestsServices->countAll();
 			$nb_approved_permission_requests = $permissionRequestsServices->countAll('approved');
 			$nb_rejected_permission_requests = $permissionRequestsServices->countAll('disapproved');
+			$nb_pending_permission_requests = $permissionRequestsServices->countAll('pending');
 			$recent_permission_requests = $permissionRequestsServices->getLatest(5);
 		} else {
 			$nb_contracts = $contractsServices->countAll('all', $auth_user->getId());
 			$nb_active_contracts = $contractsServices->countAll('active', $auth_user->getId());
 			$nb_terminated_contracts = $contractsServices->countAll('terminated', $auth_user->getId());
 
+			$nb_internships = $internshipsServices->countAll('all', $auth_user->getId());
+			$nb_terminated_internships = $internshipsServices->countAll('terminated', $auth_user->getId());
+			$nb_passed_internships = $internshipsServices->countPassed($auth_user->getId());
+
 			$nb_permission_requests = $permissionRequestsServices->countAll('all', $auth_user->getId());
 			$nb_approved_permission_requests = $permissionRequestsServices->countAll('approved', $auth_user->getId());
 			$nb_rejected_permission_requests = $permissionRequestsServices->countAll('disapproved', $auth_user->getId());
+			$nb_pending_permission_requests = $permissionRequestsServices->countAll('pending', $auth_user->getId());
 			$recent_permission_requests = $permissionRequestsServices->getLatest(5, $auth_user->getId());
 		}
 
@@ -94,6 +106,10 @@ class EmployeesController
 		$stats['nb_permission_requests'] = $nb_permission_requests;
 		$stats['nb_approved_permission_requests'] = $nb_approved_permission_requests;
 		$stats['nb_rejected_permission_requests'] = $nb_rejected_permission_requests;
+		$stats['nb_pending_permission_requests'] = $nb_pending_permission_requests;
+		$stats['nb_internships'] = $nb_internships;
+		$stats['nb_terminated_internships'] = $nb_terminated_internships;
+		$stats['nb_passed_internships'] = $nb_passed_internships;
 
 		$GLOBALS['stats'] = $stats;
 
