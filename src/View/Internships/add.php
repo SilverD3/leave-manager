@@ -126,19 +126,19 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                             <div class="col-12 row" <?= isset($form_data['username']) && !empty($form_data['username']) ? '' : 'hidden'  ?> id="intuser">
                                 <div class="col-md-4">
                                     <label for="itnemail" class="form-label"> Adresse e-mail <span class="text-danger">*</span></label>
-                                    <input type="email" maxlength="100" <?= isset($form_data['username']) && !empty($form_data['username']) ? '' : 'required'  ?> placeholder="Adresse e-mail" class="form-control" name="email" id="itnemail" value="<?= isset($form_data['email']) ? $form_data['email'] : '' ?>">
+                                    <input type="email" maxlength="100" <?= isset($form_data['username']) && !empty($form_data['username']) ? 'required' : ''  ?> placeholder="Adresse e-mail" class="form-control" name="email" id="itnemail" value="<?= isset($form_data['email']) ? $form_data['email'] : '' ?>">
                                     <div class="invalid-feedback">Veuillez entrer l'adresse e-mail</div>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="itnuname" class="form-label"> Nom d'utilisateur <span class="text-danger">*</span></label>
-                                    <input type="text" maxlength="50" <?= isset($form_data['username']) && !empty($form_data['username']) ? '' : 'required'  ?> placeholder="Nom d'utilisateur du stagiaire" class="form-control" name="username" id="itnuname" value="<?= isset($form_data['username']) ? $form_data['username'] : '' ?>">
+                                    <input type="text" maxlength="50" <?= isset($form_data['username']) && !empty($form_data['username']) ? 'required' : ''  ?> placeholder="Nom d'utilisateur du stagiaire" class="form-control" name="username" id="itnuname" value="<?= isset($form_data['username']) ? $form_data['username'] : '' ?>">
                                     <div class="invalid-feedback">Veuillez entrer le nom d'utilisateur du stagiaire</div>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="itnupwd" class="form-label"> Mot de passe <span class="text-danger">*</span></label>
-                                    <input type="password" <?= isset($form_data['username']) && !empty($form_data['username']) ? '' : 'required'  ?> placeholder="Mot de passe du stagiaire" class="form-control" name="password" id="itnupwd" value="<?= isset($form_data['password']) ? $form_data['password'] : '' ?>">
+                                    <input type="password" <?= isset($form_data['username']) && !empty($form_data['username']) ? 'required' : ''  ?> placeholder="Mot de passe du stagiaire" class="form-control" name="password" id="itnupwd" value="<?= isset($form_data['password']) ? $form_data['password'] : '' ?>">
                                     <div class="invalid-feedback">Veuillez entrer le mot de passe du stagiaire</div>
                                 </div>
                             </div>
@@ -170,18 +170,20 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
 <?php require_once dirname(__DIR__) . DS . 'Elements' . DS . 'footer.php'; ?>
 
 <script type="text/javascript">
-    const createuser = document.querySelector("#createuser");
-    createuser.addEventListener('change', (e) => {
-        if (createuser.checked) {
-            document.querySelector('#intuser').removeAttribute('hidden')
-            document.querySelector('#itnuname').setAttribute('required', true);
-            document.querySelector('#itnupwd').setAttribute('required', true);
-            document.querySelector('#itnemail').setAttribute('required', true);
-        } else {
-            document.querySelector('#intuser').setAttribute('hidden', true)
-            document.querySelector('#itnuname').setAttribute('required', false);
-            document.querySelector('#itnupwd').setAttribute('required', false);
-            document.querySelector('#itnemail').setAttribute('required', false);
-        }
+    document.addEventListener('DOMContentLoaded', (e) => {
+        const createuser = document.querySelector("#createuser");
+        createuser.addEventListener('change', (e) => {
+            if (createuser.checked) {
+                document.querySelector('#intuser').removeAttribute('hidden')
+                document.querySelector('#itnuname').setAttribute('required', true);
+                document.querySelector('#itnupwd').setAttribute('required', true);
+                document.querySelector('#itnemail').setAttribute('required', true);
+            } else {
+                document.querySelector('#intuser').setAttribute('hidden', true)
+                document.querySelector('#itnuname').removeAttribute('required');
+                document.querySelector('#itnupwd').removeAttribute('required');
+                document.querySelector('#itnemail').removeAttribute('required');
+            }
+        })
     })
 </script>

@@ -784,6 +784,8 @@ class InternshipsServices
                     $supervisor->setUsername($row['Supervisor_username']);
 
                     $internship->setSupervisor($supervisor);
+                } else {
+                    $internship->setSupervisor(null);
                 }
 
                 if (isset($row['InternshipType_id'])) {
@@ -794,6 +796,8 @@ class InternshipsServices
 
 
                     $internship->setInternshipType($internshipType);
+                } else {
+                    $internship->setInternshipType(null);
                 }
 
                 $internships[] = $internship;

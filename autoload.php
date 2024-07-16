@@ -194,5 +194,7 @@ if (session_status() === PHP_SESSION_NONE) {
         ini_set('xdebug.remote_enable', true);
         ini_set('xdebug.idebug.remote_host', 'localhost');
         ini_set('xdebug.idebug.remote_port', 9003);
+    } else {
+        error_reporting(E_ALL & ~E_DEPRECATED);
     }
 }
