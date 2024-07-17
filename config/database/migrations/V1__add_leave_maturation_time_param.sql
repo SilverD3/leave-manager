@@ -1,0 +1,2 @@
+INSERT INTO `configs` (`id`, `code`, `description`, `default_value`, `value`, `modified`, `modified_by`, `value_type`) VALUES 
+(NULL, 'LM_LEAVE_MATURATION_NB_DAYS', "Nombre de jours d'exercice après la prise de fonction à effectuer par un employé pour avoir droit au congé", '0', '365', '2024-07-17 09:50:04', '1', 'string');

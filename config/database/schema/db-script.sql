@@ -296,6 +296,18 @@ CREATE TABLE `leaves` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `migrations`
+--
+
+CREATE TABLE `migrations` (
+  `name` VARCHAR(255) NOT NULL , 
+  `description` VARCHAR(255) NULL , 
+  `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP 
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `permissions`
 --
 
