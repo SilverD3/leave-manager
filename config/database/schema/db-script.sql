@@ -75,7 +75,8 @@ INSERT INTO `configs` (`id`, `code`, `description`, `default_value`, `value`, `m
 (9, 'LM_PERMISSION_REDUCE_LEAVE', 'Définit si le temps utilisé dans les permissions doit être prélevé sur la durée de congé allouée à un employé.', 'OUI', 'OUI', '2022-09-22 15:47:08', 1, 'bool'),
 (10, 'LM_SAME_TIME_NB_LEAVE', 'Définit le nombre maximal d’employés en congé en même temps. La valeur 0 signifie pas de limite.', '0', '2', '2022-09-22 15:53:08', 1, 'string'),
 (11, 'LM_NEXT_PERMISSION_DELAY', 'Période inter-permission exprimée en jours. La valeur 0 signifie pas de délai.', '0', '14', '2022-09-13 11:29:25', 1, 'string'),
-(12, 'LM_OVERRIDE_LEAVE_NB_DAYS', 'Permettre le surpassement du nombre de jours de congé, i.e. qu\'un employé prenne plus de jours de congé que le nombre de jours défini', 'NON', 'NON', '2022-09-19 08:51:44', 1, 'bool');
+(12, 'LM_OVERRIDE_LEAVE_NB_DAYS', 'Permettre le surpassement du nombre de jours de congé, i.e. qu\'un employé prenne plus de jours de congé que le nombre de jours défini', 'NON', 'NON', '2022-09-19 08:51:44', 1, 'bool'),
+(13, 'LM_LEAVE_MATURATION_NB_DAYS', 'Nombre de jours d\'exercice après la prise de fonction à effectuer par un employé pour avoir droit au congé', '0', '365', '2024-07-17 09:50:04', '1', 'string');
 
 -- --------------------------------------------------------
 
