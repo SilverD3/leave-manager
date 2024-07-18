@@ -2,3 +2,4 @@
 /.phpintel/*
 /assets/pdf/*
 /public/uploads/*
+/vendor/

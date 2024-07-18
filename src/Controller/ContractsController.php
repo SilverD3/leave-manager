@@ -25,7 +25,6 @@ use Core\FlashMessages\Flash;
 use Core\Utils\Session;
 
 require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'autoload.php';
-require_once VENDOR_PATH . 'dompdf' . DS . 'autoload.inc.php';
 
 use \Dompdf\Dompdf;
 

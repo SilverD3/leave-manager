@@ -1,0 +1,22 @@
+{
+    "name": "silverd3/leave-manager",
+    "description": "Simple ERP for leaves and other entreprise stuffs (like contracts, interships, ...) planning",
+    "type": "project",
+    "require": {
+        "phpmailer/phpmailer": "dev-master",
+        "alamote/opis-closure": "^3.6@dev",
+        "dompdf/dompdf": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "SilverD3",
+            "email": "mrboornesilver@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
