@@ -164,14 +164,29 @@ class AutoLoader
     }
 }
 
+// Register autoload
 (new AutoLoader())->register();
 
 use Core\Configure;
 
+// Load .env files
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$configure = new Configure();
+
+// Debugging and warnings
+$debugOptions = $configure->read('Debug', ['enable' => true]);
+if ($debugOptions['enable'] === true) {
+    ini_set('xdebug.remote_enable', true);
+    ini_set('xdebug.idebug.remote_host', 'localhost');
+    ini_set('xdebug.idebug.remote_port', 9003);
+} else {
+    error_reporting(E_ALL & ~E_DEPRECATED);
+}
+
 // Start session
 if (session_status() === PHP_SESSION_NONE) {
-    $configure = new Configure();
-
     $default_session_cookie_params = [
         'timeout' => 60 * 60 * 24 * 2, // 2 days
         'path' => '/',
@@ -189,13 +204,4 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 
     $_SESSION['__configure__'] = serialize($configure);
-
-    $debugOptions = $configure->read('Debug', ['enable' => true]);
-    if ($debugOptions['enable'] === true) {
-        ini_set('xdebug.remote_enable', true);
-        ini_set('xdebug.idebug.remote_host', 'localhost');
-        ini_set('xdebug.idebug.remote_port', 9003);
-    } else {
-        error_reporting(E_ALL & ~E_DEPRECATED);
-    }
 }
