@@ -1,10 +1,10 @@
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
 	<div class="copyright">
-		&copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+		&copy; Copyright <strong><span>Silevester D.</span> 2022 <span id="todayYear"></span></strong>. All Rights Reserved
 	</div>
 	<div class="credits">
-		Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+		Developed by <a target="_blank" href="https://github.com/SilverD3/">Silevester D.</a>
 	</div>
 </footer>
 <!-- End Footer -->
@@ -20,7 +20,11 @@
 <script src="<?= TEMPLATE_PATH ?>assets/js/main.js"></script>
 
 <script type="text/javascript">
-	var logoutbtn = document.getElementById('logoutBtn');
+	const logoutbtn = document.getElementById('logoutBtn');
+
+	const todayYear = document.querySelector("#todayYear");
+	const year = (new Date()).getFullYear();
+	todayYear.innerText = " - " + year;
 
 	if (logoutbtn !== null) {
 		logoutbtn.addEventListener('click', function(){

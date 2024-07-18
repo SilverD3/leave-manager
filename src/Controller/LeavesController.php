@@ -158,14 +158,22 @@ class LeavesController
         AuthController::require_admin_priv();
 
         if (isset($_POST['add_leave'])) {
-            $leave_id = $this->service->add($_POST);
-
-            if ($leave_id) {
-                Flash::success("Le congé a été planifié avec succès.");
-
-                header("Location: " . VIEWS . "Leaves");
-                exit;
+            // First, check if the employe can take a leave
+            $nb_remaining_maturation_time = $this->service->getRemainingMaturationTime(intval($_POST['employee_id']));
+            
+            if ($nb_remaining_maturation_time !== 0) {
+                Flash::error("Il est reste $nb_remaining_maturation_time jour(s) avant que cet employé puisse prendre des congés.");
+            } else {
+                $leave_id = $this->service->add($_POST);
+    
+                if ($leave_id) {
+                    Flash::success("Le congé a été planifié avec succès.");
+    
+                    header("Location: " . VIEWS . "Leaves");
+                    exit;
+                }
             }
+
         }
 
         $_SESSION['page_title'] = 'Congés';
@@ -185,6 +193,8 @@ class LeavesController
 
         if (!empty($formdata)) {
             $GLOBALS['form_data'] = json_decode($formdata, true);
+        } elseif(isset($_POST['add_leave'])) {
+            $GLOBALS['form_data'] = $_POST;
         }
     }
 
@@ -344,16 +354,18 @@ class LeavesController
             exit;
         }
 
-        if (isset($_GET['year']) && !empty($_GET['year'])) {
-            $year = $_GET['year'];
-        } else {
-            $year = date('Y');
-        }
+        $year = (isset($_GET['year']) && !empty($_GET['year'])) ? $_GET['year'] : date('Y');
 
         $nb_spent_days = $this->service->getSpentDays($_GET['eid'], (int)$year);
+        $nb_remaining_maturation_time = $this->service->getRemainingMaturationTime(intval($_GET['eid']));
 
         header('Content-Type: application/json');
-        echo json_encode(['status' => 'success', 'nb_spent_days' => $nb_spent_days]);
+        echo json_encode([
+            'status' => 'success',
+            'nb_remaining_maturation_time' => $nb_remaining_maturation_time,
+            'nb_spent_days' => $nb_spent_days
+        ]);
+
         exit;
     }
 

@@ -405,6 +405,83 @@ class ContractsServices
     }
 
     /**
+     * Get contract by employee id
+     *
+     * @param int $id Employee id
+     * @param boolean $joinType Wheter to join contract type or not
+     * @return Contract|null Returns contract if found, null if not found.
+     */
+    public function getByEmployeeId($id, bool $joinType = true): ?Contract
+    {
+        $select = "SELECT c.id AS Contract_id, c.title AS Contract_title, c.employee_id AS Contract_employee_id, c.start_date AS Contract_start_date, 
+            c.end_date AS Contract_end_date, c.job_object AS Contract_job_object, c.job_description AS Contract_job_description, c.job_salary AS Contract_job_salary, 
+            c.hourly_rate AS Contract_hourly_rate, c.pdf AS Contract_pdf, c.created AS Contract_created, c.contract_type_id AS Contract_contract_type_id, 
+            c.modified AS Contract_modified, c.status AS Contract_status, c.etat AS Contract_etat 
+        ";
+
+        $from = " FROM contracts c";
+        $join = "";
+        $where = " WHERE c.etat = :etat AND c.employee_id = :id ";
+        $order = " ORDER BY c.created DESC";
+
+        if ($joinType) {
+            $join = " INNER JOIN contract_types ct ON ct.id = c.contract_type_id ";
+            $select .= ", ct.id AS ContractType_id, ct.name AS ContractType_name, ct.description AS ContractType_description, ct.created AS ContractType_created, "
+                . "ct.etat AS ContractType_etat ";
+        }
+
+        $sql = "$select $from $join $where $order";
+
+        try {
+            $query = $this->connectionManager->getConnection()->prepare($sql);
+
+            $query->bindValue(':etat', 1, \PDO::PARAM_BOOL);
+
+            $query->bindValue(':id', $id);
+
+            $query->execute();
+
+            $results = $query->fetch(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("SQL Exception: " . $e->getMessage(), (int)$e->getCode());
+        }
+
+        if (empty($results)) {
+            return null;
+        }
+
+        $contract = new Contract();
+        $contract->setId($results['Contract_id']);
+        $contract->setEmployeeId($results['Contract_employee_id']);
+        $contract->setContractTypeId($results['Contract_contract_type_id']);
+        $contract->setTitle($results['Contract_title']);
+        $contract->setStartDate($results['Contract_start_date']);
+        $contract->setEndDate($results['Contract_end_date']);
+        $contract->setJobObject($results['Contract_job_object']);
+        $contract->setJobDescription($results['Contract_job_description']);
+        $contract->setJobSalary($results['Contract_job_salary']);
+        $contract->setHourlyRate($results['Contract_hourly_rate']);
+        $contract->setPdf($results['Contract_pdf']);
+        $contract->setCreated($results['Contract_created']);
+        $contract->setModified($results['Contract_modified']);
+        $contract->setStatus($results['Contract_status']);
+        $contract->setEtat((bool)$results['Contract_etat']);
+
+        if ($joinType) {
+            $contractType = new ContractType();
+            $contractType->setId($results['ContractType_id']);
+            $contractType->setName($results['ContractType_name']);
+            $contractType->setDescription($results['ContractType_description']);
+            $contractType->setCreated($results['ContractType_created']);
+            $contractType->setEtat($results['ContractType_etat']);
+
+            $contract->setContractType($contractType);
+        }
+
+        return $contract;
+    }
+
+    /**
      * Add contract
      *
      * @param array|Contract $contract Contract to save
