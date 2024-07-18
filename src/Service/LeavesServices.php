@@ -19,6 +19,7 @@ use App\Entity\Leave;
 use App\Entity\Employee;
 use App\View\Helpers\DateHelper;
 use Core\FlashMessages\Flash;
+use Core\Utils\DateUtils;
 use Core\Utils\Session;
 
 /**
@@ -431,6 +432,39 @@ class LeavesServices
         }
 
         return $leave;
+    }
+
+    /**
+     * Get remaining time (in days) before an employee can take a leave
+     * 
+     * @param int $employeeId Employee Id
+     * @return int The number of days remaining. If the value of the 
+     * config `LM_LEAVE_MATURATION_NB_DAYS` is `0`, the function returns 0. 
+     * If there's no contract related to the employee, the method returns 0
+     */
+    public function getRemainingMaturationTime(int $employeeId): int
+    {
+        $leavesConfig = $this->configsServices->getByCode('LM_LEAVE_MATURATION_NB_DAYS');
+        $maturationNbDays = intval($leavesConfig->getValue());
+
+        if (is_null($leavesConfig) || $maturationNbDays === 0) {
+            return 0;
+        }
+
+        $contractServices = new ContractsServices();
+        $employeeContract = $contractServices->getByEmployeeId($employeeId);
+
+        if (is_null($employeeContract)) {
+            return 0;
+        }
+
+        $nbDays = DateUtils::differenceInDays(date('Y-m-d H:i:s'), $employeeContract->getStartDate());
+
+        if ($nbDays > $maturationNbDays) {
+            return 0;
+        }
+        
+        return $maturationNbDays - $nbDays;
     }
 
     /**

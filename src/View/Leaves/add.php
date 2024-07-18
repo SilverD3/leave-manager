@@ -73,6 +73,15 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                 Nombre de jours restant : <span class="fw-bold" id="nbSpentDays"></span>
                             </div>
 
+                            <div class="alert alert-warning d-none" id="maturationTimeInfo" role="alert">
+                                Nombre de jours restant avant que cet employé puisse prendre un congé : <span class="fw-bold" id="nbRemainingMaturationDays"></span>
+                                <br />
+                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Vous pouvez changer ce comportement en modifiant la valeur du paramètre LM_LEAVE_MATURATION_NB_DAYS">
+                                    <span class="bi bi-question-cirle"></span>
+                                    En savoir plus
+                                </a>
+                            </div>
+
                             <div class="col-sm-6">
                                 <label for="lvstartdate" class="form-label">Date de départ <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control leavePeriod" name="start_date" id="lvstartdate" value="<?= isset($form_data['start_date']) ? $form_data['start_date'] : '' ?>" required>
@@ -167,8 +176,8 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
     }
 
     function fillNbWorkingDays(nb_working_days) {
-        var workingDaysInfoEl = document.getElementById('workingDaysInfo');
-        var nbWorkingDaysEl = document.getElementById('nbWorkingDays');
+        const workingDaysInfoEl = document.getElementById('workingDaysInfo');
+        const nbWorkingDaysEl = document.getElementById('nbWorkingDays');
 
         var workingDaysText = '';
         if (nb_working_days > 1) {
@@ -182,17 +191,40 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
         workingDaysInfoEl.classList.remove('d-none');
     }
 
-    function fillNbSpentDays(nb_spent_days) {
-        var spentDaysInfoEl = document.getElementById('spentDaysInfo');
-        var nbSpentDaysEl = document.getElementById('nbSpentDays');
+    function fillNbSpentDays(nb_spent_days, nb_remaining_maturation_time) {
+        const remainingMaturationDaysInfoEl = document.getElementById('maturationTimeInfo');
+        const spentDaysInfoEl = document.getElementById('spentDaysInfo');
 
-        if (nb_spent_days < leaveNbDays) {
-            nbSpentDaysEl.innerText = leaveNbDays - nb_spent_days;
+        if (nb_remaining_maturation_time > 0) {
+            const nbRemainingMaturationDaysEl = document.getElementById('nbRemainingMaturationDays');
+
+            var remainingMaturationDaysText = '';
+            if (nb_remaining_maturation_time > 1) {
+                remainingMaturationDaysText = nb_remaining_maturation_time + ' jours';
+            } else {
+                remainingMaturationDaysText = nb_remaining_maturation_time + ' jour';
+            }
+
+            nbRemainingMaturationDaysEl.innerText = remainingMaturationDaysText;
+
+            remainingMaturationDaysInfoEl.classList.remove('d-none');
+            if (!spentDaysInfoEl.classList.contains('d-none')) {
+                spentDaysInfoEl.classList.add('d-none');
+            }
         } else {
-            nbSpentDaysEl.innerText = 0;
-        }
+            const nbSpentDaysEl = document.getElementById('nbSpentDays');
 
-        spentDaysInfoEl.classList.remove('d-none');
+            if (nb_spent_days < leaveNbDays) {
+                nbSpentDaysEl.innerText = leaveNbDays - nb_spent_days;
+            } else {
+                nbSpentDaysEl.innerText = 0;
+            }
+
+            spentDaysInfoEl.classList.remove('d-none');
+            if (!remainingMaturationDaysInfoEl.classList.contains('d-none')) {
+                remainingMaturationDaysInfoEl.classList.add('d-none');
+            }
+        }
     }
 
     /**
@@ -230,12 +262,15 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
         var xmlhttp = new XMLHttpRequest();
         var url = "<?= VIEWS . 'Leaves/getspentdays.php?' ?>eid=" + employeeId + "&year=" + year;
 
+        document.getElementById('maturationTimeInfo').classList.add('d-none');
+        document.getElementById('spentDaysInfo').classList.add('d-none');
+
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
                     var response = JSON.parse(xmlhttp.responseText);
                     if (response.status == 'success') {
-                        fillNbSpentDays(response.nb_spent_days);
+                        fillNbSpentDays(response.nb_spent_days, response.nb_remaining_maturation_time);
                     } else {
                         alert("Erreur: " + response.message);
                     }
