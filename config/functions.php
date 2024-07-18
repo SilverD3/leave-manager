@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Get the app base URL
+ * 
+ * @param bool $sufix Whether to add a leading slash (/) or not
+ * @return string Returns the base URL
+ */
 function getFullDomainUrl(bool $sufix = true)
 {
   if ((!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on')
@@ -51,4 +57,15 @@ function prepareUrlForQuery(array $keys): string
 function addQueryToUrl(string $key, string $value): string
 {
   return prepareUrlForQuery(['page', 'page_action']) . $key . '=' . $value;
+}
+
+/**
+ * Get environment var
+ * 
+ * @param string $name The name of the variable
+ * @param mixed $default The default value
+ * @return mixed The value of the env variable or the default value 
+ */
+function env(string $name, mixed $default = null) {
+  return !empty($_ENV[$name]) ? $_ENV[$name] : $default;
 }

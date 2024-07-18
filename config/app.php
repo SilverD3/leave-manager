@@ -10,10 +10,10 @@
 
 return [
     'DataSource' => [
-        'host' => 'localhost',
-        'username' => 'root',
-        'password' => '',
-        'database' => 'leave_manager',
+        'host' => env('DATABASE_HOST', 'localhost'),
+        'username' => env('DATABASE_USER', 'root'),
+        'password' => env('DATABASE_PASSWORD', ''),
+        'database' => env('DATABASE_NAME', 'leave_manager'),
     ],
 
     'Session' => [
@@ -22,6 +22,15 @@ return [
 
     // Debug config
     "Debug" => [
-        'enable' => true
-    ]
+        'enable' => env('DEBUG', true)
+    ],
+
+    // Mail
+    'Mail'=> [
+        'host'=> env('MAILER_HOST', 'ssl://smtp.gmail.com'),
+        'port' => env('MAILER_PORT', 465),
+        'username'=> env('MAILER_USER', ''),
+        'password'=> env('MAILER_PASSWORD', ''),
+        'tls'=> env('MAILER_USE_TLS', true),
+    ],
 ];
