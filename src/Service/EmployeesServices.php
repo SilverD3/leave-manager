@@ -91,6 +91,42 @@ class EmployeesServices
     }
 
     /**
+     * Get All employee with a given role
+     * 
+     * @param  int $roleId                   Id of the role to consider
+     * @return array<\App\Entity\Employee>   Array of Employee or empty array
+     * @throws \Exception                    When error occurs
+     */
+    public function getByRole(int $roleId): array
+    {
+        $result = [];
+
+        $select = "SELECT e.id AS Employee_id, e.first_name AS Employee_first_name, e.last_name AS Employee_last_name, 
+            e.email AS Employee_email, e.username AS Employee_username, e.pwd AS Employee_pwd, 
+            e.role_id AS Employee_role_id, e.created AS Employee_created, e.modified AS Employee_modified, 
+            e.token AS Employee_token, e.token_exp_date, e.status AS Employee_status, e.etat AS Employee_etat 
+        ";
+
+        $sql = $select . " FROM employees e WHERE e.role_id = ? AND e.etat = ?";
+
+        try {
+            $query = $this->connectionManager->getConnection()->prepare($sql);
+
+            $query->execute([$roleId, 1]);
+
+            $result = $query->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
+        }
+
+        if (empty($result)) {
+            return [];
+        }
+
+        return call_user_func_array($this->getMapper(), [$result, false]);
+    }
+
+    /**
      * Get All employee
      * @param  bool|boolean $joinRole Determines if roles should be joined
      * @return PagedResult  Object containing employees and page infos
