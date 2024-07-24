@@ -25,12 +25,15 @@ return [
         'enable' => env('DEBUG', true)
     ],
 
-    // Mail
+    // Mailer
     'Mail'=> [
-        'host'=> env('MAILER_HOST', 'ssl://smtp.gmail.com'),
+        'host'=> env('MAILER_HOST', 'smtp.gmail.com'),
         'port' => env('MAILER_PORT', 465),
         'username'=> env('MAILER_USER', ''),
         'password'=> env('MAILER_PASSWORD', ''),
-        'tls'=> env('MAILER_USE_TLS', true),
+        // Whether to use tls or ssl. If false, the mailer will use ssl.
+        'tls'=> env('MAILER_USE_TLS', false),
+        // Default sender email address
+        'from' => env('MAILER_FROM', null),
     ],
 ];
