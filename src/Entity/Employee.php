@@ -125,6 +125,14 @@ class Employee
     }
 
     /**
+     * @return string
+     */
+    public function getFullName()
+    {
+        return "$this->last_name $this->first_name";
+    }
+
+    /**
      * @param mixed $last_name
      *
      * @return self

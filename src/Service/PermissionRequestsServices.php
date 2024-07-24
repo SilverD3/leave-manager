@@ -428,6 +428,13 @@ class PermissionRequestsServices
             return false;
         }
 
+        if ($this->exists($permissionRequest)) {
+            Flash::error("Une autre demande de permission avec les mêmes informations existe déjà");
+            Session::write('__formdata__', json_encode($_POST));
+
+            return false;
+        }
+
         $sql = "INSERT INTO permission_requests(employee_id, reason, description, start_date, end_date, status, reduce, created, modified, etat) "
             . " VALUES(?,?,?,?,?,?,?,?,?,?)";
 
@@ -498,6 +505,13 @@ class PermissionRequestsServices
             return false;
         }
 
+        if ($this->exists($existedRequest)) {
+            Flash::error("Une autre demande de permission avec les mêmes informations existe déjà");
+            Session::write('__formdata__', json_encode($_POST));
+
+            return false;
+        }
+
         $sql = "UPDATE permission_requests SET reason = :reason, description = :description, start_date = :start_date, end_date = :end_date, modified = :modified WHERE id = :id";
 
         try {
@@ -516,6 +530,42 @@ class PermissionRequestsServices
         } catch (\PDOException $e) {
             throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
         }
+    }
+
+    /**
+     * Check if another permission request with the same data
+     * already exists
+     * 
+     * @param \App\Entity\PermissionRequest $permissionRequest
+     * @return bool Returns true if the permission request already
+     * exists, false otherwise.
+     */
+    public function exists(PermissionRequest $permissionRequest): bool {
+        $sql = "SELECT COUNT(*) AS totalRequests FROM permission_requests WHERE employee_id = :employee_id AND 
+            reason = :reason AND start_date = :start_date
+        ";
+        $hasId = $permissionRequest->getId() && intval($permissionRequest->getId()) > 0;
+
+        if ($hasId) {
+            $sql .= " AND id != :id";
+        }
+
+        try {
+            $query = $this->connectionManager->getConnection()->prepare($sql);
+            $query->bindValue(":employee_id", $permissionRequest->getEmployeeId(), \PDO::PARAM_INT);
+            $query->bindValue(":reason", $permissionRequest->getReason(), \PDO::PARAM_STR);
+            $query->bindValue(":start_date", $permissionRequest->getStartDate(), \PDO::PARAM_STR);
+            if ($hasId) {
+                $query->bindValue(":id", $permissionRequest->getId(), \PDO::PARAM_INT);
+            }
+
+            $query->execute();
+            $result = $query->fetch(\PDO::FETCH_ASSOC);
+
+            return intval($result['totalRequests']) > 0;
+        } catch (\PDOException $e) {
+            throw new \Exception("SQL Exception: " . $e->getMessage(), 1);
+        }       
     }
 
     /**

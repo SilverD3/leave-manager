@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Service\ConfigsServices;
+use App\Service\MailerServices;
 use App\Service\PermissionRequestsServices;
 use App\View\Helpers\DateHelper;
 use Core\Auth\Auth;
@@ -130,6 +131,8 @@ class PermissionRequestsController
             $permission_request_id = $this->service->add($data);
 
             if ($permission_request_id) {
+                (new MailerServices())->sentNewPermissionRequestEmail($employee_id, $permission_request_id);
+
                 Flash::success("Le demande de permission a été enregistré avec succès.");
 
                 header("Location: " . VIEWS . "PermissionRequests");
