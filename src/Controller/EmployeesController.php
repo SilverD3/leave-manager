@@ -20,6 +20,7 @@ use App\Service\ContractTypesServices;
 use App\Service\ContractsServices;
 use App\Service\InternshipsServices;
 use App\Service\LeavesServices;
+use App\Service\MailerServices;
 use App\Service\RolesServices;
 use Core\Auth\Auth;
 use Core\Auth\PasswordHasher;
@@ -159,6 +160,8 @@ class EmployeesController
 			$employee_id = $this->service->add($_POST);
 
 			if ($employee_id) {
+				(new MailerServices())->sendAccountCreationMail($_POST['email'], $_POST['password']);
+
 				Flash::success("L'employé a été ajouté avec succès.");
 
 				header("Location: " . VIEWS . "Employees");
