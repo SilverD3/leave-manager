@@ -51,7 +51,6 @@ class Mailer
 
             $mailerDisabled = isset(self::$config['enable'])
                 && (self::$config['enable'] === false || self::$config['enable'] === 'false');
-
             // Just return true if mail sending is disabled
             if ($mailerDisabled) {
                 return true;
