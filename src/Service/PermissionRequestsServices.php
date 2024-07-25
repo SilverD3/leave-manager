@@ -39,7 +39,7 @@ class PermissionRequestsServices
      * @param  bool|null $joinEmployee Determines if employees should be joined
      * @param  int|string|null $year Year of permission
      * @return array                  Array of Permission requests or empty array
-     * @throw \Exception When error occurs
+     * @throws \Exception When error occurs
      */
     public function getAll(bool $joinEmployee = false, $employee_id = null, $year = null)
     {
@@ -697,7 +697,7 @@ class PermissionRequestsServices
      * @param int|null $employeeId Id of the employee
      * @param int|string|null $year Year of permission
      * @return array                      Array of Permission or empty array
-     * @throw \Exception When error occurs
+     * @throws \Exception When error occurs
      */
     public function getAllPermissions(bool $joinEmployee = false, $employee_id = null, $year = null)
     {

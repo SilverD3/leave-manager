@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Service\ConfigsServices;
 use App\Service\EmployeesServices;
 use App\Service\LeavesServices;
+use App\Service\MailerServices;
 use App\Service\PermissionRequestsServices;
 use App\View\Helpers\DateHelper;
 use Core\Auth\Auth;
@@ -28,12 +29,12 @@ class LeavesController
     /**
      * @var LeavesServices $services Permission Requests services
      */
-    private $service;
+    private LeavesServices $service;
 
     /**
      * @var ConfigsServices $configsServices Configs Services
      */
-    private $configsServices;
+    private ConfigsServices $configsServices;
 
     function __construct()
     {
@@ -56,17 +57,11 @@ class LeavesController
             AuthController::require_auth();
         }
 
-        if (isset($_GET['year']) && !empty($_GET['year'])) {
-            $year = $_GET['year'];
-        } else {
-            $year = date('Y');
-        }
+        $year = isset($_GET['year']) && !empty($_GET['year']) ? $_GET['year'] : date('Y');
 
-        if ($auth_user->getRole()->getCode() == 'ADM') {
-            $leaves = $this->service->getAll($year, true);
-        } else {
-            $leaves = $this->service->getAll($year, true, $auth_user->getId());
-        }
+        $leaves = $auth_user->getRole()->getCode() == 'ADM'
+            ? $this->service->getAll($year, true)
+            :  $this->service->getAll($year, true, $auth_user->getId());
 
         $years = $this->service->getYears();
         $GLOBALS['years'] = $years;
@@ -160,20 +155,21 @@ class LeavesController
         if (isset($_POST['add_leave'])) {
             // First, check if the employe can take a leave
             $nb_remaining_maturation_time = $this->service->getRemainingMaturationTime(intval($_POST['employee_id']));
-            
+
             if ($nb_remaining_maturation_time !== 0) {
                 Flash::error("Il est reste $nb_remaining_maturation_time jour(s) avant que cet employé puisse prendre des congés.");
             } else {
                 $leave_id = $this->service->add($_POST);
-    
+
                 if ($leave_id) {
+                    (new MailerServices())->sendNewLeaveMail($leave_id, $_POST["start_date"], $_POST["start_date"], $_POST["employee_id"]);
+
                     Flash::success("Le congé a été planifié avec succès.");
-    
+
                     header("Location: " . VIEWS . "Leaves");
                     exit;
                 }
             }
-
         }
 
         $_SESSION['page_title'] = 'Congés';
@@ -193,7 +189,7 @@ class LeavesController
 
         if (!empty($formdata)) {
             $GLOBALS['form_data'] = json_decode($formdata, true);
-        } elseif(isset($_POST['add_leave'])) {
+        } elseif (isset($_POST['add_leave'])) {
             $GLOBALS['form_data'] = $_POST;
         }
     }
@@ -232,6 +228,17 @@ class LeavesController
             $updated = $this->service->update($data);
 
             if ($updated) {
+                if (
+                    $_POST["start_date"] != $checkLeave->getStartDate()
+                    || $_POST["end_date"] != $checkLeave->getEndDate()
+                ) {
+                    (new MailerServices())->sendLeaveUpdatedMail(
+                        $checkLeave,
+                        $_POST["start_date"],
+                        $_POST["start_date"]
+                    );
+                }
+
                 Flash::success("Le congé a été mis à jour avec succès.");
 
                 header("Location: " . VIEWS . "Leaves/view.php?id=" . $_GET['id']);
@@ -296,6 +303,11 @@ class LeavesController
         $deleted = $this->service->delete((int)$_GET['id']);
 
         if ($deleted) {
+            if (strtotime($checkLeave->getEndDate()) > strtotime(date("Y-m-d"))) {
+                (new MailerServices())->sendLeaveCancelledMail(
+                    $checkLeave
+                );
+            }
             Flash::success("Le congé a été supprimé avec succès.");
         } else {
             Flash::error("Le congé n'a pas été supprimé. Veuillez réessayer !");

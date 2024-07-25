@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Leave;
 use App\Entity\PermissionRequest;
 use Core\Configure;
 use Core\Mailer\Mailer;
@@ -112,8 +113,8 @@ class MailerServices
             return false;
         }
 
-        $template = $approved 
-            ? file_get_contents(VIEW_PATH . 'email' . DS . 'permissionrequestapproved.php') 
+        $template = $approved
+            ? file_get_contents(VIEW_PATH . 'email' . DS . 'permissionrequestapproved.php')
             : file_get_contents(VIEW_PATH . 'email' . DS . 'permissionrequestrejected.php');
 
         $placeholders = ['$_start_date', '$_end_date', '$_details_link'];
@@ -130,6 +131,106 @@ class MailerServices
                 ? $this->mailConfig['from']
                 : 'no-reply@leavemanager.com',
             'object' => $approved ? 'Confirmation de votre demande de permission' : 'Rejet de votre demande de permission',
+            'body' => $body,
+            'recipients' => [$employee->getEmail()],
+        ]);
+
+        return Mailer::send($mailOptions);
+    }
+
+    public function sendProcessLeaveMail(
+        int $leaveId,
+        string $startDate,
+        string $endDate,
+        int $employeeId,
+        string $action = "new"
+    ): bool {
+        $employeesService = new EmployeesServices();
+
+        $employee = $employeesService->getById($employeeId);
+
+        if (!$employee) {
+            return false;
+        }
+
+        switch ($action) {
+            case 'delete':
+                $template = file_get_contents(VIEW_PATH . 'email' . DS . 'leavedeleted.php');
+                $subject = "Annulation du congé";
+                break;
+
+            default:
+                $template = file_get_contents(VIEW_PATH . 'email' . DS . 'newleave.php');
+                $subject = "Ajout d'un congé";
+                break;
+        }
+
+        $placeholders = ['$_start_date', '$_end_date', '$_details_link'];
+        $replacementsArray = [
+            $startDate,
+            $endDate,
+            VIEWS . 'Leaves/view.php?id=' . $leaveId
+        ];
+
+        $body = str_replace($placeholders, $replacementsArray, $template);
+
+        $mailOptions = new MailOptions([
+            'senderEmail' => (isset($this->mailConfig['from']) && !empty($this->mailConfig['from']))
+                ? $this->mailConfig['from']
+                : 'no-reply@leavemanager.com',
+            'object' => $subject,
+            'body' => $body,
+            'recipients' => [$employee->getEmail()],
+        ]);
+
+        return Mailer::send($mailOptions);
+    }
+
+    public function sendNewLeaveMail(int $leaveId, string $startDate, string $endDate, int $employeeId): bool
+    {
+        return $this->sendProcessLeaveMail($leaveId, $startDate, $endDate, $employeeId, "new");
+    }
+
+    public function sendLeaveCancelledMail(Leave $leave): bool
+    {
+        return $this->sendProcessLeaveMail(
+            $leave->getId(),
+            $leave->getStartDate(),
+            $leave->getEndDate(),
+            $leave->getEmployeeId(),
+            "delete"
+        );
+    }
+
+    public function sendLeaveUpdatedMail(Leave $oldLeave, string $startDate, string $endDate): bool
+    {
+        $employeesService = new EmployeesServices();
+
+        $employee = $employeesService->getById($oldLeave->getEmployeeId());
+
+        if (!$employee) {
+            return false;
+        }
+
+        $template = file_get_contents(VIEW_PATH . 'email' . DS . 'leaveupdate.php');
+
+        $placeholders = ['$_old_start_date', '$_old_end_date', '$_start_date', '$_end_date', '$_details_link'];
+
+        $replacementsArray = [
+            $oldLeave->getStartDate(),
+            $oldLeave->getEndDate(),
+            $startDate,
+            $endDate,
+            VIEWS . 'Leaves/view.php?id=' . $oldLeave->getId()
+        ];
+
+        $body = str_replace($placeholders, $replacementsArray, $template);
+
+        $mailOptions = new MailOptions([
+            'senderEmail' => (isset($this->mailConfig['from']) && !empty($this->mailConfig['from']))
+                ? $this->mailConfig['from']
+                : 'no-reply@leavemanager.com',
+            'object' => 'Modification du congé',
             'body' => $body,
             'recipients' => [$employee->getEmail()],
         ]);
