@@ -127,7 +127,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                     <button type="button" class="btn btn-success px-sm-4" data-bs-toggle="modal" data-bs-target="#approveRequest">
                                         <i class="bi bi-check"></i> Approuver
                                     </button>
-                                    <button type="button" class="btn btn-danger px-sm-4" onclick="disapproveRequest(<?= $permissionRequest->getId() ?>)">
+                                    <button type="button" id="disapproveBtn" class="btn btn-danger px-sm-4" onclick="disapproveRequest(<?= $permissionRequest->getId() ?>)">
                                         <i class="bi bi-x"></i> Rejeter
                                     </button>
                                 </div>
@@ -158,7 +158,7 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                                    <button type="button" class="btn btn-success" onclick="approveRequest(<?= $permissionRequest->getId() ?>)">Approuver</button>
+                                                    <button type="button" id="approveBtn" class="btn btn-success" onclick="approveRequest(<?= $permissionRequest->getId() ?>)">Approuver</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -191,8 +191,12 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
         var xmlhttp = new XMLHttpRequest();
         var url = "<?= VIEWS . 'PermissionRequests/approve.php?ajax=1&id=' ?>" + request_id + "&reduce=" + reduce;
 
+        document.querySelector("#approveBtn").setAttribute("disabled", "disabled");
+
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4) {
+                document.querySelector("#approveBtn").removeAttribute("disabled");
+
                 if (xmlhttp.status == 200) {
                     location.reload();
                 } else {
@@ -210,8 +214,12 @@ require_once dirname(__DIR__) . DS . 'Elements' . DS . 'header.php';
             var xmlhttp = new XMLHttpRequest();
             var url = "<?= VIEWS . 'PermissionRequests/disapprove.php?ajax=1&id=' ?>" + request_id;
 
+            document.querySelector("#disapproveBtn").setAttribute("disabled", "disabled");
+
             xmlhttp.onreadystatechange = function() {
                 if (xmlhttp.readyState == 4) {
+                    document.querySelector("#disapproveBtn").removeAttribute("disabled");
+
                     if (xmlhttp.status == 200) {
                         location.reload();
                     } else {
