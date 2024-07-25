@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\PermissionRequest;
 use Core\Configure;
 use Core\Mailer\Mailer;
 use Core\Mailer\MailOptions;
@@ -99,5 +100,50 @@ class MailerServices
         ]);
 
         return Mailer::send($mailOptions);
+    }
+
+    private function sendPermissionRequestProcessedMail(PermissionRequest $permissionRequest, bool $approved): bool
+    {
+        $employeesService = new EmployeesServices();
+
+        $employee = $employeesService->getById($permissionRequest->getEmployeeId());
+
+        if (!$employee) {
+            return false;
+        }
+
+        $template = $approved 
+            ? file_get_contents(VIEW_PATH . 'email' . DS . 'permissionrequestapproved.php') 
+            : file_get_contents(VIEW_PATH . 'email' . DS . 'permissionrequestrejected.php');
+
+        $placeholders = ['$_start_date', '$_end_date', '$_details_link'];
+        $replacementsArray = [
+            $permissionRequest->getStartDate(),
+            $permissionRequest->getEndDate(),
+            VIEWS . 'PermissionRequests/view.php?id=' . $permissionRequest->getId()
+        ];
+
+        $body = str_replace($placeholders, $replacementsArray, $template);
+
+        $mailOptions = new MailOptions([
+            'senderEmail' => (isset($this->mailConfig['from']) && !empty($this->mailConfig['from']))
+                ? $this->mailConfig['from']
+                : 'no-reply@leavemanager.com',
+            'object' => $approved ? 'Confirmation de votre demande de permission' : 'Rejet de votre demande de permission',
+            'body' => $body,
+            'recipients' => [$employee->getEmail()],
+        ]);
+
+        return Mailer::send($mailOptions);
+    }
+
+    public function sentPermissionRequestApprovedEmail(PermissionRequest $permissionRequest): bool
+    {
+        return $this->sendPermissionRequestProcessedMail($permissionRequest, true);
+    }
+
+    public function sentPermissionRequestRejectedEmail(PermissionRequest $permissionRequest): bool
+    {
+        return $this->sendPermissionRequestProcessedMail($permissionRequest, false);
     }
 }

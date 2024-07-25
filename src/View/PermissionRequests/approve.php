@@ -1,4 +1,4 @@
-<?
+<?php
 
 /**
  * Leave manager : Simple app for contract and leave management.

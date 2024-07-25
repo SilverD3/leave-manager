@@ -27,12 +27,12 @@ class PermissionRequestsController
     /**
      * @var PermissionRequestsServices $services Permission Requests services
      */
-    private $service;
+    private PermissionRequestsServices $service;
 
     /**
      * @var ConfigsServices $configsServices Configs Services
      */
-    private $configsServices;
+    private ConfigsServices $configsServices;
 
     function __construct()
     {
@@ -288,6 +288,7 @@ class PermissionRequestsController
     public function approve()
     {
         AuthController::require_admin_priv();
+        $isAjax = isset($_GET['ajax']) && $_GET['ajax'] == 1;
 
         if (!isset($_GET['id']) || empty($_GET['id'])) {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
@@ -306,7 +307,7 @@ class PermissionRequestsController
         // check if the contract model exists
         $check_permission_request = $this->service->get((int)$_GET['id'], false);
         if (!$check_permission_request) {
-            if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+            if ($isAjax) {
                 http_response_code(404);
                 header('Content-Type: application/json');
                 echo json_encode(['status' => 'error', 'message' => "Aucune demande de permission trouvée avec l'id " . $_GET['id']]);
@@ -321,8 +322,8 @@ class PermissionRequestsController
         }
 
         if ($check_permission_request->getStatus() != 'pending') {
-            if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
-                http_response_code(500);
+            if ($isAjax) {
+                http_response_code(400);
                 header('Content-Type: application/json');
                 echo json_encode(['status' => 'error', 'message' => "Cette demande de permission ne plus être approuvée car elle n'est plus en attente"]);
 
@@ -334,18 +335,16 @@ class PermissionRequestsController
             exit;
         }
 
-        if (isset($_GET['reduce']) && $_GET['reduce'] == 1) {
-            $reduce = true;
-        } else {
-            $reduce = false;
-        }
-
+        $reduce = isset($_GET['reduce']) && $_GET['reduce'] == 1;
+        
         $approved = $this->service->approve((int)$_GET['id'], $reduce);
 
         if ($approved) {
+            (new MailerServices())->sentPermissionRequestApprovedEmail($check_permission_request);
+
             Flash::success("La demande de permission a été approuvé avec succès.");
         } else {
-            if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+            if ($isAjax) {
                 http_response_code(500);
                 header('Content-Type: application/json');
                 echo json_encode(['status' => 'error', 'message' => "La demande de perimssion n'a pas été approuvé. Veuillez réessayer !"]);
@@ -356,7 +355,7 @@ class PermissionRequestsController
             Flash::error("La demande de permission n'a pas été approuvé. Veuillez réessayer !");
         }
 
-        if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
+        if ($isAjax) {
             header('Content-Type: application/json');
             echo json_encode(['status' => 'success', 'message' => 'Demande de permission approuvée avec succès.']);
 
@@ -414,9 +413,11 @@ class PermissionRequestsController
             exit;
         }
 
-        $approved = $this->service->disapprove((int)$_GET['id']);
+        $disapproved = $this->service->disapprove((int)$_GET['id']);
 
-        if ($approved) {
+        if ($disapproved) {
+            (new MailerServices())->sentPermissionRequestRejectedEmail($check_permission_request);
+
             Flash::success("La demande de permission a été rejeté avec succès.");
         } else {
             if (isset($_GET['ajax']) && $_GET['ajax'] == 1) {
