@@ -19,6 +19,7 @@ use PHPMailer\PHPMailer\SMTP;
 class Mailer
 {
     private static PHPMailer $phpMailer;
+    private static array $config;
 
     public static function send(MailOptions $options): bool
     {
@@ -48,6 +49,14 @@ class Mailer
 
             $phpMailer->CharSet = 'UTF-8';
 
+            $mailerDisabled = isset(self::$config['enable'])
+                && (self::$config['enable'] === false || self::$config['enable'] === 'false');
+
+            // Just return true if mail sending is disabled
+            if ($mailerDisabled) {
+                return true;
+            }
+
             if ($phpMailer->send() !== false) {
                 return true;
             }
@@ -60,28 +69,32 @@ class Mailer
 
     public static function getPHPMailer()
     {
+        self::initConfig();
+        return self::$phpMailer;
+    }
+
+    public static function initConfig(): void
+    {
+        if (!isset(self::$config) || empty(self::$config)) {
+            self::$config = (new Configure())->read("Mail");
+        }
+
         if (!isset(self::$phpMailer)) {
             self::$phpMailer = new PHPMailer();
-
-            $mailConfig = (new Configure())->read("Mail");
 
             self::$phpMailer->IsSMTP();
             self::$phpMailer->SMTPDebug = SMTP::DEBUG_OFF;
             self::$phpMailer->SMTPAuth = true;
-            self::$phpMailer->SMTPSecure = $mailConfig['tls'] === true ? PHPMailer::ENCRYPTION_STARTTLS : PHPMailer::ENCRYPTION_SMTPS;
-            self::$phpMailer->Host = $mailConfig['host'];
-            self::$phpMailer->Port = intval($mailConfig['port']);
-            self::$phpMailer->Username = $mailConfig['username'];
-            self::$phpMailer->Password = $mailConfig['password'];
+            self::$phpMailer->SMTPSecure = self::$config['tls'] === true ? PHPMailer::ENCRYPTION_STARTTLS : PHPMailer::ENCRYPTION_SMTPS;
+            self::$phpMailer->Host = self::$config['host'];
+            self::$phpMailer->Port = intval(self::$config['port']);
+            self::$phpMailer->Username = self::$config['username'];
+            self::$phpMailer->Password = self::$config['password'];
 
-            if (isset($mailConfig['from']) && !empty($mailConfig['from'])) {
-                self::$phpMailer->setFrom($mailConfig['from']);
+            if (isset(self::$config['from']) && !empty(self::$config['from'])) {
+                self::$phpMailer->setFrom(self::$config['from']);
             }
-
-            return self::$phpMailer;
         }
-
-        return self::$phpMailer;
     }
 
     public static function validateOptions(MailOptions $options, PHPMailer $phpMailer = null)
