@@ -162,7 +162,7 @@ class LeavesController
                 $leave_id = $this->service->add($_POST);
 
                 if ($leave_id) {
-                    (new MailerServices())->sendNewLeaveMail($leave_id, $_POST["start_date"], $_POST["start_date"], $_POST["employee_id"]);
+                    (new MailerServices())->sendNewLeaveMail($leave_id, $_POST["start_date"], $_POST["start_date"], intval($_POST["employee_id"]));
 
                     Flash::success("Le congé a été planifié avec succès.");
 
@@ -199,9 +199,7 @@ class LeavesController
      *
      * @return void
      */
-    public function generate()
-    {
-    }
+    public function generate() {}
 
     public function update()
     {
