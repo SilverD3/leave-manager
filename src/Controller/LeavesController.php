@@ -342,7 +342,7 @@ class LeavesController
             $year = date('Y');
         }
 
-        $nb_working_days = $this->service->getWorkingDays($_GET['from'], $_GET['to'], $year);
+        $nb_working_days = $this->service->getWorkingDays($_GET['from'], $_GET['to']);
 
         header('Content-Type: application/json');
         echo json_encode(['status' => 'success', 'nb_working_days' => $nb_working_days]);

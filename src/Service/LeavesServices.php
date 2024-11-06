@@ -463,7 +463,7 @@ class LeavesServices
         if ($nbDays > $maturationNbDays) {
             return 0;
         }
-        
+
         return $maturationNbDays - $nbDays;
     }
 
@@ -509,7 +509,7 @@ class LeavesServices
 
         if (!empty($results)) {
             foreach ($results as $row) {
-                $leaveWorkingDays = $this->getWorkingDays($row['start_date'], $row['end_date'], $year);
+                $leaveWorkingDays = $this->getWorkingDays($row['start_date'], $row['end_date']);
 
                 if ($leaveWorkingDays > 0) {
                     $nb_spent_days += $leaveWorkingDays;
@@ -537,12 +537,22 @@ class LeavesServices
      * @param string $year Year to consider
      * @return int Returns the number of working days
      */
-    public function getWorkingDays($dateFrom, $dateTo, $year)
+    public function getWorkingDays($dateFrom, $dateTo)
     {
         // Get holidays
         $holidays = [];
         $holidaysConfig = $this->configsServices->getByCode('LM_HOLIDAYS');
-        $holidays = explode(',', str_replace('*', (string)$year, $holidaysConfig->getValue()));
+
+        $startYear = date('Y', DateHelper::toTimestamp($dateFrom));
+        $endYear = date('Y', DateHelper::toTimestamp($dateTo));
+
+        if ($startYear != $endYear) {
+            $startYearHolidays = explode(',', str_replace('*', $startYear, $holidaysConfig->getValue()));
+            $endYearHolidays = explode(',', str_replace('*', $endYear, $holidaysConfig->getValue()));
+            $holidays = array_unique(array_merge($startYearHolidays, $endYearHolidays));
+        } else {
+            $holidays = explode(',', str_replace('*', $startYear, $holidaysConfig->getValue()));
+        }
 
         // Get working days
         $workingDays = [];
@@ -695,7 +705,7 @@ class LeavesServices
             $leave = $this->toEntity($leave);
         }
 
-        $days = $this->getWorkingDays($leave->getStartDate(), $leave->getEndDate(), $leave->getYear());
+        $days = $this->getWorkingDays($leave->getStartDate(), $leave->getEndDate());
         $leave->setDays($days);
 
         // Validation
@@ -816,7 +826,7 @@ class LeavesServices
             !empty($leave->getStartDate()) && $leave->getStartDate() != $existedLeave->getStartDate()
             || !empty($leave->getEndDate()) && $leave->getEndDate() != $existedLeave->getEndDate()
         ) {
-            $days = $this->getWorkingDays($leave->getStartDate(), $leave->getEndDate(), $leave->getYear());
+            $days = $this->getWorkingDays($leave->getStartDate(), $leave->getEndDate());
             $existedLeave->setDays($days);
 
             $leave_nb_days = (int)$this->configsServices->getByCode('LM_LEAVE_NB_DAYS')->getValue();
