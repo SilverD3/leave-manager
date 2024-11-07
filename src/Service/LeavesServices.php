@@ -546,9 +546,15 @@ class LeavesServices
         $startYear = date('Y', DateHelper::toTimestamp($dateFrom));
         $endYear = date('Y', DateHelper::toTimestamp($dateTo));
 
-        if ($startYear != $endYear) {
+        if (intval($startYear) < intval($endYear)) {
             $startYearHolidays = explode(',', str_replace('*', $startYear, $holidaysConfig->getValue()));
-            $endYearHolidays = explode(',', str_replace('*', $endYear, $holidaysConfig->getValue()));
+            $endYearHolidays = [];
+            for ($i = 1; $i <= intval($endYear) - intval($startYear); $i++) {
+                $year = intval($startYear) + $i;
+                $endYearHolidays = array_unique(
+                    array_merge(explode(',', str_replace('*', "$year", $holidaysConfig->getValue())))
+                );
+            }
             $holidays = array_unique(array_merge($startYearHolidays, $endYearHolidays));
         } else {
             $holidays = explode(',', str_replace('*', $startYear, $holidaysConfig->getValue()));
